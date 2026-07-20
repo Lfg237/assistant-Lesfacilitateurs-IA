@@ -1964,10 +1964,9 @@ url:"https://raw.githubusercontent.com/Lfg237/audio-/main/nom%20de%20dieu%20.mp3
 },
 
 {
-user:"TikTok",
+	user : "tiktok",
 url:"https://vm.tiktok.com/ZSXLmqFJp/"
 }
-
 ];
 
 let statusIndex=0;
@@ -2094,48 +2093,18 @@ text-align:center;
 // YOUTUBE
 
 else if(
-url.includes("youtube")
-||
-url.includes("youtu.be")
+url.includes("tiktok") ||
+url.includes("facebook") ||
+url.includes("instagram") ||
+url.includes("github") ||
+url.includes("youtube") ||
+url.includes("youtu.be") ||
+url.includes("archive.org")
 ){
 
-let id="";
-
-
-if(url.includes("watch?v=")){
-
-id=s.url.split("watch?v=")[1].split("&")[0];
+window.open(s.url,"_blank");
 
 }
-else{
-
-id=s.url.split("/").pop();
-
-}
-
-
-
-box.innerHTML=`
-
-<iframe
-
-src="https://www.youtube.com/embed/${id}"
-
-style="
-width:90%;
-height:70vh;
-border-radius:20px;
-border:none;
-"
-
-allowfullscreen>
-
-</iframe>
-
-`;
-
-}
-
 
 
 // TIKTOK FACEBOOK AUTRES
@@ -2302,4 +2271,4 @@ class="popup-btn call">
 
 </div>
 </body>
-</html>
+</html
