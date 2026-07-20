@@ -1004,15 +1004,26 @@ keyPath:"id"
 
 
 
+
 request.onsuccess=function(e){
 
 database=e.target.result;
 
+
+// attendre le chargement utilisateur
+
 loadUserSession();
+
+
+setTimeout(()=>{
 
 addAIMessage(
 "Bonjour 👋 Je suis l'assistant IA Lesfacilitateurs. Comment puis-je vous aider ?"
 );
+
+
+},500);
+
 
 };
 
