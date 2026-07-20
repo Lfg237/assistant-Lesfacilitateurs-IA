@@ -1160,8 +1160,15 @@ box.scrollTop=box.scrollHeight;
 
 function addAIMessage(text){
 
-
 let box=document.getElementById("chat");
+
+
+// Transformer les liens en liens cliquables
+
+let message=text.replace(
+/(https?:\/\/[^\s]+)/g,
+'<br><a href="$1" target="_blank" style="color:#0066ff;font-weight:bold;">🔗 Ouvrir le lien</a>'
+);
 
 
 
@@ -1173,15 +1180,13 @@ box.innerHTML += `
 
 <br>
 
-${text}
-
+${message}
 
 <div class="message-time">
 
 ${new Date().toLocaleTimeString()}
 
 </div>
-
 
 </div>
 
@@ -1193,9 +1198,6 @@ box.scrollTop=box.scrollHeight;
 
 
 }
-
-
-
 
 
 // ==========================
