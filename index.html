@@ -1003,6 +1003,7 @@ keyPath:"id"
 
 
 
+
 request.onsuccess=function(e){
 
 database=e.target.result;
@@ -1144,34 +1145,71 @@ name:currentUser
 
 
 
-
 function loadUserSession(){
 
-
-let saved=localStorage.getItem(
-"assistant_user"
-);
+    // 1) Vérifier d'abord localStorage
+    let saved = localStorage.getItem("assistant_user");
 
 
+    if(saved){
 
-if(saved){
+        currentUser = saved;
 
-currentUser=saved;
+        document.getElementById("profile").innerHTML =
+        "✅ Connecté : " + currentUser;
+
+        return;
+
+    }
 
 
-document.getElementById("profile").innerHTML=
 
-"✅ Connecté : "+currentUser;
+    // 2) Sinon chercher dans IndexedDB
+
+    if(!database) return;
 
 
-return;
+    let tx = database.transaction(
+        "session",
+        "readonly"
+    );
+
+
+    let store = tx.objectStore("session");
+
+
+    let req = store.get(1);
+
+
+
+    req.onsuccess=function(){
+
+        if(req.result){
+
+            currentUser=req.result.name;
+
+
+            localStorage.setItem(
+                "assistant_user",
+                currentUser
+            );
+
+
+            document.getElementById("profile").innerHTML =
+            "✅ Connecté : " + currentUser;
+
+
+            console.log(
+            "Session restaurée :",
+            currentUser
+            );
+
+        }
+
+    };
+
 
 }
-
-
-
-}
-
 
 
 
