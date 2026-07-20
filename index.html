@@ -1347,8 +1347,6 @@ https://facebook.com/lesfacilitateurs
 
 },
 
-https://workshopkmer.vercel.app/#job1
-
 
 {
 categorie:"emploi",
@@ -1358,33 +1356,11 @@ questions:[
 "offre d'emploi",
 "recherche d'emploi"
 ],
-
-reponse:
-`
+reponse:`
 🎵 inscription gratuite à la liste:
 https://workshopkmer.vercel.app/#job1
 `
 
-},
-
-
-
-https://workshopkmer.vercel.app/#job1
-
-{
-catégories :"emplois",
-
-questions:[
-"recherche emploi",
-"besoin de travail",
-"emploi",
-" travail"
-],
-
-reponse:
-`
-inscrivez-vous gratuitement 
-`
 }
 
 ];
@@ -1928,7 +1904,7 @@ const STATUTS=[
 
 {
 user:"archives",
-URL:"https://archive.org/embed/in-shot-20250618-050312535"
+url:"https://archive.org/embed/in-shot-20250618-050312535"
 },
 {
 user:"Photo",
@@ -1967,7 +1943,7 @@ let box=document.getElementById("statusContent");
 
 let s=STATUTS[statusIndex];
 
-let url=s.url.toLowerCase();
+let url=(s.url || "").toLowerCase();
 
 
 // IMAGE
@@ -2024,6 +2000,22 @@ background:#000;
 
 }
 
+
+<video
+autoplay
+playsinline
+controls
+controlslist="nofullscreen"
+disablepictureinpicture
+webkit-playsinline
+style="
+width:100%;
+max-height:70vh;
+object-fit:contain;
+">
+video::-webkit-media-controls-fullscreen-button{
+display:none;
+}
 
 
 
