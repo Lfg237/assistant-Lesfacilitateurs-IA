@@ -230,7 +230,7 @@ background:#efeae2;
 padding:15px;
 padding-bottom:100px;
 }
-}
+
 
 
 
@@ -544,15 +544,37 @@ background:#25d366;
 
 <div class="card">
 
-<h3>👤 Profil utilisateur</h3>
+<h3>👤 Compte utilisateur</h3>
 
-<input id="username" placeholder="Votre nom">
-
-<button onclick="createUser()">
-Créer mon profil
+<button onclick="openRegister()">
+➕ Créer un compte
 </button>
 
 <p id="profile"></p>
+
+</div>
+
+
+<div id="registerPopup" class="popup">
+
+<div class="popup-box">
+
+<h3>Créer votre compte</h3>
+
+<input id="registerName" placeholder="Votre nom">
+
+
+<button onclick="createAccount()">
+✅ Valider la création
+</button>
+
+
+<button onclick="closeRegister()">
+❌ Fermer
+</button>
+
+
+</div>
 
 </div>
 
@@ -735,8 +757,13 @@ if(text==="") return;
 
 
 if(currentUser===""){
-alert("Crée d'abord ton profil");
+
+alert("Vous devez créer un compte avant d'utiliser l'assistant");
+
+openRegister();
+
 return;
+
 }
 
 
@@ -1257,7 +1284,7 @@ return bloc.reponse;
 // 3 - Réponse par défaut
 
 
-return " merci de  contacter admin par appel +237656050097  ou whasapp +237670035609.";
+return " pour plus d'info merci de  contacter admin par appel +237656050097  ou whasapp +237670035609.";
 
 }
 
@@ -1551,16 +1578,41 @@ name:name
 
 
 
+
 function loadUserSession(){
 
 
-let tx=database.transaction(
+let saved = localStorage.getItem("assistant_user");
+
+
+if(saved){
+
+currentUser = saved;
+
+
+document.getElementById("profile").innerHTML =
+"✅ Connecté : " + currentUser;
+
+
+addAIMessage(
+"Bienvenue de nouveau " + currentUser + " 👋"
+);
+
+
+return;
+
+}
+
+
+
+
+let tx = database.transaction(
 "session",
 "readonly"
 );
 
 
-let req=
+let req =
 tx.objectStore("session")
 .get(1);
 
@@ -1572,16 +1624,15 @@ req.onsuccess=function(){
 if(req.result){
 
 
-currentUser=req.result.name;
+currentUser = req.result.name;
 
 
-document.getElementById("profile").innerHTML=
-"Connecté : "+currentUser;
-
+document.getElementById("profile").innerHTML =
+"✅ Connecté : " + currentUser;
 
 
 addAIMessage(
-"Bienvenue de nouveau "+currentUser+" 👋"
+"Bienvenue de nouveau " + currentUser + " 👋"
 );
 
 
@@ -1589,6 +1640,71 @@ addAIMessage(
 
 
 };
+
+
+}
+
+
+
+
+function openRegister(){
+
+document.getElementById("registerPopup").style.display="flex";
+
+}
+
+
+function closeRegister(){
+
+document.getElementById("registerPopup").style.display="none";
+
+}
+
+
+
+function createAccount(){
+
+let name=document.getElementById("registerName").value.trim();
+
+
+if(name===""){
+
+alert("Veuillez entrer votre nom pour créer un compte");
+
+return;
+
+}
+
+
+currentUser=name;
+
+
+// sauvegarde locale
+
+localStorage.setItem(
+"assistant_user",
+name
+);
+
+
+
+document.getElementById("profile").innerHTML=
+
+"✅ Connecté : "+name;
+
+
+closeRegister();
+
+
+
+addAIMessage(
+"Bienvenue "+name+" 👋 Votre compte a été créé avec succès."
+);
+
+
+alert(
+"Compte créé avec succès ✅"
+);
 
 
 }
@@ -1642,4 +1758,4 @@ class="popup-btn call">
 
 </div>
 </body>
-  </html>
+</html>
