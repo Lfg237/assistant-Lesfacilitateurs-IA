@@ -1049,46 +1049,46 @@ document.getElementById("registerPopup").style.display="none";
 
 function createAccount(){
 
-    let name=document.getElementById("registerName").value.trim();
+    const name = document.getElementById("registerName").value.trim();
 
     if(name===""){
         alert("Veuillez entrer votre nom");
         return;
     }
 
-    currentUser=name;
+    currentUser = name;
 
-    localStorage.setItem("assistant_user",name);
+    // Sauvegarde locale
+    localStorage.setItem("assistant_user", name);
 
+    // Mise à jour de l'interface
+    document.getElementById("profile").innerHTML =
+        "✅ Connecté : " + name;
+
+    // Fermer la fenêtre
+    closeRegister();
+
+    // Message de bienvenue
+    addAIMessage("Bienvenue " + name + " 👋");
+
+    // Sauvegarde dans IndexedDB si disponible
     if(database){
 
-        let tx=database.transaction(["users","session"],"readwrite");
+        const tx = database.transaction(["users","session"], "readwrite");
 
         tx.objectStore("users").put({
-            name:name,
-            date:new Date().toLocaleString()
+            name: name,
+            date: new Date().toLocaleString()
         });
 
         tx.objectStore("session").put({
-            id:1,
-            name:name
+            id: 1,
+            name: name
         });
-
-        tx.oncomplete=function(){
-
-            document.getElementById("profile").innerHTML=
-            "✅ Connecté : "+name;
-
-            closeRegister();
-
-            addAIMessage("Bienvenue "+name+" 👋");
-
-        };
 
     }
 
 }
-
 
 
 // ==========================
@@ -2173,7 +2173,7 @@ openStatus();
 
 </script>
 
-
+document.querySelector("#registerPopup button").onclick = createAccount;
 </body>
 
 </html>
