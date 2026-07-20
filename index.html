@@ -597,6 +597,13 @@ display:none;
 
 }
 
+.floating-prev,
+.floating-next{
+position:fixed;
+z-index:99999;
+pointer-events:auto;
+}
+
 
 .floating-prev,
 .floating-next{
@@ -930,17 +937,6 @@ request.onsuccess=function(e){
 
 
 
-// CREATION UTILISATEUR
-
-function createUser(){
-
-let name=document.getElementById("username").value.trim();
-
-
-if(name===""){
-alert("Entrez un nom");
-return;
-}
 
 
 currentUser=name;
