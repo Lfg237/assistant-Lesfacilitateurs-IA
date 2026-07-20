@@ -2003,34 +2003,31 @@ if (
 
 // VIDEO
 
-else if(
-url.includes(".mp4") ||
-url.includes(".webm") ||
-url.includes(".mov")
-){
+// VIDEO
+else if (
+    url.endsWith(".mp4") ||
+    url.endsWith(".webm") ||
+    url.endsWith(".mov")
+) {
 
-box.innerHTML=`
+box.innerHTML = `
+<div style="position:relative;width:100%;text-align:center;">
 
 <video
-
 controls
-
-autoplay
-
 playsinline
-
+controlslist="nofullscreen"
+disablepictureinpicture
 style="
-width:90%;
-max-height:75vh;
+width:95%;
+max-height:60vh;
 border-radius:20px;
+background:#000;
 ">
-
 <source src="${s.url}">
-
-Votre navigateur ne lit pas cette vidéo.
-
 </video>
 
+</div>
 `;
 
 }
