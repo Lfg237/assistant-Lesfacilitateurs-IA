@@ -487,6 +487,238 @@ background:#0066ff;
 background:#25d366;
 
 }
+
+
+
+.status-viewer{
+
+position:fixed;
+top:0;
+bottom:0;
+left:0;
+right:0;
+
+background:#000;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+z-index:3000;
+
+}
+
+
+.status-prev,
+.status-next{
+
+position:absolute;
+
+top:50%;
+
+transform:translateY(-50%);
+
+width:55px;
+height:55px;
+
+border-radius:50%;
+
+background:white;
+
+color:black;
+
+font-size:30px;
+
+z-index:4000;
+
+}
+
+
+.status-prev{
+
+left:15px;
+
+}
+
+
+.status-next{
+
+right:15px;
+
+}
+
+
+.status-viewer img,
+.status-viewer video{
+
+max-width:90%;
+max-height:80%;
+
+border-radius:15px;
+
+}
+
+
+.status-prev,
+.status-next{
+
+width:50px;
+height:50px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.7);
+
+color:black;
+
+font-size:25px;
+
+}
+
+
+
+.status-close{
+
+position:absolute;
+
+top:20px;
+right:20px;
+
+background:red;
+
+width:100px;
+
+}
+
+
+#statusViewer{
+
+display:none;
+
+}
+
+
+.floating-prev,
+.floating-next{
+
+position:fixed;
+
+top:70%;
+
+transform:translateY(-50%);
+
+width:65px;
+height:65px;
+
+border-radius:50%;
+
+border:2px solid rgba(255,255,255,.5);
+
+background:linear-gradient(135deg,#25d366,#075e54);
+
+color:white;
+
+font-size:28px;
+
+display:flex;
+
+align-items:center;
+justify-content:center;
+
+box-shadow:
+0 8px 25px rgba(0,0,0,.4),
+inset 0 0 15px rgba(255,255,255,.3);
+
+backdrop-filter:blur(10px);
+
+z-index:5000;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+
+/* bouton gauche */
+
+.floating-prev{
+
+left:15px;
+
+}
+
+
+
+/* bouton droit */
+
+.floating-next{
+
+right:15px;
+
+}
+
+
+
+/* animation au toucher */
+
+.floating-prev:hover,
+.floating-next:hover{
+
+transform:translateY(-50%) scale(1.15);
+
+background:linear-gradient(135deg,#00c853,#128c7e);
+
+}
+
+
+
+/* effet clic mobile */
+
+.floating-prev:active,
+.floating-next:active{
+
+transform:translateY(-50%) scale(.9);
+
+}
+
+
+
+/* bouton fermer */
+
+.status-close{
+
+position:absolute;
+
+top:25px;
+
+right:25px;
+
+width:50px;
+
+height:50px;
+
+border-radius:50%;
+
+background:linear-gradient(135deg,#ff1744,#b71c1c);
+
+color:white;
+
+font-size:22px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+border:none;
+
+box-shadow:0 8px 20px rgba(0,0,0,.5);
+
+z-index:6000;
+
+}
 </style>
 
 </head>
@@ -516,7 +748,9 @@ background:#25d366;
 </header>
 
 <div id="sideMenu" class="side-menu">
-
+<button onclick="openStatus()">
+📷 Statuts
+</button>
 
 <button onclick="toggleDark()">
 🌙 Mode sombre
@@ -628,15 +862,26 @@ let database;
 
 
 // OUVERTURE DE LA BASE LOCALE
+
 window.onload=function(){
 
 if(localStorage.getItem("theme")=="dark"){
-
 document.body.classList.add("dark");
-
 }
 
+
+// ouverture automatique des statuts
+
+setTimeout(function(){
+
+openStatus();
+
+},1000);
+
+
 };
+
+
 
 
 let request = indexedDB.open("AssistantIA_Local",2);
@@ -1708,6 +1953,276 @@ alert(
 
 
 }
+
+
+const STATUTS=[
+
+{
+user:"Photo",
+url:"https://raw.githubusercontent.com/Lfg237/image-st-joseph-/main/IMG-20260715-WA0001.jpg"
+},
+
+{
+user:"Audio",
+url:"https://raw.githubusercontent.com/Lfg237/audio-/main/nom%20de%20dieu%20.mp3"
+}
+
+];
+
+let statusIndex=0;
+
+
+function openStatus(){
+
+let viewer=document.getElementById("statusViewer");
+
+viewer.style.display="flex";
+
+showStatus();
+
+}
+
+
+
+function showStatus(){
+
+let box=document.getElementById("statusContent");
+
+let s=STATUTS[statusIndex];
+
+let url=s.url.toLowerCase();
+
+
+// IMAGE
+
+if(
+url.includes(".jpg") ||
+url.includes(".jpeg") ||
+url.includes(".png") ||
+url.includes(".webp")
+){
+
+box.innerHTML=`
+
+<img src="${s.url}"
+
+style="
+max-width:90%;
+max-height:75vh;
+border-radius:20px;
+object-fit:contain;
+">
+
+`;
+
+}
+
+
+
+// VIDEO
+
+else if(
+url.includes(".mp4") ||
+url.includes(".webm") ||
+url.includes(".mov")
+){
+
+box.innerHTML=`
+
+<video
+
+controls
+
+autoplay
+
+playsinline
+
+style="
+width:90%;
+max-height:75vh;
+border-radius:20px;
+">
+
+<source src="${s.url}">
+
+Votre navigateur ne lit pas cette vidéo.
+
+</video>
+
+`;
+
+}
+
+
+
+
+// AUDIO
+
+else if(
+url.includes(".mp3") ||
+url.includes(".wav") ||
+url.includes(".ogg")
+){
+
+box.innerHTML=`
+
+<div style="
+color:white;
+text-align:center;
+">
+
+<h2>🎵 Lecture audio</h2>
+
+
+<audio controls autoplay>
+
+<source src="${s.url}">
+
+</audio>
+
+
+</div>
+
+`;
+
+}
+
+
+
+
+// YOUTUBE
+
+else if(
+url.includes("youtube")
+||
+url.includes("youtu.be")
+){
+
+let id="";
+
+
+if(url.includes("watch?v=")){
+
+id=s.url.split("watch?v=")[1].split("&")[0];
+
+}
+else{
+
+id=s.url.split("/").pop();
+
+}
+
+
+
+box.innerHTML=`
+
+<iframe
+
+src="https://www.youtube.com/embed/${id}"
+
+style="
+width:90%;
+height:70vh;
+border-radius:20px;
+border:none;
+"
+
+allowfullscreen>
+
+</iframe>
+
+`;
+
+}
+
+
+
+// TIKTOK FACEBOOK AUTRES
+
+else{
+
+
+box.innerHTML=`
+
+<iframe
+
+src="${s.url}"
+
+style="
+width:90%;
+height:70vh;
+border-radius:20px;
+border:none;
+">
+
+</iframe>
+
+`;
+
+}
+
+
+
+}
+
+
+
+
+function nextStatus(){
+
+statusIndex++;
+
+if(statusIndex>=STATUTS.length){
+
+statusIndex=0;
+
+}
+
+showStatus();
+
+}
+
+
+
+function previousStatus(){
+
+statusIndex--;
+
+if(statusIndex<0){
+
+statusIndex=STATUTS.length-1;
+
+}
+
+showStatus();
+
+}
+
+
+
+
+function closeStatus(){
+
+document.getElementById("statusViewer").style.display="none";
+
+
+}
+
+
+
+// OUVERTURE AUTOMATIQUE DES STATUTS AU DÉMARRAGE
+
+window.addEventListener("load", function(){
+
+setTimeout(function(){
+
+document.getElementById("statusViewer").style.display="flex";
+
+showStatus();
+
+},1000);
+
+});
 </script>
 
 
@@ -1755,6 +2270,34 @@ class="popup-btn call">
 
 
 </div>
+
+</div>
+
+
+<!-- BOUTONS STATUTS TOUJOURS VISIBLES -->
+
+<button class="floating-prev" onclick="openStatus();previousStatus()">
+◀
+</button>
+
+
+<button class="floating-next" onclick="openStatus();nextStatus()">
+▶
+</button>
+
+
+
+<!-- AFFICHAGE STATUT -->
+
+<div id="statusViewer" class="status-viewer">
+
+<div id="statusContent"></div>
+
+
+<button class="status-close" onclick="closeStatus()">
+✖ Fermer
+</button>
+
 
 </div>
 </body>
