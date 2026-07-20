@@ -863,24 +863,6 @@ let database;
 
 // OUVERTURE DE LA BASE LOCALE
 
-window.onload=function(){
-
-if(localStorage.getItem("theme")=="dark"){
-document.body.classList.add("dark");
-}
-
-
-// ouverture automatique des statuts
-
-setTimeout(function(){
-
-openStatus();
-
-},1000);
-
-
-};
-
 
 
 
@@ -2005,21 +1987,25 @@ url.includes(".png") ||
 url.includes(".webp")
 ){
 
-box.innerHTML=`
+box.innerHTML = `
+<div style="text-align:center;color:white;">
+<h2>${s.user}</h2>
 
-<img src="${s.url}"
+<a href="${s.url}"
+   target="_blank"
+   style="
+   display:inline-block;
+   padding:15px 25px;
+   background:#25d366;
+   color:white;
+   border-radius:30px;
+   text-decoration:none;
+   font-weight:bold;">
+🚀 Ouvrir ${s.user}
+</a>
 
-style="
-max-width:90%;
-max-height:75vh;
-border-radius:20px;
-object-fit:contain;
-">
-
+</div>
 `;
-
-}
-
 
 
 // VIDEO
