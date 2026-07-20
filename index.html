@@ -1024,6 +1024,8 @@ addAIMessage(
 
 },500);
 
+console.log(localStorage.getItem("assistant_user"));
+
 
 };
 
@@ -1051,78 +1053,47 @@ document.getElementById("registerPopup").style.display="none";
 
 
 
-
 function createAccount(){
 
-let name=document.getElementById("registerName").value.trim();
+    let name=document.getElementById("registerName").value.trim();
 
+    if(name===""){
+        alert("Veuillez entrer votre nom");
+        return;
+    }
 
-if(name===""){
+    currentUser=name;
 
-alert("Veuillez entrer votre nom");
+    localStorage.setItem("assistant_user",name);
 
-return;
+    if(database){
 
-}
+        let tx=database.transaction(["users","session"],"readwrite");
 
+        tx.objectStore("users").put({
+            name:name,
+            date:new Date().toLocaleString()
+        });
 
-currentUser=name;
+        tx.objectStore("session").put({
+            id:1,
+            name:name
+        });
 
+        tx.oncomplete=function(){
 
-// sauvegarde permanente navigateur
+            document.getElementById("profile").innerHTML=
+            "✅ Connecté : "+name;
 
-localStorage.setItem(
-"assistant_user",
-name
-);
+            closeRegister();
 
+            addAIMessage("Bienvenue "+name+" 👋");
 
-// sauvegarde IndexedDB
+        };
 
-if(database){
-
-let tx=database.transaction(
-["users","session"],
-"readwrite"
-);
-
-
-tx.objectStore("users").put({
-
-name:name,
-
-date:new Date().toLocaleString()
-
-});
-
-
-tx.objectStore("session").put({
-
-id:1,
-
-name:name
-
-});
-
+    }
 
 }
-
-
-
-document.getElementById("profile").innerHTML=
-"✅ Connecté : "+name;
-
-
-closeRegister();
-
-
-addAIMessage(
-"Bienvenue "+name+" 👋 Votre compte est enregistré définitivement sur cet appareil."
-);
-
-
-}
-
 
 
 
