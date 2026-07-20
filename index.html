@@ -1,354 +1,98 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ASSISTANT IA LESFACILITATEURS</title>
 
 <style>
+
 *{
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
+
 
 body{
-    margin:0;
-    background:#eef2f7;
-    color:#222;
-    height:100vh;
-    overflow:hidden;
 
-}
-
-.whatsapp-header{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:75px;
-background:#075e54;
-color:white;
-display:flex;
-align-items:center;
-gap:15px;
-padding:15px;
-z-index:1000;
-}
-.container{
-
-padding-top:85px;
-padding-bottom:80px;
+margin:0;
+background:#eef2f7;
+color:#222;
 height:100vh;
-
-}
-.container{
-    max-width:900px;
-    margin:auto;
-    padding:15px;
-}
-
-.card{
-    background:white;
-    border-radius:15px;
-    padding:20px;
-    margin-bottom:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,.1);
-}
-
-input,textarea,button{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border-radius:10px;
-    border:1px solid #ccc;
-}
-
-button{
-    background:#0066ff;
-    color:white;
-    border:none;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-button:hover{
-    opacity:.8;
-}
-
-
-#chat{
-
-position:fixed;
-top:75px;
-bottom:70px;
-left:0;
-right:0;
-
-overflow-y:auto;
-
-background:#efeae2;
-
-padding:15px;
+overflow:hidden;
 
 }
 
-.message{
-    padding:10px;
-    margin:8px 0;
-    border-radius:12px;
-    max-width:80%;
-}
 
-.user{
-    background:#d1e7ff;
-    margin-left:auto;
-}
-
-.ai{
-    background:#e8e8e8;
-    margin-right:auto;
-}
-
-
-.admin{
-    display:none;
-}
-
-.small{
-    font-size:13px;
-    color:#777;
-}
-
-
-/* MODE SOMBRE AMÉLIORÉ */
-
-.dark{
-    background:#111;
-    color:#fff;
-}
-
-
-.dark .card{
-    background:#222;
-    color:#fff;
-}
-
-
-.dark input,
-.dark textarea{
-    background:#333;
-    color:white;
-    border:1px solid #555;
-}
-
-
-.dark input::placeholder,
-.dark textarea::placeholder{
-    color:#bbb;
-}
-
-
-.dark #chat{
-    background:#1a1a1a;
-}
-
-
-.dark .message.ai{
-    background:#333;
-    color:white;
-}
-
-
-.dark .message.user{
-    background:#004a99;
-    color:white;
-}
-
-
-.dark .small{
-    color:#ccc;
-}
-
-
-
-/* INTERFACE STYLE WHATSAPP */
-
+/* ENTÊTE */
 
 .whatsapp-header{
+
 position:fixed;
 top:0;
 left:0;
+
 width:100%;
 height:75px;
+
 background:#075e54;
 color:white;
+
 display:flex;
 align-items:center;
+
 gap:15px;
 padding:15px;
+
 z-index:1000;
+
 }
 
 
-.whatsapp-header span{
+.hamburger{
 
-font-size:13px;
-opacity:.8;
+width:45px;
+height:45px;
+
+background:none;
+color:white;
+
+font-size:28px;
+
+border:none;
 
 }
 
 
 .avatar{
 
-background:white;
-color:#075e54;
 width:45px;
 height:45px;
+
 border-radius:50%;
+
+background:white;
+
 display:flex;
 align-items:center;
 justify-content:center;
+
 font-size:25px;
 
-}
-
-
-
-.chat-card{
-
-padding:0;
-overflow:hidden;
-
-}
-
-
-#chat{
-
-height:65vh;
-background:#efeae2;
-padding:15px;
-padding-bottom:100px;
-}
-
-
-
-
-.message{
-
-max-width:75%;
-padding:10px 14px;
-margin:8px;
-border-radius:15px;
-font-size:15px;
-
-}
-
-
-.message.user{
-
-background:#dcf8c6;
-margin-left:auto;
-border-bottom-right-radius:3px;
+color:#075e54;
 
 }
 
 
 
-.message.ai{
-
-background:white;
-margin-right:auto;
-border-bottom-left-radius:3px;
-
-}
-
-
-
-.message-time{
-
-font-size:10px;
-text-align:right;
-color:#777;
-margin-top:5px;
-
-}
-
-
-
-.message-box{
-
-position:fixed;
-
-bottom:0;
-left:0;
-right:0;
-
-display:flex;
-
-gap:8px;
-
-padding:10px;
-
-background:#f0f0f0;
-
-z-index:1000;
-
-}
-
-
-
-.message-box input{
-
-flex:1;
-border-radius:25px;
-border:none;
-padding:14px;
-
-}
-
-
-
-.message-box button{
-
-width:45px;
-height:45px;
-border-radius:50%;
-
-}
-
-
-
-.send{
-
-background:#25d366;
-
-}
-
-
-.emoji{
-
-background:#ddd;
-
-}
-
-
-/* MENU HAMBURGER */
-
-
-.hamburger{
-
-background:none;
-font-size:28px;
-width:45px;
-padding:0;
-
-}
-
+/* MENU */
 
 .side-menu{
 
 position:fixed;
+
 top:0;
 left:-300px;
 
@@ -356,13 +100,14 @@ width:280px;
 height:100%;
 
 background:white;
-z-index:1000;
 
 padding:20px;
 
-box-shadow:5px 0 15px rgba(0,0,0,.3);
+z-index:3000;
 
 transition:.3s;
+
+box-shadow:5px 0 20px #0005;
 
 }
 
@@ -374,24 +119,449 @@ left:0;
 }
 
 
-
 .side-menu button{
 
-margin-bottom:15px;
+width:100%;
+
+padding:14px;
+
+margin-bottom:12px;
+
+border:none;
+
+border-radius:10px;
+
+background:#0066ff;
+
+color:white;
+
+font-weight:bold;
+
+}
+
+
+/* CONTENU */
+
+.container{
+
+padding-top:90px;
+
+padding-bottom:80px;
+
+height:100vh;
+
+max-width:900px;
+
+margin:auto;
 
 }
 
 
 
-.side-menu input{
+.card{
 
-background:#eee;
+background:white;
+
+border-radius:15px;
+
+padding:20px;
+
+margin:15px;
+
+box-shadow:0 5px 15px #0002;
 
 }
 
 
 
-/* fond sombre menu */
+/* CHAT */
+
+
+#chat{
+
+position:fixed;
+
+top:75px;
+
+bottom:70px;
+
+left:0;
+right:0;
+
+overflow-y:auto;
+
+background:#efeae2;
+
+padding:15px;
+
+}
+
+
+
+.message{
+
+max-width:75%;
+
+padding:12px;
+
+margin:8px;
+
+border-radius:15px;
+
+font-size:15px;
+
+}
+
+
+
+.message.user{
+
+background:#dcf8c6;
+
+margin-left:auto;
+
+}
+
+
+
+.message.ai{
+
+background:white;
+
+margin-right:auto;
+
+}
+
+
+
+.message-time{
+
+font-size:10px;
+
+text-align:right;
+
+color:#777;
+
+margin-top:5px;
+
+}
+
+
+
+/* ZONE MESSAGE */
+
+
+.message-box{
+
+position:fixed;
+
+bottom:0;
+
+left:0;
+right:0;
+
+display:flex;
+
+gap:8px;
+
+padding:10px;
+
+background:#f0f0f0;
+
+z-index:2000;
+
+}
+
+
+.message-box input{
+
+flex:1;
+
+border:none;
+
+border-radius:25px;
+
+padding:15px;
+
+}
+
+
+.message-box button{
+
+width:45px;
+
+height:45px;
+
+border-radius:50%;
+
+border:none;
+
+}
+
+
+
+.send{
+
+background:#25d366;
+
+color:white;
+
+font-size:20px;
+
+}
+
+
+.emoji{
+
+background:#ddd;
+
+}
+
+
+
+/* POPUP */
+
+.popup{
+
+display:none;
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:#0008;
+
+z-index:5000;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+
+
+.popup-box{
+
+background:white;
+
+width:90%;
+
+max-width:400px;
+
+padding:25px;
+
+border-radius:20px;
+
+text-align:center;
+
+}
+
+
+
+.popup-box input{
+
+width:100%;
+
+padding:12px;
+
+border-radius:10px;
+
+border:1px solid #ccc;
+
+margin:10px 0;
+
+}
+
+
+
+.popup-box button{
+
+width:100%;
+
+padding:12px;
+
+border:none;
+
+border-radius:10px;
+
+background:#0066ff;
+
+color:white;
+
+margin-top:10px;
+
+}
+
+
+
+.close-popup{
+
+background:red!important;
+
+}
+
+
+
+/* BOUTONS STATUTS */
+
+.floating-prev,
+.floating-next{
+
+
+position:fixed;
+
+top:70%;
+
+width:65px;
+
+height:65px;
+
+border-radius:50%;
+
+background:linear-gradient(135deg,#25d366,#075e54);
+
+color:white;
+
+font-size:28px;
+
+border:none;
+
+z-index:99999;
+
+}
+
+
+
+.floating-prev{
+
+left:15px;
+
+}
+
+
+
+.floating-next{
+
+right:15px;
+
+}
+
+
+
+/* AFFICHAGE STATUT */
+
+.status-viewer{
+
+display:none;
+
+position:fixed;
+
+top:0;
+left:0;
+right:0;
+bottom:0;
+
+background:black;
+
+z-index:8000;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+
+
+#statusContent{
+
+width:100%;
+
+text-align:center;
+
+}
+
+
+
+.status-viewer img,
+.status-viewer video{
+
+max-width:90%;
+
+max-height:80vh;
+
+border-radius:20px;
+
+}
+
+
+
+.status-close{
+
+position:absolute;
+
+top:20px;
+
+right:20px;
+
+width:55px;
+
+height:55px;
+
+border-radius:50%;
+
+border:none;
+
+background:red;
+
+color:white;
+
+z-index:9000;
+
+}
+
+
+
+/* MODE SOMBRE */
+
+
+.dark{
+
+background:#111;
+
+color:white;
+
+}
+
+
+.dark .card{
+
+background:#222;
+
+color:white;
+
+}
+
+
+.dark #chat{
+
+background:#181818;
+
+}
+
+
+.dark .message.ai{
+
+background:#333;
+
+color:white;
+
+}
 
 
 .dark .side-menu{
@@ -403,374 +573,85 @@ color:white;
 }
 
 
-.dark .side-menu input{
 
-background:#333;
-color:white;
-
-}
+/* VIDEO SANS PLEIN ECRAN */
 
 
-.popup{
+video::-webkit-media-controls-fullscreen-button{
 
 display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.6);
-z-index:2000;
-align-items:center;
-justify-content:center;
-
-}
-
-
-.popup-box{
-
-background:white;
-width:90%;
-max-width:400px;
-padding:25px;
-border-radius:20px;
-text-align:center;
-box-shadow:0 10px 30px rgba(0,0,0,.3);
-
-}
-
-
-.dark .popup-box{
-
-background:#222;
-color:white;
 
 }
 
 
 
-.close-popup{
-
-position:absolute;
-right:20px;
-top:20px;
-width:40px;
-
-background:red;
-
-}
-
-
-
-.popup-btn{
-
-display:block;
-padding:15px;
-margin-top:15px;
-border-radius:30px;
-color:white;
-text-decoration:none;
-font-weight:bold;
-
-}
-
-
-.call{
-
-background:#0066ff;
-
-}
-
-
-.whatsapp{
-
-background:#25d366;
-
-}
-
-
-
-.status-viewer{
-
-position:fixed;
-top:0;
-bottom:0;
-left:0;
-right:0;
-
-background:#000;
-
-display:flex;
-align-items:center;
-justify-content:space-between;
-
-z-index:3000;
-
-}
-
-
-.status-prev,
-.status-next{
-
-position:absolute;
-
-top:50%;
-
-transform:translateY(-50%);
-
-width:55px;
-height:55px;
-
-border-radius:50%;
-
-background:white;
-
-color:black;
-
-font-size:30px;
-
-z-index:4000;
-
-}
-
-
-.status-prev{
-
-left:15px;
-
-}
-
-
-.status-next{
-
-right:15px;
-
-}
-
-
-.status-viewer img,
-.status-viewer video{
-
-max-width:90%;
-max-height:80%;
-
-border-radius:15px;
-
-}
-
-
-.status-prev,
-.status-next{
-
-width:50px;
-height:50px;
-
-border-radius:50%;
-
-background:rgba(255,255,255,.7);
-
-color:black;
-
-font-size:25px;
-
-}
-
-
-
-.status-close{
-
-position:absolute;
-
-top:20px;
-right:20px;
-
-background:red;
-
-width:100px;
-
-}
-
-
-#statusViewer{
-
-display:none;
-
-}
-
-.floating-prev,
-.floating-next{
-position:fixed;
-z-index:99999;
-pointer-events:auto;
-}
-
-
-.floating-prev,
-.floating-next{
-
-position:fixed;
-
-top:70%;
-
-transform:translateY(-50%);
-
-width:65px;
-height:65px;
-
-border-radius:50%;
-
-border:2px solid rgba(255,255,255,.5);
-
-background:linear-gradient(135deg,#25d366,#075e54);
-
-color:white;
-
-font-size:28px;
-
-display:flex;
-
-align-items:center;
-justify-content:center;
-
-box-shadow:
-0 8px 25px rgba(0,0,0,.4),
-inset 0 0 15px rgba(255,255,255,.3);
-
-backdrop-filter:blur(10px);
-
-z-index:5000;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-
-/* bouton gauche */
-
-.floating-prev{
-
-left:15px;
-
-}
-
-
-
-/* bouton droit */
-
-.floating-next{
-
-right:15px;
-
-}
-
-
-
-/* animation au toucher */
-
-.floating-prev:hover,
-.floating-next:hover{
-
-transform:translateY(-50%) scale(1.15);
-
-background:linear-gradient(135deg,#00c853,#128c7e);
-
-}
-
-
-
-/* effet clic mobile */
-
-.floating-prev:active,
-.floating-next:active{
-
-transform:translateY(-50%) scale(.9);
-
-}
-
-
-
-/* bouton fermer */
-
-.status-close{
-
-position:absolute;
-
-top:25px;
-
-right:25px;
-
-width:50px;
-
-height:50px;
-
-border-radius:50%;
-
-background:linear-gradient(135deg,#ff1744,#b71c1c);
-
-color:white;
-
-font-size:22px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-border:none;
-
-box-shadow:0 8px 20px rgba(0,0,0,.5);
-
-z-index:6000;
-
-}
 </style>
 
 </head>
+
 
 <body>
 
 
 <header class="whatsapp-header">
 
+
 <button class="hamburger" onclick="openMenu()">
+
 ☰
+
 </button>
 
 
 <div class="avatar">
+
 🤖
+
 </div>
 
 
 <div>
+
 <b>ASSISTANT LESFACILITATEURS IA</b>
+
 <br>
+
 <span>En ligne</span>
+
 </div>
 
 
 </header>
 
+
 <div id="sideMenu" class="side-menu">
+
+
 <button onclick="openStatus()">
+
 📷 Statuts
+
 </button>
 
+
 <button onclick="toggleDark()">
+
 🌙 Mode sombre
+
 </button>
 
 
 <button onclick="checkAdmin()">
-🔐 Administration IA
+
+🔐 Administration
+
 </button>
 
 
 <button onclick="inviteUsers()">
-📢 Inviter des utilisateurs
+
+📢 Inviter
+
 </button>
 
 
@@ -785,141 +666,214 @@ z-index:6000;
 
 <div class="card">
 
-<h3>👤 Compte utilisateur</h3>
+
+<h3>
+👤 Compte utilisateur
+</h3>
+
 
 <button onclick="openRegister()">
+
 ➕ Créer un compte
+
 </button>
 
+
 <p id="profile"></p>
+
 
 </div>
 
 
+
 <div id="registerPopup" class="popup">
+
 
 <div class="popup-box">
 
-<h3>Créer votre compte</h3>
+
+<h3>
+Créer votre compte
+</h3>
+
 
 <input id="registerName" placeholder="Votre nom">
 
 
 <button onclick="createAccount()">
-✅ Valider la création
+
+✅ Valider
+
 </button>
 
 
-<button onclick="closeRegister()">
+<button onclick="closeRegister()" class="close-popup">
+
 ❌ Fermer
+
 </button>
 
 
 </div>
 
+
 </div>
 
 
+<div class="card">
 
-<div class="card chat-card">
 
 <div id="chat"></div>
 
 
+</div>
+
+
+</div>
+
+
+
 <div class="message-box">
 
+
 <button class="emoji">
+
 😊
+
 </button>
 
 
-<input id="question" 
-placeholder="Écrire un message">
+<input id="question" placeholder="Écrire un message">
 
 
-<button class="send"
-onclick="sendMessage()">
+<button class="send" onclick="sendMessage()">
+
 ➤
+
 </button>
 
 
 </div>
 
+
+
+<!-- ADMIN POPUP -->
+
+<div id="adminPopup" class="popup">
+
+
+<div class="popup-box">
+
+
+<button onclick="closeAdmin()" class="close-popup">
+
+✖
+
+</button>
+
+
+<h2>
+🤖 Administration IA
+</h2>
+
+
+<p>
+ASSISTANT LESFACILITATEURS
+</p>
+
+
+<a href="https://wa.me/237670035609"
+style="display:block;padding:15px;background:#25d366;color:white;border-radius:20px;text-decoration:none">
+
+💬 WhatsApp
+
+</a>
+
+
+</div>
+
 </div>
 
 
 
+<!-- STATUTS -->
+
+<button class="floating-prev" onclick="openStatus();previousStatus()">
+
+◀
+
+</button>
 
 
+<button class="floating-next" onclick="openStatus();nextStatus()">
+
+▶
+
+</button>
+
+
+
+<div id="statusViewer" class="status-viewer">
+
+
+<div id="statusContent"></div>
+
+
+<button class="status-close" onclick="closeStatus()">
+
+✖
+
+</button>
+
+
+</div>
 <script>
 
-// La suite du code JavaScript complet arrive dans la partie 2/2
+
+let currentUser="";
+
+let database=null;
 
 
 
-
-// ===============================
-// ASSISTANT IA ADMINISTRATEUR LOCAL
-// PARTIE 2/2
-// ===============================
+// ==========================
+// BASE LOCALE INDEXEDDB
+// ==========================
 
 
-let currentUser = "";
-let database;
-
-
-// OUVERTURE DE LA BASE LOCALE
+let request=indexedDB.open("AssistantIA_Local",1);
 
 
 
+request.onupgradeneeded=function(e){
 
-let request = indexedDB.open("AssistantIA_Local",2);
-
-
-request.onupgradeneeded = function(e){
-
-    database = e.target.result;
+database=e.target.result;
 
 
-    if(!database.objectStoreNames.contains("users")){
+if(!database.objectStoreNames.contains("users")){
 
-        database.createObjectStore("users",{
-            keyPath:"name"
-        });
+database.createObjectStore("users",{keyPath:"name"});
 
-    }
+}
 
 
+if(!database.objectStoreNames.contains("messages")){
 
-    if(!database.objectStoreNames.contains("messages")){
+database.createObjectStore("messages",{
+keyPath:"id",
+autoIncrement:true
+});
 
-        database.createObjectStore("messages",{
-            keyPath:"id",
-            autoIncrement:true
-        });
-
-    }
-
+}
 
 
-    if(!database.objectStoreNames.contains("rules")){
+if(!database.objectStoreNames.contains("session")){
 
-        database.createObjectStore("rules",{
-            keyPath:"id"
-        });
+database.createObjectStore("session",{
+keyPath:"id"
+});
 
-    }
-
-
-
-    if(!database.objectStoreNames.contains("session")){
-
-        database.createObjectStore("session",{
-            keyPath:"id"
-        });
-
-    }
-
+}
 
 };
 
@@ -927,37 +881,104 @@ request.onupgradeneeded = function(e){
 
 request.onsuccess=function(e){
 
-    database=e.target.result;
+database=e.target.result;
 
-    loadRules();
+loadUserSession();
 
-    loadUserSession();
+addAIMessage(
+"Bonjour 👋 Je suis l'assistant IA Lesfacilitateurs. Comment puis-je vous aider ?"
+);
 
 };
 
 
 
 
+// ==========================
+// CREATION COMPTE
+// ==========================
+
+
+function openRegister(){
+
+document.getElementById("registerPopup").style.display="flex";
+
+}
+
+
+
+function closeRegister(){
+
+document.getElementById("registerPopup").style.display="none";
+
+}
+
+
+
+
+function createAccount(){
+
+
+let name=document.getElementById("registerName").value.trim();
+
+
+
+if(name===""){
+
+alert("Veuillez entrer votre nom");
+
+return;
+
+}
+
+
 
 currentUser=name;
-saveUserSession(name);
 
 
-let tx=database.transaction("users","readwrite");
+
+localStorage.setItem(
+"assistant_user",
+name
+);
+
+
+
+if(database){
+
+let tx=database.transaction(
+"users",
+"readwrite"
+);
+
 
 tx.objectStore("users").put({
+
 name:name,
+
 date:new Date().toLocaleString()
+
 });
 
 
+}
+
+
+
 document.getElementById("profile").innerHTML=
-"Connecté : "+name;
+
+"✅ Connecté : "+name;
+
+
+
+closeRegister();
+
 
 
 addAIMessage(
-"Bienvenue "+name+" 👋 Je suis ton assistant IA lesfacilitteurs."
+"Bienvenue "+name+" 👋 Votre compte est créé."
 );
+
 
 
 }
@@ -965,25 +986,96 @@ addAIMessage(
 
 
 
+// ==========================
+// SESSION
+// ==========================
 
-// ENVOI MESSAGE
+
+function saveUserSession(){
+
+
+if(!database)return;
+
+
+let tx=database.transaction(
+"session",
+"readwrite"
+);
+
+
+tx.objectStore("session").put({
+
+id:1,
+
+name:currentUser
+
+});
+
+
+}
+
+
+
+
+function loadUserSession(){
+
+
+let saved=localStorage.getItem(
+"assistant_user"
+);
+
+
+
+if(saved){
+
+currentUser=saved;
+
+
+document.getElementById("profile").innerHTML=
+
+"✅ Connecté : "+currentUser;
+
+
+return;
+
+}
+
+
+
+}
+
+
+
+
+// ==========================
+// CHAT
+// ==========================
 
 
 function sendMessage(){
 
+
 let input=document.getElementById("question");
+
 
 let text=input.value.trim();
 
 
-if(text==="") return;
+
+if(text==="")return;
+
 
 
 if(currentUser===""){
 
-alert("Vous devez créer un compte avant d'utiliser l'assistant");
+
+alert(
+"Créez un compte avant d'utiliser l'assistant"
+);
+
 
 openRegister();
+
 
 return;
 
@@ -992,7 +1084,6 @@ return;
 
 
 addUserMessage(text);
-
 
 
 saveMessage(
@@ -1006,130 +1097,100 @@ input.value="";
 
 
 
-setTimeout(()=>{
-
-let answer=AIResponse(text);
+setTimeout(function(){
 
 
-addAIMessage(answer);
+let response=AIResponse(text);
+
+
+addAIMessage(response);
+
 
 
 saveMessage(
 "ia",
-answer
+response
 );
+
 
 
 },500);
 
 
+
 }
 
 
 
 
-
-
-
-// AFFICHAGE MESSAGE UTILISATEUR
-
 function addUserMessage(text){
+
 
 let box=document.getElementById("chat");
 
 
-box.innerHTML +=
-`
+
+box.innerHTML += `
+
 <div class="message user">
 
 ${text}
 
+
 <div class="message-time">
+
 ${new Date().toLocaleTimeString()}
-</div>
 
 </div>
+
+
+</div>
+
 `;
 
 
+
 box.scrollTop=box.scrollHeight;
+
 
 }
 
 
 
 
-// AFFICHAGE IA
-
-
 function addAIMessage(text){
+
 
 let box=document.getElementById("chat");
 
 
-// Transformation automatique des liens en boutons cliquables
 
-let message = text;
+box.innerHTML += `
 
-
-// Détection YouTube
-message = message.replace(
-/https:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/g,
-`
-<div style="margin-top:10px;">
-<iframe 
-width="100%" 
-height="250"
-src="https://www.youtube.com/embed/$2"
-frameborder="0"
-allowfullscreen>
-</iframe>
-</div>
-`
-);
-
-
-// Détection liens vidéos mp4
-message = message.replace(
-/(https?:\/\/[^\s]+\.mp4)/g,
-`
-<video 
-controls 
-width="100%" 
-style="border-radius:15px;margin-top:10px;">
-<source src="$1" type="video/mp4">
-</video>
-`
-);
-
-
-// Autres liens normaux
-message = message.replace(
-/(https?:\/\/[^\s<]+)/g,
-'<br><a href="$1" target="_blank" style="color:#0066ff;font-weight:bold;">🔗 Ouvrir le lien</a>'
-);
-
-
-
-box.innerHTML +=
-`
 <div class="message ai">
 
 <b>🤖 Assistant IA</b>
 
 <br>
 
-${message}
+${text}
+
 
 <div class="message-time">
+
 ${new Date().toLocaleTimeString()}
-</div>
 
 </div>
+
+
+</div>
+
 `;
 
 
+
 box.scrollTop=box.scrollHeight;
+
 
 }
 
@@ -1137,10 +1198,16 @@ box.scrollTop=box.scrollHeight;
 
 
 
-// MEMORISATION DES MESSAGES
+// ==========================
+// SAUVEGARDE MESSAGES
+// ==========================
 
 
 function saveMessage(type,text){
+
+
+if(!database)return;
+
 
 
 let tx=database.transaction(
@@ -1149,11 +1216,15 @@ let tx=database.transaction(
 );
 
 
+
 tx.objectStore("messages").add({
 
 user:currentUser,
+
 type:type,
+
 text:text,
+
 date:new Date().toLocaleString()
 
 });
@@ -1166,198 +1237,131 @@ date:new Date().toLocaleString()
 
 
 // ==========================
-// MOTEUR IA A REGLES
+// BASE DE CONNAISSANCES IA
 // ==========================
 
 
-let defaultRules=
-`
-Tu es un administrateur intelligent.
-
-Tu dois être poli.
-
-Tu dois aider les utilisateurs.
-
-Tu dois refuser les insultes.
-
-Tu dois respecter les règles de confifentialites
-`;
-
-
-
-
-
-// ==========================
-// BASE DE CONNAISSANCE IA
-// QUESTIONS MULTIPLES = REPONSE
-// ==========================
-
-
-const BASE_CONNAISSANCE = [
+const BASE_CONNAISSANCE=[
 
 
 {
-categorie:"salutation",
+
 
 questions:[
+
 "bonjour",
 "salut",
-"bonsoir",
 "hello",
-"coucou",
-"ça va",
-"comment allez vous",
-"comment vas tu"
+"bonsoir"
+
 ],
 
+
 reponse:
-"Bonjour 👋 Bienvenue. Je suis votre assistant IA Lesfacilitateurs. Comment puis-je vous aider ?"
+
+"Bonjour 👋 Bienvenue sur l'assistant IA Lesfacilitateurs."
 
 },
 
 
 
 {
-categorie:" numérique",
+
 
 questions:[
-"visibilité",
-"création site web",
-"page Facebook professionnel",
-"publicité",
-"e-commerce",
-"commerce en ligne",
-"vente"
-],
 
-reponse:
-"contact admin a What's+237670035609."
-
-},
-
-
-
-{
-categorie:"service technique",
-
-questions:[
-"recherche maçon",
-"besoin de technicien ",
-"coffreur",
-"ferrailleur",
-"daleur"
-],
-
-reponse:
-"disponible a Yaoundé nyom3 What's+237670035609  où appel +237656050097"
-
-},
-
-
-
-{
-categorie:"contact",
-
-questions:[
-"contact",
-"numéro",
-"telephone",
-"whatsapp",
-"comment vous joindre",
-"adresse"
-],
-
-reponse:
-"Pour contacter l'administrateur, utilisez le moyen de contact configuré dans le système."
-
-},
-
-
-
-{
-categorie:"placement du personnel",
-
-questions:[
-"ménagère",
-"ménagère résidente",
-"gardien ",
-"nounou résidente",
-"jardinier",
-"manutentionnaire"
-],
-
-reponse:
-" contacter l'administration pour la recherche d'emploi l'inscription est gratuite mais pour le besoin d'employés la commission c'est 5000fcfa pour plus d'informations contacte admin +237670035609"
-
-},
-
-
-
-{
-categorie:"merci",
-
-questions:[
-"merci",
-"je te remercie",
-"c'est gentil",
-"super merci"
-],
-
-reponse:
-"Avec plaisir 😊 Je reste disponible pour vous aider."
-
-},
-
-{
-categorie:"liens",
-
-questions:[
 "site",
 "site web",
 "page officielle"
+
 ],
 
+
 reponse:
+
 `
-🌐 Notre site officiel :
+🌐 Site officiel :
+
 https://lesfacilitateurs.vercel.app/
 `
 
 },
 
 
+
+
 {
-categorie:"facebook",
+
 
 questions:[
-"facebook",
-"page facebook",
-"facebook officiel"
+
+"emploi",
+"travail",
+"recrutement",
+"offre emploi"
+
 ],
 
+
 reponse:
+
 `
-📘 Notre page Facebook :
-https://facebook.com/lesfacilitateurs
+💼 Trouvez des opportunités :
+
+https://workshopkmer.vercel.app/#job1
 `
 
 },
 
 
+
+
 {
-categorie:"emploi",
+
 
 questions:[
-"recrutement",
-"offre d'emploi",
-"recherche d'emploi"
+
+"contact",
+"whatsapp",
+"telephone"
+
 ],
-reponse:`
-🎵 inscription gratuite à la liste:
-https://workshopkmer.vercel.app/#job1
+
+
+reponse:
+
+`
+📞 Contact :
+
+WhatsApp : +237670035609
+
+Appel : +237656050097
 `
 
+},
+
+
+
+
+{
+
+
+questions:[
+
+"merci",
+"super",
+"bravo"
+
+],
+
+
+reponse:
+
+"Merci beaucoup 😊 Je reste disponible pour vous aider."
+
 }
+
+
 
 ];
 
@@ -1365,94 +1369,36 @@ https://workshopkmer.vercel.app/#job1
 
 
 
+
 // ==========================
-// MOTEUR IA AMELIORE
+// MOTEUR IA
 // ==========================
 
 
 function AIResponse(question){
 
 
-let q = question.toLowerCase();
-
-
-// Nettoyage texte
-
-q=q.normalize("NFD")
-.replace(/[\u0300-\u036f]/g,"");
-
-
-
-// 1 - Recherche dans les règles personnalisées admin
-
-let rules = getStoredRules();
-
-
-if(rules){
-
-
-let lignes = rules.split("\n");
-
-
-for(let ligne of lignes){
-
-
-let separation = ligne.split("=");
-
-
-if(separation.length >=2){
-
-
-let mots = separation[0]
-.toLowerCase()
-.trim();
-
-
-let reponse = separation.slice(1)
-.join("=")
-.trim();
-
-
-
-if(q.includes(mots)){
-
-
-return reponse;
-
-
-}
-
-
-}
-
-
-
-}
-
-
-}
-
-
-
-
-
-// 2 - Recherche dans la base de connaissance
-
-
-for(let bloc of BASE_CONNAISSANCE){
-
-
-for(let questionPossible of bloc.questions){
-
-
-let qp = questionPossible
+let q=question
 .toLowerCase()
 .normalize("NFD")
 .replace(/[\u0300-\u036f]/g,"");
 
 
 
-if(q.includes(qp)){
+for(let bloc of BASE_CONNAISSANCE){
+
+
+for(let mot of bloc.questions){
+
+
+let m=mot
+.toLowerCase()
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"");
+
+
+
+if(q.includes(m)){
 
 
 return bloc.reponse;
@@ -1461,43 +1407,25 @@ return bloc.reponse;
 }
 
 
-
 }
 
 
-}
-
-
-
-
-// 3 - Réponse par défaut
-
-
-return " pour plus d'info merci de  contacter admin par appel +237656050097  ou whasapp +237670035609.";
 
 }
 
 
 
+return `
 
+Je n'ai pas trouvé la réponse.
 
-// ===============================
-// GESTION DES CONSIGNES ADMIN
-// ===============================
+Pour plus d'informations contactez :
 
+📞 +237656050097
 
-function openAdmin(){
+💬 WhatsApp +237670035609
 
-let p=document.getElementById("adminPanel");
-
-
-p.style.display=
-p.style.display==="block"
-?
-"none"
-:
-"block";
-
+`;
 
 }
 
@@ -1505,225 +1433,37 @@ p.style.display==="block"
 
 
 
-
-function saveRules(){
-
-
-let rules=
-document.getElementById("rules").value;
-
-
-
-let tx=database.transaction(
-"rules",
-"readwrite"
-);
-
-
-
-tx.objectStore("rules")
-.put({
-
-id:1,
-content:rules
-
-});
-
-
-
-alert("Consignes IA sauvegardées");
-
-
-}
-
-
-
-
-
-
-function loadRules(){
-
-
-let tx=database.transaction(
-"rules",
-"readonly"
-);
-
-
-let req=
-tx.objectStore("rules")
-.get(1);
-
-
-
-req.onsuccess=function(){
-
-
-if(req.result){
-
-document.getElementById("rules").value=
-req.result.content;
-
-
-}
-
-
-};
-
-
-}
-
-
-
-
-
-function getStoredRules(){
-
-
-let result="";
-
-
-let tx=database.transaction(
-"rules",
-"readonly"
-);
-
-
-
-let req=
-tx.objectStore("rules")
-.get(1);
-
-
-
-req.onsuccess=function(){
-
-
-if(req.result){
-
-result=req.result.content;
-
-}
-
-};
-
-
-return result;
-
-
-}
-
-
-
-
-
-
-// MODE SOMBRE
-
-
-function toggleDark(){
-
-document.body.classList.toggle("dark");
-
-
-if(document.body.classList.contains("dark")){
-
-localStorage.setItem("theme","dark");
-
-}else{
-
-localStorage.removeItem("theme");
-
-}
-
-}
-
-
-
-function checkAdmin(){
-
-document.getElementById("adminPopup").style.display="flex";
-
-}
-
-
-function closeAdmin(){
-
-document.getElementById("adminPopup").style.display="none";
-
-}
-
-
-
-// ===============================
-// LIEN D'INVITATION
-// ===============================
-
-
-function inviteUsers(){
-
-let lien = window.location.href;
-
-
-document.getElementById("inviteLink").value = lien;
-
-
-if(navigator.share){
-
-navigator.share({
-
-title:"Assistant IA lesfacilitteurs",
-
-text:"Rejoins mon assistant IA",
-
-url:lien
-
-});
-
-
-}
-else{
-
-navigator.clipboard.writeText(lien);
-
-alert(
-"Lien copié ✅\nEnvoyez-le aux utilisateurs."
-);
-
-}
-
-
-}
-
-
-
-// ===============================
-// MENU HAMBURGER
-// ===============================
+// ==========================
+// MENU
+// ==========================
 
 
 function openMenu(){
 
-let menu=document.getElementById("sideMenu");
-
-menu.classList.toggle("active");
+document
+.getElementById("sideMenu")
+.classList.toggle("active");
 
 }
 
 
-// fermer menu en cliquant ailleurs
 
-document.addEventListener("click",function(e){
+
+document.addEventListener(
+"click",
+function(e){
+
 
 let menu=document.getElementById("sideMenu");
 
-let button=document.querySelector(".hamburger");
+let btn=document.querySelector(".hamburger");
+
 
 
 if(
 !menu.contains(e.target)
 &&
-!button.contains(e.target)
+!btn.contains(e.target)
 ){
 
 menu.classList.remove("active");
@@ -1736,292 +1476,168 @@ menu.classList.remove("active");
 
 
 
-// ===============================
-// MEMOIRE UTILISATEUR PERSISTANTE
-// ===============================
 
 
-function saveUserSession(name){
+// ==========================
+// MODE SOMBRE
+// ==========================
 
 
-let tx=database.transaction(
-"session",
-"readwrite"
-);
+function toggleDark(){
 
-
-tx.objectStore("session")
-.put({
-
-id:1,
-name:name
-
-});
-
+document.body.classList.toggle("dark");
 
 }
 
 
 
 
-function loadUserSession(){
+// ==========================
+// ADMIN
+// ==========================
 
 
-let saved = localStorage.getItem("assistant_user");
+function checkAdmin(){
+
+document.getElementById("adminPopup").style.display="flex";
+
+}
 
 
-if(saved){
 
-currentUser = saved;
+function closeAdmin(){
 
-
-document.getElementById("profile").innerHTML =
-"✅ Connecté : " + currentUser;
-
-
-addAIMessage(
-"Bienvenue de nouveau " + currentUser + " 👋"
-);
-
-
-return;
+document.getElementById("adminPopup").style.display="none";
 
 }
 
 
 
 
-let tx = database.transaction(
-"session",
-"readonly"
-);
+
+// ==========================
+// INVITATION
+// ==========================
 
 
-let req =
-tx.objectStore("session")
-.get(1);
+function inviteUsers(){
 
 
-
-req.onsuccess=function(){
-
-
-if(req.result){
+let lien=window.location.href;
 
 
-currentUser = req.result.name;
-
-
-document.getElementById("profile").innerHTML =
-"✅ Connecté : " + currentUser;
-
-
-addAIMessage(
-"Bienvenue de nouveau " + currentUser + " 👋"
-);
-
-
-}
-
-
-};
-
-
-}
+document.getElementById("inviteLink").value=lien;
 
 
 
+if(navigator.clipboard){
 
-function openRegister(){
-
-document.getElementById("registerPopup").style.display="flex";
-
-}
-
-
-function closeRegister(){
-
-document.getElementById("registerPopup").style.display="none";
-
-}
-
-
-
-function createAccount(){
-
-let name=document.getElementById("registerName").value.trim();
-
-
-if(name===""){
-
-alert("Veuillez entrer votre nom pour créer un compte");
-
-return;
-
-}
-
-
-currentUser=name;
-
-
-// sauvegarde locale
-
-localStorage.setItem(
-"assistant_user",
-name
-);
-
-
-
-document.getElementById("profile").innerHTML=
-
-"✅ Connecté : "+name;
-
-
-closeRegister();
-
-
-
-addAIMessage(
-"Bienvenue "+name+" 👋 Votre compte a été créé avec succès."
-);
+navigator.clipboard.writeText(lien);
 
 
 alert(
-"Compte créé avec succès ✅"
+"Lien copié ✅"
 );
 
 
 }
+
+
+}
+
+
+
+
+
+</script>
+<script>
+
+
+// ==========================
+// SYSTEME STATUTS
+// ==========================
 
 
 const STATUTS=[
 
 
 {
-user:"archives",
-url:"https://archive.org/embed/in-shot-20250618-050312535"
-},
-{
-user:"Photo",
+type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/image-st-joseph-/main/IMG-20260715-WA0001.jpg"
 },
 
+
 {
-user:"Audio",
+type:"audio",
 url:"https://raw.githubusercontent.com/Lfg237/audio-/main/nom%20de%20dieu%20.mp3"
 },
 
+
 {
-	user : "tiktok",
-url:"https://vm.tiktok.com/ZSXLmqFJp/"
+type:"iframe",
+url:"https://archive.org/embed/in-shot-20250618-050312535"
 }
+
+
 ];
+
+
 
 let statusIndex=0;
 
 
+
+// OUVRIR STATUT
+
+
 function openStatus(){
 
-let viewer=document.getElementById("statusViewer");
 
-viewer.style.display="flex";
+document.getElementById(
+"statusViewer"
+).style.display="flex";
+
 
 showStatus();
 
+
 }
 
+
+
+// AFFICHER STATUT
 
 
 function showStatus(){
 
-let box=document.getElementById("statusContent");
 
-let s=STATUTS[statusIndex];
+let box=document.getElementById(
+"statusContent"
+);
 
-let url=(s.url || "").toLowerCase();
 
-
-// IMAGE
-
-if (
-    url.includes(".jpg") ||
-    url.includes(".jpeg") ||
-    url.includes(".png") ||
-    url.includes(".webp")
-) {
-
-    box.innerHTML = `
-        <img src="${s.url}"
-        style="
-            max-width:90%;
-            max-height:75vh;
-            border-radius:20px;
-            object-fit:contain;
-        ">
-    `;
-
-}
+let statut=STATUTS[statusIndex];
 
 
 
-// VIDEO
+if(statut.type==="image"){
 
-// VIDEO
-else if (
-    url.endsWith(".mp4") ||
-    url.endsWith(".webm") ||
-    url.endsWith(".mov")
-) {
 
-box.innerHTML = `
-<div style="position:relative;width:100%;text-align:center;">
+box.innerHTML=`
 
-<video
-controls
-playsinline
-controlslist="nofullscreen"
-disablepictureinpicture
-style="
-width:95%;
-max-height:60vh;
-border-radius:20px;
-background:#000;
-">
-<source src="${s.url}">
-</video>
+<img src="${statut.url}">
 
-</div>
 `;
 
-}
 
 
-<video
-autoplay
-playsinline
-controls
-controlslist="nofullscreen"
-disablepictureinpicture
-webkit-playsinline
-style="
-width:100%;
-max-height:70vh;
-object-fit:contain;
-">
-video::-webkit-media-controls-fullscreen-button{
-display:none;
 }
 
 
 
-// AUDIO
 
-else if(
-url.includes(".mp3") ||
-url.includes(".wav") ||
-url.includes(".ogg")
-){
+else if(statut.type==="audio"){
+
 
 box.innerHTML=`
 
@@ -2030,12 +1646,12 @@ color:white;
 text-align:center;
 ">
 
-<h2>🎵 Lecture audio</h2>
+<h2>🎵 Audio</h2>
 
 
 <audio controls autoplay>
 
-<source src="${s.url}">
+<source src="${statut.url}">
 
 </audio>
 
@@ -2044,29 +1660,49 @@ text-align:center;
 
 `;
 
+
+
 }
 
 
 
 
-// YOUTUBE
 
-else if(
-url.includes("tiktok") ||
-url.includes("facebook") ||
-url.includes("instagram") ||
-url.includes("github") ||
-url.includes("youtube") ||
-url.includes("youtu.be") ||
-url.includes("archive.org")
-){
+else if(statut.type==="video"){
 
-location.href = s.url;
+
+box.innerHTML=`
+
+<video
+
+autoplay
+
+playsinline
+
+controls
+
+controlslist="nofullscreen"
+
+style="
+width:90%;
+max-height:75vh;
+object-fit:contain;
+">
+
+
+<source src="${statut.url}">
+
+
+</video>
+
+`;
+
+
 
 }
 
 
-// TIKTOK FACEBOOK AUTRES
+
 
 else{
 
@@ -2075,19 +1711,21 @@ box.innerHTML=`
 
 <iframe
 
-src="${s.url}"
+src="${statut.url}"
 
 style="
 width:90%;
-height:70vh;
-border-radius:20px;
+height:75vh;
 border:none;
+border-radius:20px;
 ">
 
 </iframe>
 
 `;
 
+
+
 }
 
 
@@ -2095,11 +1733,16 @@ border:none;
 }
 
 
+
+
+// SUIVANT
 
 
 function nextStatus(){
 
+
 statusIndex++;
+
 
 if(statusIndex>=STATUTS.length){
 
@@ -2107,15 +1750,23 @@ statusIndex=0;
 
 }
 
+
 showStatus();
+
 
 }
 
 
 
+
+// PRECEDENT
+
+
 function previousStatus(){
 
+
 statusIndex--;
+
 
 if(statusIndex<0){
 
@@ -2123,111 +1774,57 @@ statusIndex=STATUTS.length-1;
 
 }
 
+
 showStatus();
+
 
 }
 
 
+
+
+
+// FERMER
 
 
 function closeStatus(){
 
-document.getElementById("statusViewer").style.display="none";
+
+document.getElementById(
+"statusViewer"
+).style.display="none";
 
 
 }
 
 
 
-// OUVERTURE AUTOMATIQUE DES STATUTS AU DÉMARRAGE
 
-window.addEventListener("load", function(){
+// OUVERTURE AUTOMATIQUE
+
+
+window.addEventListener(
+"load",
+function(){
+
 
 setTimeout(function(){
 
-document.getElementById("statusViewer").style.display="flex";
 
-showStatus();
+openStatus();
 
-},1000);
+
+},1500);
+
+
 
 });
+
+
+
 </script>
 
 
-<div id="adminPopup" class="popup">
-
-<div class="popup-box">
-
-<button class="close-popup" onclick="closeAdmin()">
-✖
-</button>
-
-<h2>🤖 Administration IA</h2>
-
-<p>
-<b>ASSISTANT LESFACILITATEURS</b>
-</p>
-
-<p>
-📍 Yaoundé - Nyom 3
-</p>
-
-
-<p>
-Contactez-nous directement :
-</p>
-
-
-<a 
-href="https://wa.me/237670035609?text=Bonjour%20je%20contacte%20LESFACILITATEURS%20IA"
-class="popup-btn whatsapp"
-target="_blank">
-
-💬 WhatsApp : +237670035609
-
-</a>
-
-
-<a 
-href="tel:+237656050097"
-class="popup-btn call">
-
-📞 Appel : +237656050097
-
-</a>
-
-
-</div>
-
-</div>
-
-
-<!-- BOUTONS STATUTS TOUJOURS VISIBLES -->
-
-<button class="floating-prev" onclick="openStatus();previousStatus()">
-◀
-</button>
-
-
-<button class="floating-next" onclick="openStatus();nextStatus()">
-▶
-</button>
-
-
-
-<!-- AFFICHAGE STATUT -->
-
-<div id="statusViewer" class="status-viewer">
-
-<div id="statusContent"></div>
-
-
-<button class="status-close" onclick="closeStatus()">
-✖ Fermer
-</button>
-
-
-</div>
 </body>
-</html
+
+</html>
