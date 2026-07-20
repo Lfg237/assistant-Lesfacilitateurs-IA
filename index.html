@@ -1980,32 +1980,25 @@ let url=s.url.toLowerCase();
 
 // IMAGE
 
-if(
-url.includes(".jpg") ||
-url.includes(".jpeg") ||
-url.includes(".png") ||
-url.includes(".webp")
-){
+if (
+    url.includes(".jpg") ||
+    url.includes(".jpeg") ||
+    url.includes(".png") ||
+    url.includes(".webp")
+) {
 
-box.innerHTML = `
-<div style="text-align:center;color:white;">
-<h2>${s.user}</h2>
+    box.innerHTML = `
+        <img src="${s.url}"
+        style="
+            max-width:90%;
+            max-height:75vh;
+            border-radius:20px;
+            object-fit:contain;
+        ">
+    `;
 
-<a href="${s.url}"
-   target="_blank"
-   style="
-   display:inline-block;
-   padding:15px 25px;
-   background:#25d366;
-   color:white;
-   border-radius:30px;
-   text-decoration:none;
-   font-weight:bold;">
-🚀 Ouvrir ${s.user}
-</a>
+}
 
-</div>
-`;
 
 
 // VIDEO
@@ -2091,7 +2084,7 @@ url.includes("youtu.be") ||
 url.includes("archive.org")
 ){
 
-window.open(s.url,"_blank");
+location.href = s.url;
 
 }
 
