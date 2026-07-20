@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ASSISTANT IA LESFACILITATEURS</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    margin:0;
+    background:#eef2f7;
+    color:#222;
+    height:100vh;
+    overflow:hidden;
+
+}
+
+.whatsapp-header{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:75px;
+background:#075e54;
+color:white;
+display:flex;
+align-items:center;
+gap:15px;
+padding:15px;
+z-index:1000;
+}
+.container{
+
+padding-top:85px;
+padding-bottom:80px;
+height:100vh;
+
+}
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+input,textarea,button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+
+button{
+    background:#0066ff;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{
+    opacity:.8;
+}
+
+
+#chat{
+
+position:fixed;
+top:75px;
+bottom:70px;
+left:0;
+right:0;
+
+overflow-y:auto;
+
+background:#efeae2;
+
+padding:15px;
+
+}
+
+.message{
+    padding:10px;
+    margin:8px 0;
+    border-radius:12px;
+    max-width:80%;
+}
+
+.user{
+    background:#d1e7ff;
+    margin-left:auto;
+}
+
+.ai{
+    background:#e8e8e8;
+    margin-right:auto;
+}
+
+
+.admin{
+    display:none;
+}
+
+.small{
+    font-size:13px;
+    color:#777;
+}
+
+
+/* MODE SOMBRE AMÉLIORÉ */
+
+.dark{
+    background:#111;
+    color:#fff;
+}
+
+
+.dark .card{
+    background:#222;
+    color:#fff;
+}
+
+
+.dark input,
+.dark textarea{
+    background:#333;
+    color:white;
+    border:1px solid #555;
+}
+
+
+.dark input::placeholder,
+.dark textarea::placeholder{
+    color:#bbb;
+}
+
+
+.dark #chat{
+    background:#1a1a1a;
+}
+
+
+.dark .message.ai{
+    background:#333;
+    color:white;
+}
+
+
+.dark .message.user{
+    background:#004a99;
+    color:white;
+}
+
+
+.dark .small{
+    color:#ccc;
+}
+
+
+
+/* INTERFACE STYLE WHATSAPP */
+
+
+.whatsapp-header{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:75px;
+background:#075e54;
+color:white;
+display:flex;
+align-items:center;
+gap:15px;
+padding:15px;
+z-index:1000;
+}
+
+
+.whatsapp-header span{
+
+font-size:13px;
+opacity:.8;
+
+}
+
+
+.avatar{
+
+background:white;
+color:#075e54;
+width:45px;
+height:45px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:25px;
+
+}
+
+
+
+.chat-card{
+
+padding:0;
+overflow:hidden;
+
+}
+
+
+#chat{
+
+height:65vh;
+background:#efeae2;
+padding:15px;
+padding-bottom:100px;
+}
+}
+
+
+
+.message{
+
+max-width:75%;
+padding:10px 14px;
+margin:8px;
+border-radius:15px;
+font-size:15px;
+
+}
+
+
+.message.user{
+
+background:#dcf8c6;
+margin-left:auto;
+border-bottom-right-radius:3px;
+
+}
+
+
+
+.message.ai{
+
+background:white;
+margin-right:auto;
+border-bottom-left-radius:3px;
+
+}
+
+
+
+.message-time{
+
+font-size:10px;
+text-align:right;
+color:#777;
+margin-top:5px;
+
+}
+
+
+
+.message-box{
+
+position:fixed;
+
+bottom:0;
+left:0;
+right:0;
+
+display:flex;
+
+gap:8px;
+
+padding:10px;
+
+background:#f0f0f0;
+
+z-index:1000;
+
+}
+
+
+
+.message-box input{
+
+flex:1;
+border-radius:25px;
+border:none;
+padding:14px;
+
+}
+
+
+
+.message-box button{
+
+width:45px;
+height:45px;
+border-radius:50%;
+
+}
+
+
+
+.send{
+
+background:#25d366;
+
+}
+
+
+.emoji{
+
+background:#ddd;
+
+}
+
+
+/* MENU HAMBURGER */
+
+
+.hamburger{
+
+background:none;
+font-size:28px;
+width:45px;
+padding:0;
+
+}
+
+
+.side-menu{
+
+position:fixed;
+top:0;
+left:-300px;
+
+width:280px;
+height:100%;
+
+background:white;
+z-index:1000;
+
+padding:20px;
+
+box-shadow:5px 0 15px rgba(0,0,0,.3);
+
+transition:.3s;
+
+}
+
+
+.side-menu.active{
+
+left:0;
+
+}
+
+
+
+.side-menu button{
+
+margin-bottom:15px;
+
+}
+
+
+
+.side-menu input{
+
+background:#eee;
+
+}
+
+
+
+/* fond sombre menu */
+
+
+.dark .side-menu{
+
+background:#222;
+
+color:white;
+
+}
+
+
+.dark .side-menu input{
+
+background:#333;
+color:white;
+
+}
+
+
+.popup{
+
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+z-index:2000;
+align-items:center;
+justify-content:center;
+
+}
+
+
+.popup-box{
+
+background:white;
+width:90%;
+max-width:400px;
+padding:25px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,.3);
+
+}
+
+
+.dark .popup-box{
+
+background:#222;
+color:white;
+
+}
+
+
+
+.close-popup{
+
+position:absolute;
+right:20px;
+top:20px;
+width:40px;
+
+background:red;
+
+}
+
+
+
+.popup-btn{
+
+display:block;
+padding:15px;
+margin-top:15px;
+border-radius:30px;
+color:white;
+text-decoration:none;
+font-weight:bold;
+
+}
+
+
+.call{
+
+background:#0066ff;
+
+}
+
+
+.whatsapp{
+
+background:#25d366;
+
+}
+</style>
+
+</head>
+
+<body>
+
+
+<header class="whatsapp-header">
+
+<button class="hamburger" onclick="openMenu()">
+☰
+</button>
+
+
+<div class="avatar">
+🤖
+</div>
+
+
+<div>
+<b>ASSISTANT LESFACILITATEURS IA</b>
+<br>
+<span>En ligne</span>
+</div>
+
+
+</header>
+
+<div id="sideMenu" class="side-menu">
+
+
+<button onclick="toggleDark()">
+🌙 Mode sombre
+</button>
+
+
+<button onclick="checkAdmin()">
+🔐 Administration IA
+</button>
+
+
+<button onclick="inviteUsers()">
+📢 Inviter des utilisateurs
+</button>
+
+
+<input id="inviteLink" readonly placeholder="Lien invitation">
+
+
+</div>
+
+
+<div class="container">
+
+
+<div class="card">
+
+<h3>👤 Profil utilisateur</h3>
+
+<input id="username" placeholder="Votre nom">
+
+<button onclick="createUser()">
+Créer mon profil
+</button>
+
+<p id="profile"></p>
+
+</div>
+
+
+
+<div class="card chat-card">
+
+<div id="chat"></div>
+
+
+<div class="message-box">
+
+<button class="emoji">
+😊
+</button>
+
+
+<input id="question" 
+placeholder="Écrire un message">
+
+
+<button class="send"
+onclick="sendMessage()">
+➤
+</button>
+
+
+</div>
+
+</div>
+
+
+
+
+
+<script>
+
+// La suite du code JavaScript complet arrive dans la partie 2/2
+
+
+
+
+// ===============================
+// ASSISTANT IA ADMINISTRATEUR LOCAL
+// PARTIE 2/2
+// ===============================
+
+
+let currentUser = "";
+let database;
+
+
+// OUVERTURE DE LA BASE LOCALE
+window.onload=function(){
+
+if(localStorage.getItem("theme")=="dark"){
+
+document.body.classList.add("dark");
+
+}
+
+};
+
+
+let request = indexedDB.open("AssistantIA_Local",2);
+
+
+request.onupgradeneeded = function(e){
+
+    database = e.target.result;
+
+
+    if(!database.objectStoreNames.contains("users")){
+
+        database.createObjectStore("users",{
+            keyPath:"name"
+        });
+
+    }
+
+
+
+    if(!database.objectStoreNames.contains("messages")){
+
+        database.createObjectStore("messages",{
+            keyPath:"id",
+            autoIncrement:true
+        });
+
+    }
+
+
+
+    if(!database.objectStoreNames.contains("rules")){
+
+        database.createObjectStore("rules",{
+            keyPath:"id"
+        });
+
+    }
+
+
+
+    if(!database.objectStoreNames.contains("session")){
+
+        database.createObjectStore("session",{
+            keyPath:"id"
+        });
+
+    }
+
+
+};
+
+
+
+request.onsuccess=function(e){
+
+    database=e.target.result;
+
+    loadRules();
+
+    loadUserSession();
+
+};
+
+
+
+// CREATION UTILISATEUR
+
+function createUser(){
+
+let name=document.getElementById("username").value.trim();
+
+
+if(name===""){
+alert("Entrez un nom");
+return;
+}
+
+
+currentUser=name;
+saveUserSession(name);
+
+
+let tx=database.transaction("users","readwrite");
+
+tx.objectStore("users").put({
+name:name,
+date:new Date().toLocaleString()
+});
+
+
+document.getElementById("profile").innerHTML=
+"Connecté : "+name;
+
+
+addAIMessage(
+"Bienvenue "+name+" 👋 Je suis ton assistant IA lesfacilitteurs."
+);
+
+
+}
+
+
+
+
+
+// ENVOI MESSAGE
+
+
+function sendMessage(){
+
+let input=document.getElementById("question");
+
+let text=input.value.trim();
+
+
+if(text==="") return;
+
+
+if(currentUser===""){
+alert("Crée d'abord ton profil");
+return;
+}
+
+
+
+addUserMessage(text);
+
+
+
+saveMessage(
+"user",
+text
+);
+
+
+
+input.value="";
+
+
+
+setTimeout(()=>{
+
+let answer=AIResponse(text);
+
+
+addAIMessage(answer);
+
+
+saveMessage(
+"ia",
+answer
+);
+
+
+},500);
+
+
+}
+
+
+
+
+
+
+
+// AFFICHAGE MESSAGE UTILISATEUR
+
+function addUserMessage(text){
+
+let box=document.getElementById("chat");
+
+
+box.innerHTML +=
+`
+<div class="message user">
+
+${text}
+
+<div class="message-time">
+${new Date().toLocaleTimeString()}
+</div>
+
+</div>
+`;
+
+
+box.scrollTop=box.scrollHeight;
+
+}
+
+
+
+
+// AFFICHAGE IA
+
+
+function addAIMessage(text){
+
+let box=document.getElementById("chat");
+
+
+// Transformation automatique des liens en boutons cliquables
+
+let message = text;
+
+
+// Détection YouTube
+message = message.replace(
+/https:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/g,
+`
+<div style="margin-top:10px;">
+<iframe 
+width="100%" 
+height="250"
+src="https://www.youtube.com/embed/$2"
+frameborder="0"
+allowfullscreen>
+</iframe>
+</div>
+`
+);
+
+
+// Détection liens vidéos mp4
+message = message.replace(
+/(https?:\/\/[^\s]+\.mp4)/g,
+`
+<video 
+controls 
+width="100%" 
+style="border-radius:15px;margin-top:10px;">
+<source src="$1" type="video/mp4">
+</video>
+`
+);
+
+
+// Autres liens normaux
+message = message.replace(
+/(https?:\/\/[^\s<]+)/g,
+'<br><a href="$1" target="_blank" style="color:#0066ff;font-weight:bold;">🔗 Ouvrir le lien</a>'
+);
+
+
+
+box.innerHTML +=
+`
+<div class="message ai">
+
+<b>🤖 Assistant IA</b>
+
+<br>
+
+${message}
+
+<div class="message-time">
+${new Date().toLocaleTimeString()}
+</div>
+
+</div>
+`;
+
+
+box.scrollTop=box.scrollHeight;
+
+}
+
+
+
+
+
+// MEMORISATION DES MESSAGES
+
+
+function saveMessage(type,text){
+
+
+let tx=database.transaction(
+"messages",
+"readwrite"
+);
+
+
+tx.objectStore("messages").add({
+
+user:currentUser,
+type:type,
+text:text,
+date:new Date().toLocaleString()
+
+});
+
+
+}
+
+
+
+
+
+// ==========================
+// MOTEUR IA A REGLES
+// ==========================
+
+
+let defaultRules=
+`
+Tu es un administrateur intelligent.
+
+Tu dois être poli.
+
+Tu dois aider les utilisateurs.
+
+Tu dois refuser les insultes.
+
+Tu dois respecter les règles de confifentialites
+`;
+
+
+
+
+
+// ==========================
+// BASE DE CONNAISSANCE IA
+// QUESTIONS MULTIPLES = REPONSE
+// ==========================
+
+
+const BASE_CONNAISSANCE = [
+
+
+{
+categorie:"salutation",
+
+questions:[
+"bonjour",
+"salut",
+"bonsoir",
+"hello",
+"coucou",
+"ça va",
+"comment allez vous",
+"comment vas tu"
+],
+
+reponse:
+"Bonjour 👋 Bienvenue. Je suis votre assistant IA administrateur. Comment puis-je vous aider ?"
+
+},
+
+
+
+{
+categorie:"identite",
+
+questions:[
+"qui es tu",
+"tu es qui",
+"présente toi",
+"quel est ton rôle",
+"que fais tu"
+],
+
+reponse:
+"Je suis un assistant IA locale configurée pour assister et guider les utilisateurs dans les plateformes numeriques des ets lesfacilitateurs groupe."
+
+},
+
+
+
+{
+categorie:"regles",
+
+questions:[
+"quelles sont les règles",
+"donne les règles",
+"règle de confidentialité",
+"conditions",
+"fonctionnement"
+],
+
+reponse:
+"Les règles sont définies par l'administrateur. Je veille au respect, à la politesse et à la bonne utilisation du service."
+
+},
+
+
+
+{
+categorie:"contact",
+
+questions:[
+"contact",
+"numéro",
+"telephone",
+"whatsapp",
+"comment vous joindre",
+"adresse"
+],
+
+reponse:
+"Pour contacter l'administrateur, utilisez le moyen de contact configuré dans le système."
+
+},
+
+
+
+{
+categorie:"aide",
+
+questions:[
+"aide",
+"je ne comprends pas",
+"comment utiliser",
+"explique moi",
+"comment ça marche"
+],
+
+reponse:
+"Je peux répondre à vos questions selon les connaissances et les consignes ajoutées par mon administrateur."
+
+},
+
+
+
+{
+categorie:"merci",
+
+questions:[
+"merci",
+"je te remercie",
+"c'est gentil",
+"super merci"
+],
+
+reponse:
+"Avec plaisir 😊 Je reste disponible pour vous aider."
+
+},
+
+{
+categorie:"liens",
+
+questions:[
+"site",
+"site web",
+"page officielle"
+],
+
+reponse:
+`
+🌐 Notre site officiel :
+https://www.lesfacilitateurs.com
+`
+
+},
+
+
+{
+categorie:"facebook",
+
+questions:[
+"facebook",
+"page facebook",
+"facebook officiel"
+],
+
+reponse:
+`
+📘 Notre page Facebook :
+https://facebook.com/lesfacilitateurs
+`
+
+},
+
+
+{
+categorie:"youtube",
+
+questions:[
+"youtube",
+"chaine youtube",
+"vidéo"
+],
+
+reponse:
+`
+▶️ Notre chaîne YouTube :
+https://youtube.com
+`
+
+},
+
+
+{
+categorie:"spotify",
+
+questions:[
+"spotify",
+"musique",
+"chanson"
+],
+
+reponse:
+`
+🎵 Écoutez nos musiques :
+https://spotify.com
+`
+
+},
+
+
+{
+categorie:"whatsapp",
+
+questions:[
+"whatsapp",
+"contact whatsapp",
+"numéro whatsapp"
+],
+
+reponse:
+`
+💬 Contact WhatsApp :
+https://wa.me/237670035609
+`
+}
+
+];
+
+
+
+
+
+// ==========================
+// MOTEUR IA AMELIORE
+// ==========================
+
+
+function AIResponse(question){
+
+
+let q = question.toLowerCase();
+
+
+// Nettoyage texte
+
+q=q.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"");
+
+
+
+// 1 - Recherche dans les règles personnalisées admin
+
+let rules = getStoredRules();
+
+
+if(rules){
+
+
+let lignes = rules.split("\n");
+
+
+for(let ligne of lignes){
+
+
+let separation = ligne.split("=");
+
+
+if(separation.length >=2){
+
+
+let mots = separation[0]
+.toLowerCase()
+.trim();
+
+
+let reponse = separation.slice(1)
+.join("=")
+.trim();
+
+
+
+if(q.includes(mots)){
+
+
+return reponse;
+
+
+}
+
+
+}
+
+
+
+}
+
+
+}
+
+
+
+
+
+// 2 - Recherche dans la base de connaissance
+
+
+for(let bloc of BASE_CONNAISSANCE){
+
+
+for(let questionPossible of bloc.questions){
+
+
+let qp = questionPossible
+.toLowerCase()
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"");
+
+
+
+if(q.includes(qp)){
+
+
+return bloc.reponse;
+
+
+}
+
+
+
+}
+
+
+}
+
+
+
+
+// 3 - Réponse par défaut
+
+
+return " merci de  contacter admin par appel +237656050097  ou whasapp +237670035609.";
+
+}
+
+
+
+
+
+// ===============================
+// GESTION DES CONSIGNES ADMIN
+// ===============================
+
+
+function openAdmin(){
+
+let p=document.getElementById("adminPanel");
+
+
+p.style.display=
+p.style.display==="block"
+?
+"none"
+:
+"block";
+
+
+}
+
+
+
+
+
+
+function saveRules(){
+
+
+let rules=
+document.getElementById("rules").value;
+
+
+
+let tx=database.transaction(
+"rules",
+"readwrite"
+);
+
+
+
+tx.objectStore("rules")
+.put({
+
+id:1,
+content:rules
+
+});
+
+
+
+alert("Consignes IA sauvegardées");
+
+
+}
+
+
+
+
+
+
+function loadRules(){
+
+
+let tx=database.transaction(
+"rules",
+"readonly"
+);
+
+
+let req=
+tx.objectStore("rules")
+.get(1);
+
+
+
+req.onsuccess=function(){
+
+
+if(req.result){
+
+document.getElementById("rules").value=
+req.result.content;
+
+
+}
+
+
+};
+
+
+}
+
+
+
+
+
+function getStoredRules(){
+
+
+let result="";
+
+
+let tx=database.transaction(
+"rules",
+"readonly"
+);
+
+
+
+let req=
+tx.objectStore("rules")
+.get(1);
+
+
+
+req.onsuccess=function(){
+
+
+if(req.result){
+
+result=req.result.content;
+
+}
+
+};
+
+
+return result;
+
+
+}
+
+
+
+
+
+
+// MODE SOMBRE
+
+
+function toggleDark(){
+
+document.body.classList.toggle("dark");
+
+
+if(document.body.classList.contains("dark")){
+
+localStorage.setItem("theme","dark");
+
+}else{
+
+localStorage.removeItem("theme");
+
+}
+
+}
+
+// ===============================
+// PROTECTION PANNEAU ADMIN
+// CODE ADMIN : 2332
+// ===============================
+
+
+function checkAdmin(){
+
+document.getElementById("adminPopup").style.display="flex";
+
+}
+
+
+function closeAdmin(){
+
+document.getElementById("adminPopup").style.display="none";
+
+}
+
+
+
+// ===============================
+// LIEN D'INVITATION
+// ===============================
+
+
+function inviteUsers(){
+
+let lien = window.location.href;
+
+
+document.getElementById("inviteLink").value = lien;
+
+
+if(navigator.share){
+
+navigator.share({
+
+title:"Assistant IA lesfacilitteurs",
+
+text:"Rejoins mon assistant IA",
+
+url:lien
+
+});
+
+
+}
+else{
+
+navigator.clipboard.writeText(lien);
+
+alert(
+"Lien copié ✅\nEnvoyez-le aux utilisateurs."
+);
+
+}
+
+
+}
+
+
+
+// ===============================
+// MENU HAMBURGER
+// ===============================
+
+
+function openMenu(){
+
+let menu=document.getElementById("sideMenu");
+
+menu.classList.toggle("active");
+
+}
+
+
+// fermer menu en cliquant ailleurs
+
+document.addEventListener("click",function(e){
+
+let menu=document.getElementById("sideMenu");
+
+let button=document.querySelector(".hamburger");
+
+
+if(
+!menu.contains(e.target)
+&&
+!button.contains(e.target)
+){
+
+menu.classList.remove("active");
+
+}
+
+
+});
+
+
+
+
+// ===============================
+// MEMOIRE UTILISATEUR PERSISTANTE
+// ===============================
+
+
+function saveUserSession(name){
+
+
+let tx=database.transaction(
+"session",
+"readwrite"
+);
+
+
+tx.objectStore("session")
+.put({
+
+id:1,
+name:name
+
+});
+
+
+}
+
+
+
+function loadUserSession(){
+
+
+let tx=database.transaction(
+"session",
+"readonly"
+);
+
+
+let req=
+tx.objectStore("session")
+.get(1);
+
+
+
+req.onsuccess=function(){
+
+
+if(req.result){
+
+
+currentUser=req.result.name;
+
+
+document.getElementById("profile").innerHTML=
+"Connecté : "+currentUser;
+
+
+
+addAIMessage(
+"Bienvenue de nouveau "+currentUser+" 👋"
+);
+
+
+}
+
+
+};
+
+
+}
+</script>
+
+
+<div id="adminPopup" class="popup">
+
+<div class="popup-box">
+
+<button class="close-popup" onclick="closeAdmin()">
+✖
+</button>
+
+<h2>🤖 Administration IA</h2>
+
+<p>
+<b>ASSISTANT LESFACILITATEURS</b>
+</p>
+
+<p>
+📍 Yaoundé - Nyom 3
+</p>
+
+
+<p>
+Contactez-nous directement :
+</p>
+
+
+<a 
+href="https://wa.me/237670035609?text=Bonjour%20je%20contacte%20LESFACILITATEURS%20IA"
+class="popup-btn whatsapp"
+target="_blank">
+
+💬 WhatsApp : +237670035609
+
+</a>
+
+
+<a 
+href="tel:+237656050097"
+class="popup-btn call">
+
+📞 Appel : +237656050097
+
+</a>
+
+
+</div>
+
+</div>
+</body>
+  </html>
