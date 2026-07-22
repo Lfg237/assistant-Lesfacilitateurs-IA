@@ -1013,9 +1013,15 @@ request.onsuccess = function(e){
     loadUserSession(function(){
 
         // Afficher le message de bienvenue seulement après le chargement
-        addAIMessage(
-            "Bonjour 👋 Je suis l'assistant IA Lesfacilitateurs. Comment puis-je vous aider ?"
-        );
+        loadMessages();
+
+if(document.getElementById("chat").innerHTML===""){
+
+    addAIMessage(
+    "Bonjour 👋 Je suis l'assistant IA Lesfacilitateurs. Comment puis-je vous aider ?"
+    );
+
+}
 
         // Vérification dans la console
         console.log("Utilisateur :", currentUser);
@@ -1064,7 +1070,7 @@ function createAccount(){
     // Mise à jour de l'interface
     document.getElementById("profile").innerHTML =
         "✅ Connecté : " + name;
-
+loadMessages();
     // Fermer la fenêtre
     closeRegister();
 
@@ -1141,7 +1147,9 @@ function loadUserSession(callback){
     // Sinon chercher dans IndexedDB
     if(!database){
 
-        if(callback) callback();
+        loadMessages();
+
+if(callback) callback();
 
         return;
     }
@@ -1365,7 +1373,45 @@ date:new Date().toLocaleString()
 
 }
 
+// ==========================
+// CHARGER LES CONVERSATIONS
+// ==========================
 
+function loadMessages(){
+
+    if(!database || currentUser==="") return;
+
+    let tx = database.transaction("messages","readonly");
+
+    let store = tx.objectStore("messages");
+
+    let req = store.getAll();
+
+    req.onsuccess = function(){
+
+        let messages = req.result.filter(
+            m => m.user === currentUser
+        );
+
+        document.getElementById("chat").innerHTML = "";
+
+        messages.forEach(function(m){
+
+            if(m.type==="user"){
+
+                addUserMessage(m.text);
+
+            }else{
+
+                addAIMessage(m.text);
+
+            }
+
+        });
+
+    };
+
+}
 
 
 
@@ -2020,6 +2066,7 @@ text-align:center;
 
 
 <audio controls autoplay>
+
 
 <source src="${statut.url}">
 
