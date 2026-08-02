@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ASSISTANT IA LESFACILITATEURS</title>
+
 
 <style>
 
@@ -18,57 +21,62 @@ font-family:Arial,sans-serif;
 body{
 
 margin:0;
-background:#eef2f7;
-color:#222;
 height:100vh;
 overflow:hidden;
+background:#efeae2;
 
 }
 
 
-/* ENTÊTE */
+/* HEADER FIXE */
 
-.whatsapp-header{
+.header{
 
 position:fixed;
+
 top:0;
 left:0;
+right:0;
 
-width:100%;
-height:75px;
+height:70px;
 
 background:#075e54;
+
 color:white;
 
 display:flex;
+
 align-items:center;
 
+padding:10px;
+
 gap:15px;
-padding:15px;
 
 z-index:1000;
 
 }
 
 
-.hamburger{
-
-width:45px;
-height:45px;
+.menu-btn{
 
 background:none;
-color:white;
-
-font-size:28px;
 
 border:none;
 
+color:white;
+
+font-size:30px;
+
+cursor:pointer;
+
 }
+
 
 
 .avatar{
 
 width:45px;
+
 height:45px;
 
 border-radius:50%;
@@ -76,27 +84,30 @@ border-radius:50%;
 background:white;
 
 display:flex;
+
 align-items:center;
+
 justify-content:center;
 
 font-size:25px;
-
-color:#075e54;
 
 }
 
 
 
+
 /* MENU */
 
-.side-menu{
+.menu{
 
 position:fixed;
 
 top:0;
+
 left:-300px;
 
 width:280px;
+
 height:100%;
 
 background:white;
@@ -107,31 +118,33 @@ z-index:3000;
 
 transition:.3s;
 
-box-shadow:5px 0 20px #0005;
+box-shadow:5px 0 15px #0005;
 
 }
 
 
-.side-menu.active{
+
+.menu.active{
 
 left:0;
 
 }
 
 
-.side-menu button{
+
+.menu button{
 
 width:100%;
 
-padding:14px;
+padding:15px;
 
-margin-bottom:12px;
+margin-bottom:10px;
 
 border:none;
 
 border-radius:10px;
 
-background:#0066ff;
+background:#128c7e;
 
 color:white;
 
@@ -140,59 +153,48 @@ font-weight:bold;
 }
 
 
-/* CONTENU */
-
-.container{
-
-padding-top:90px;
-
-padding-bottom:80px;
-
-height:100vh;
-
-max-width:900px;
-
-margin:auto;
-
-}
 
 
+/* ZONE CHAT */
 
-.card{
-
-background:white;
-
-border-radius:15px;
-
-padding:20px;
-
-margin:15px;
-
-box-shadow:0 5px 15px #0002;
-
-}
-
-
-
-/* CHAT */
-
-
-#chat{
+.chat{
 
 position:fixed;
 
-top:75px;
+top:70px;
 
-bottom:70px;
+bottom:75px;
 
 left:0;
+
 right:0;
 
 overflow-y:auto;
 
+padding:15px;
+
 background:#efeae2;
 
-padding:15px;
+}
+.chat{
+
+position:fixed;
+
+top:70px;
+
+bottom:75px;
+
+left:0;
+
+right:0;
+
+overflow-y:auto;
+
+padding:10px;
+
+background:#efeae2;
+
+font-size:16px;
 
 }
 
@@ -200,314 +202,130 @@ padding:15px;
 
 .message{
 
-max-width:75%;
+max-width:60%;
 
-padding:12px;
+padding:6px 10px;
 
-margin:8px;
+margin:5px 0;
 
-border-radius:15px;
+border-radius:12px;
 
-font-size:15px;
+line-height:1.3;
+
+font-size:14px;
+
+word-wrap:break-word;
+
+white-space:pre-wrap;
 
 }
 
 
+/* MESSAGE UTILISATEUR */
 
-.message.user{
+.user{
 
 background:#dcf8c6;
 
 margin-left:auto;
 
+color:#111;
+
+border-bottom-right-radius:3px;
+
 }
 
 
-
-.message.ai{
+.ai{
 
 background:white;
 
 margin-right:auto;
 
+color:#111;
+
+border-bottom-left-radius:3px;
+
+}
+
+/* MODE SOMBRE */
+
+body.sombre .message{
+
+color:white;
+
+}
+
+
+body.sombre .ai{
+
+background:#333;
+
+color:white;
+
+}
+
+
+body.sombre .user{
+
+background:#056162;
+
+color:white;
+
 }
 
 
 
-.message-time{
 
-font-size:10px;
+/* BARRE ENVOI */
 
-text-align:right;
-
-color:#777;
-
-margin-top:5px;
-
-}
-
-
-
-/* ZONE MESSAGE */
-
-
-.message-box{
+.footer{
 
 position:fixed;
 
 bottom:0;
 
 left:0;
+
 right:0;
 
-display:flex;
-
-gap:8px;
-
-padding:10px;
-
-background:#f0f0f0;
-
-z-index:2000;
-
-}
-
-
-.message-box input{
-
-flex:1;
-
-border:none;
-
-border-radius:25px;
-
-padding:15px;
-
-}
-
-
-.message-box button{
-
-width:45px;
-
-height:45px;
-
-border-radius:50%;
-
-border:none;
-
-}
-
-
-
-.send{
-
-background:#25d366;
-
-color:white;
-
-font-size:20px;
-
-}
-
-
-.emoji{
-
-background:#ddd;
-
-}
-
-
-
-/* POPUP */
-
-.popup{
-
-display:none;
-
-position:fixed;
-
-top:0;
-left:0;
-
-width:100%;
-height:100%;
-
-background:#0008;
-
-z-index:5000;
-
-align-items:center;
-
-justify-content:center;
-
-}
-
-
-
-.popup-box{
+height:75px;
 
 background:white;
 
-width:90%;
-
-max-width:400px;
-
-padding:25px;
-
-border-radius:20px;
-
-text-align:center;
-
-}
-
-
-
-.popup-box input{
-
-width:100%;
-
-padding:12px;
-
-border-radius:10px;
-
-border:1px solid #ccc;
-
-margin:10px 0;
-
-}
-
-
-
-.popup-box button{
-
-width:100%;
-
-padding:12px;
-
-border:none;
-
-border-radius:10px;
-
-background:#0066ff;
-
-color:white;
-
-margin-top:10px;
-
-}
-
-
-
-.close-popup{
-
-background:red!important;
-
-}
-
-
-
-/* BOUTONS STATUTS */
-
-.floating-prev,
-.floating-next{
-
-
-position:fixed;
-
-top:70%;
-
-width:65px;
-
-height:65px;
-
-border-radius:50%;
-
-background:linear-gradient(135deg,#25d366,#075e54);
-
-color:white;
-
-font-size:28px;
-
-border:none;
-
-z-index:99999;
-
-}
-
-
-
-.floating-prev{
-
-left:15px;
-
-}
-
-
-
-.floating-next{
-
-right:15px;
-
-}
-
-
-
-/* AFFICHAGE STATUT */
-
-.status-viewer{
-
-display:none;
-
-position:fixed;
-
-top:0;
-left:0;
-right:0;
-bottom:0;
-
-background:black;
-
-z-index:8000;
+display:flex;
 
 align-items:center;
 
-justify-content:center;
+gap:10px;
+
+padding:10px;
+
+z-index:5000;
 
 }
 
 
 
-#statusContent{
+#message{
 
-width:100%;
+flex:1;
 
-text-align:center;
+height:50px;
 
-}
+border-radius:25px;
 
+border:1px solid #ccc;
 
+padding:0 20px;
 
-.status-viewer img,
-.status-viewer video{
-
-max-width:90%;
-
-max-height:80vh;
-
-border-radius:20px;
+font-size:16px;
 
 }
 
 
 
-.status-close{
-
-position:absolute;
-
-top:20px;
-
-right:20px;
+#send{
 
 width:55px;
 
@@ -517,54 +335,61 @@ border-radius:50%;
 
 border:none;
 
-background:red;
+background:#25d366;
 
 color:white;
 
-z-index:9000;
+font-size:25px;
+
+cursor:pointer;
 
 }
 
 
+body.sombre{
 
-/* MODE SOMBRE */
-
-
-.dark{
-
-background:#111;
-
-color:white;
-
-}
-
-
-.dark .card{
-
-background:#222;
+background:#121212;
 
 color:white;
 
 }
 
 
-.dark #chat{
+body.sombre .chat{
 
-background:#181818;
+background:#202020;
 
 }
 
 
-.dark .message.ai{
+body.sombre .ai{
+
+background:#2b2b2b;
+
+color:white;
+
+}
+
+
+body.sombre .footer{
+
+background:#1e1e1e;
+
+}
+
+
+body.sombre #message{
 
 background:#333;
 
 color:white;
 
+border-color:#555;
+
 }
 
 
-.dark .side-menu{
+body.sombre .menu{
 
 background:#222;
 
@@ -573,143 +398,8 @@ color:white;
 }
 
 
-
-/* VIDEO SANS PLEIN ECRAN */
-
-
-video::-webkit-media-controls-fullscreen-button{
-
-display:none;
-
-}
-
-
-/* AMELIORATION MODE SOMBRE */
-
-.dark,
-.dark body{
-    background:#111;
-    color:#ffffff;
-}
-
-
-/* Tous les textes */
-
-.dark h1,
-.dark h2,
-.dark h3,
-.dark h4,
-.dark p,
-.dark span,
-.dark b,
-.dark label{
-    color:#ffffff;
-}
-
-
-
-/* Cartes */
-
-.dark .card{
-
-    background:#222;
-    color:#ffffff;
-
-}
-
-
-
-/* Chat */
-
-.dark #chat{
-
-    background:#181818;
-
-}
-
-
-
-.dark .message.ai{
-
-    background:#2b2b2b;
-    color:#ffffff;
-
-}
-
-
-
-.dark .message.user{
-
-    background:#005c4b;
-    color:#ffffff;
-
-}
-
-
-
-.dark .message-time{
-
-    color:#cccccc;
-
-}
-
-
-
-/* Champs de saisie */
-
-.dark input,
-.dark textarea{
-
-    background:#333;
-    color:white;
-    border:1px solid #666;
-
-}
-
-
-.dark input::placeholder{
-
-    color:#bbbbbb;
-
-}
-
-
-
-/* Menu */
-
-.dark .side-menu{
-
-    background:#222;
-    color:white;
-
-}
-
-
-.dark .side-menu button{
-
-    color:white;
-
-}
-
-
-/* Popup */
-
-.dark .popup-box{
-
-    background:#222;
-    color:white;
-
-}
-
-
-.dark .popup-box input{
-
-    background:#333;
-    color:white;
-
-}
-
 </style>
+
 
 </head>
 
@@ -717,10 +407,13 @@ display:none;
 <body>
 
 
-<header class="whatsapp-header">
+
+<!-- HEADER -->
+
+<div class="header">
 
 
-<button class="hamburger" onclick="openMenu()">
+<button class="menu-btn" id="menuBtn">
 
 ☰
 
@@ -736,102 +429,62 @@ display:none;
 
 <div>
 
-<b>ASSISTANT LESFACILITATEURS IA</b>
+<b>
+
+ASSISTANT IA LESFACILITATEURS
+
+</b>
 
 <br>
 
-<span>En ligne</span>
+<small>
+
+● En ligne
+
+</small>
+
 
 </div>
 
 
-</header>
+</div>
 
 
-<div id="sideMenu" class="side-menu">
 
 
-<button onclick="openStatus()">
 
-📷 Statuts
+
+<!-- MENU -->
+
+
+<div class="menu" id="menu">
+
+
+<button id="services">
+📋 Services
+</button>
+
+<div id="listeServices"></div>
+<button id="statuts">
+📺 Statuts
+</button>
+
+<button id="help">
+
+❓ Aide
 
 </button>
 
-
-<button onclick="toggleDark()">
-
-🌙 Mode sombre
-
-</button>
-
-
-<button onclick="checkAdmin()">
-
-🔐 Administration
-
-</button>
-
-
-<button onclick="inviteUsers()">
-
+<button id="invite">
 📢 Inviter
-
 </button>
 
 
-<input id="inviteLink" readonly placeholder="Lien invitation">
-
-
-</div>
-
-
-<div class="container">
-
-
-<div class="card">
-
-
-<h3>
-👤 Compte utilisateur
-</h3>
-
-
-<button onclick="openRegister()">
-
-➕ Créer un compte
-
+<button id="dark">
+🌙 Mode sombre
 </button>
 
-
-<p id="profile"></p>
-
-
-</div>
-
-
-
-<div id="registerPopup" class="popup">
-
-
-<div class="popup-box">
-
-
-<h3>
-Créer votre compte
-</h3>
-
-
-<input id="registerName" placeholder="Votre nom">
-
-
-<button onclick="createAccount()">
-
-✅ Valider
-
-</button>
-
-
-<button onclick="closeRegister()" class="close-popup">
+<button id="closeMenu">
 
 ❌ Fermer
 
@@ -841,36 +494,32 @@ Créer votre compte
 </div>
 
 
-</div>
-
-
-<div class="card">
-
-
-<div id="chat"></div>
-
-
-</div>
-
-
-</div>
 
 
 
-<div class="message-box">
 
 
-<button class="emoji">
-
-😊
-
-</button>
+<!-- CHAT -->
 
 
-<input id="question" placeholder="Écrire un message">
+<!-- CHAT -->
+
+<div id="chat" class="chat"></div>
 
 
-<button class="send" onclick="sendMessage()">
+
+
+
+<!-- ENVOI -->
+
+
+<div class="footer">
+
+
+<input id="message" placeholder="Écrire un message...">
+
+
+<button id="send">
 
 ➤
 
@@ -881,1078 +530,49 @@ Créer votre compte
 
 
 
-<!-- ADMIN POPUP -->
-
-<div id="adminPopup" class="popup">
-
-
-<div class="popup-box">
-
-
-<button onclick="closeAdmin()" class="close-popup">
-
-✖
-
-</button>
-
-
-<h2>
-🤖 Administration IA
-</h2>
-
-
-<p>
-ASSISTANT LESFACILITATEURS
-</p>
-
-
-<a href="https://wa.me/237670035609"
-style="display:block;padding:15px;background:#25d366;color:white;border-radius:20px;text-decoration:none">
-
-💬 WhatsApp
-
-</a>
-
-
-</div>
-
-</div>
 
 
 
-<!-- STATUTS -->
-
-<button class="floating-prev" onclick="openStatus();previousStatus()">
-
-◀
-
-</button>
-
-
-<button class="floating-next" onclick="openStatus();nextStatus()">
-
-▶
-
-</button>
-
-
-
-<div id="statusViewer" class="status-viewer">
-
-
-<div id="statusContent"></div>
-
-
-<button class="status-close" onclick="closeStatus()">
-
-✖
-
-</button>
-
-
-</div>
 <script>
 
 
-let currentUser="";
-
-let database=null;
-
-
-
-// ==========================
-// BASE LOCALE INDEXEDDB
-// ==========================
-
-
-let request=indexedDB.open("AssistantIA_Local",1);
+// PARTIE 2 ARRIVERA ICI
+// =================================
+// PARTIE 2
+// MENU + ENVOI + REPONSE IA
+// =================================
 
 
 
-request.onupgradeneeded=function(e){
-
-database=e.target.result;
-
-
-if(!database.objectStoreNames.contains("users")){
-
-database.createObjectStore("users",{keyPath:"name"});
-
-}
+// ===============================
+// MENU OUVERTURE / FERMETURE
+// ===============================
 
 
-if(!database.objectStoreNames.contains("messages")){
+const menu = document.getElementById("menu");
 
-database.createObjectStore("messages",{
-keyPath:"id",
-autoIncrement:true
-});
-
-}
+const menuBtn = document.getElementById("menuBtn");
 
 
-if(!database.objectStoreNames.contains("session")){
+menuBtn.onclick=function(e){
 
-database.createObjectStore("session",{
-keyPath:"id"
-});
+e.stopPropagation();
 
-}
+menu.classList.toggle("active");
 
 };
 
 
 
-
-
-request.onsuccess = function(e){
-
-    database = e.target.result;
-
-    // Charger la session utilisateur
-    loadUserSession(function(){
-
-        // Afficher le message de bienvenue seulement après le chargement
-        loadMessages();
-
-if(document.getElementById("chat").innerHTML===""){
-
-    addAIMessage(
-    "Bonjour 👋 Je suis l'assistant IA Lesfacilitateurs. Comment puis-je vous aider ?"
-    );
-
-}
-
-        // Vérification dans la console
-        console.log("Utilisateur :", currentUser);
-        console.log("localStorage :", localStorage.getItem("assistant_user"));
-
-    });
-
-};
-
-
-// ==========================
-// CREATION COMPTE
-// ==========================
-
-
-function openRegister(){
-
-document.getElementById("registerPopup").style.display="flex";
-
-}
-
-
-
-function closeRegister(){
-
-document.getElementById("registerPopup").style.display="none";
-
-}
-
-
-
-function createAccount(){
-
-    const name = document.getElementById("registerName").value.trim();
-
-    if(name===""){
-        alert("Veuillez entrer votre nom");
-        return;
-    }
-
-    currentUser = name;
-
-    // Sauvegarde locale
-    localStorage.setItem("assistant_user", name);
-
-    // Mise à jour de l'interface
-    document.getElementById("profile").innerHTML =
-        "✅ Connecté : " + name;
-loadMessages();
-    // Fermer la fenêtre
-    closeRegister();
-
-    // Message de bienvenue
-    addAIMessage("Bienvenu " + name + " 👋 je suis un assistant virtuel❤️ je vous assiste pour la communication visuelle pour plus de visibilité sur les réseaux sociaux création et gestion de site web vitrine community manager 🌍je vous accompagne dans la recherche des ouvriers techniciens  manutentionnaires employé de maison etc pour la réalisation de vos travaux de maçonnerie générale BTP  💥 je vous accompagne aussi dans la vente  achat où location des terrains voiture maison immobilier et autres auprès de mes multiples abonnés 🧭 pour un partenariat d'affaire veuillez contacter l'admin 📚 Merci de consulter les statuts pour plus d'informations sur nos prestations et services");
-
-    // Sauvegarde dans IndexedDB si disponible
-    if(database){
-
-        const tx = database.transaction(["users","session"], "readwrite");
-
-        tx.objectStore("users").put({
-            name: name,
-            date: new Date().toLocaleString()
-        });
-
-        tx.objectStore("session").put({
-            id: 1,
-            name: name
-        });
-
-    }
-
-}
-
-
-// ==========================
-// SESSION
-// ==========================
-
-
-function saveUserSession(){
-
-
-if(!database)return;
-
-
-let tx=database.transaction(
-"session",
-"readwrite"
-);
-
-
-tx.objectStore("session").put({
-
-id:1,
-
-name:currentUser
-
-});
-
-
-}
-
-
-
-function loadUserSession(callback){
-
-    // Vérifier d'abord localStorage
-    let saved = localStorage.getItem("assistant_user");
-
-    if(saved){
-
-        currentUser = saved;
-
-        document.getElementById("profile").innerHTML =
-        "✅ Connecté : " + currentUser;
-
-        if(callback) callback();
-
-        return;
-    }
-
-    // Sinon chercher dans IndexedDB
-    if(!database){
-
-        loadMessages();
-
-if(callback) callback();
-
-        return;
-    }
-
-    let tx = database.transaction("session","readonly");
-
-    let req = tx.objectStore("session").get(1);
-
-    req.onsuccess = function(){
-
-        if(req.result){
-
-            currentUser = req.result.name;
-
-            localStorage.setItem("assistant_user", currentUser);
-
-            document.getElementById("profile").innerHTML =
-            "✅ Connecté : " + currentUser;
-
-            console.log("Session restaurée :", currentUser);
-
-        }
-
-        if(callback) callback();
-
-    };
-
-    req.onerror = function(){
-
-        if(callback) callback();
-
-    };
-
-}
-
-
-// ==========================
-// CHAT
-// ==========================
-
-
-function sendMessage(){
-
-
-let input=document.getElementById("question");
-
-
-let text=input.value.trim();
-
-
-
-if(text==="")return;
-
-
-
-if(currentUser===""){
-
-
-alert(
-"Créez un compte avant d'utiliser l'assistant"
-);
-
-
-openRegister();
-
-
-return;
-
-}
-
-
-
-addUserMessage(text);
-
-
-saveMessage(
-"user",
-text
-);
-
-
-
-input.value="";
-
-
-
-setTimeout(function(){
-
-
-let response=AIResponse(text);
-
-
-addAIMessage(response);
-
-
-
-saveMessage(
-"ia",
-response
-);
-
-
-
-},500);
-
-
-
-}
-
-
-
-
-function addUserMessage(text){
-
-
-let box=document.getElementById("chat");
-
-
-
-box.innerHTML += `
-
-<div class="message user">
-
-${text}
-
-
-<div class="message-time">
-
-${new Date().toLocaleTimeString()}
-
-</div>
-
-
-</div>
-
-`;
-
-
-
-box.scrollTop=box.scrollHeight;
-
-
-}
-
-
-
-
-function addAIMessage(text){
-
-let box=document.getElementById("chat");
-
-
-// Transformer les liens en liens cliquables
-
-let message=text.replace(
-/(https?:\/\/[^\s]+)/g,
-'<br><a href="$1" target="_blank" style="color:#0066ff;font-weight:bold;">🔗 Ouvrir le lien</a>'
-);
-
-
-
-box.innerHTML += `
-
-<div class="message ai">
-
-<b>🤖 Assistant IA</b>
-
-<br>
-
-${message}
-
-<div class="message-time">
-
-${new Date().toLocaleTimeString()}
-
-</div>
-
-</div>
-
-`;
-
-
-
-box.scrollTop=box.scrollHeight;
-
-
-}
-
-
-// ==========================
-// SAUVEGARDE MESSAGES
-// ==========================
-
-
-function saveMessage(type,text){
-
-
-if(!database)return;
-
-
-
-let tx=database.transaction(
-"messages",
-"readwrite"
-);
-
-
-
-tx.objectStore("messages").add({
-
-user:currentUser,
-
-type:type,
-
-text:text,
-
-date:new Date().toLocaleString()
-
-});
-
-
-}
-
-// ==========================
-// CHARGER LES CONVERSATIONS
-// ==========================
-
-function loadMessages(){
-
-    if(!database || currentUser==="") return;
-
-    let tx = database.transaction("messages","readonly");
-
-    let store = tx.objectStore("messages");
-
-    let req = store.getAll();
-
-    req.onsuccess = function(){
-
-        let messages = req.result.filter(
-            m => m.user === currentUser
-        );
-
-        document.getElementById("chat").innerHTML = "";
-
-        messages.forEach(function(m){
-
-            if(m.type==="user"){
-
-                addUserMessage(m.text);
-
-            }else{
-
-                addAIMessage(m.text);
-
-            }
-
-        });
-
-    };
-
-}
-
-
-
-// ==========================
-// BASE DE CONNAISSANCES IA
-// ==========================
-
-
-const BASE_CONNAISSANCE=[
-
-
-{
-
-
-questions:[
-
-"bonjour",
-"salut",
-"hello",
-"bonsoir",
-"bjr",
-"slt",
-"bsr"
-
-],
-
-
-reponse:
-
-"sl't comment vous allez qu'es ce que je peux faire pour vous ? 👋 ."
-
-},
-
-{
-
-
-questions:[
-
-"quartier saint joseph",
-" st joseph",
-"nanfan",
-"chef debloc",
-"",
-"",
-""
-
-],
-
-
-reponse:
-"quartier situé à 5km après le dispensaire Messassi ? 👋 visitez le site web pour plus d'informations https://quartier-saint-joseph.vercel.app/."
-
-},
-
-
-
-{
-
-
-questions:[
-
-"site",
-"site web",
-"page officielle"
-
-],
-
-
-reponse:
-
-`
-🌐 Site officiel :
-
-https://lesfacilitateurs.vercel.app/
-`
-
-},
-
-{
-
-
-questions:[
-
-"création site web ",
-"besoin de site web",
-"page Facebook professionnel",
-"marketing digital",
-"community manager freelance",
-
-
-
-
-],
-
-
-reponse:
-
-`
-🌐 Site officiel :
-
-création de site web statistiques à partir de 50000 XAF ça dépend des exigences 
-`
-
-},
-
-
-
-
-{
-
-
-questions:[
-
-"emploi",
-"travail",
-"recrutement",
-"offre emploi", 
-"embauche",
-"travail",
-"job",
-"warap",
-"chômeur",
-"chercheurs d'emploi",
-"je suis "
-
-],
-
-
-reponse:
-`
-💼 inscrivez-vous gratuitement  dans la liste en attente des chercheurs d'opportunités en suivant ce lien:
-
-https://workshopkmer.vercel.app/#job1
-
-`
-},
-
-{
-
-
-questions:[
-
-"formation",
-
-
-],
-
-
-reponse:
-
-`
- formation en ligne 100% vidéo préenregistrés à télégram et WhatsApp 5000xaf avec attestation de participation craie scolaire micro brasserie baume menthol chocolat élevage hannetons biogaz biscuits resyne et bien d'autres : 
-
-`
-
-},
-
-{
-
-
-questions:[
-
-" document",
-"devis",
-"cv",
-"lettre de motivation",
-"création de mini secrétariat bureautique",
-"programme funéraires",
-"programme sportifs"
-
-],
-
-
-reponse:
-`
-💼 crée tes documents gratuitement en suivant ce lien :
-
-https://mini-secretariat.vercel.app/
-
-`
-},
-
-{
-
-
-questions:[
-
-" technicien",
-"maçon",
-"ferraille",
-"coffrage",
-" électricien",
-"etancheiste",
-"boss",
-"admin",
-"responsable",
-"contact admin",
-"contact"
-
-
-
-],
-
-
-reponse:
-
-`
-💼 contact administration pour plus d'informations a What's+237670035609
-
-`
-
-},
-{
-
-
-questions:[
-
-"création musicale",
-"dédicace",
-"mariage",
-"musique anniversaire",
-"dote",
-"surprise",
-"cadeau",
-"musique",
-"chanson"
-
-],
-
-
-reponse:
-`
-💼 création musicale assister par l'IA en moins de 48h pour toutes vos cérémonies où dédicace écoute nos créations musicales en suivant ce lien:
-
-https://label-lfg-music-production.vercel.app/
-
-`
-},
-{
-
-
-questions:[
-"je veux la visibilité",
-"je veux la publicité",
-"je veux un community manager",
-"publicité",
-"je veux me faire connaître",
-"je veux vendre en ligne",
-"je veux que tu parles de moi",
-"de mon entreprise",
-"de mes activités",
-"de ce que je fais",
-"ce que je vends"
-
-
-
-
-],
-
-
-reponse:
-
-`
- pour plus de visibilité sur les réseaux sociaux je peux vous aider à partager vos informations et prestations entreprenariales commerciales et autres auprès des mes multiples abonnés mais vous devez contacter mon boss pour qu'il m'accorde les autorisations ☺️
-`
-
-},
-
-
-
-{
-
-
-questions:[
-
-"services",
-"prestations",
-"nos offres",
-"ce que nous proposons",
-"ce que nous savons faire",
-"besoin de visibilité",
-"publicité en ligne"
-
-
-],
-
-
-reponse:
-
-`
-📞 nos prestations :
-développement web mobile service numérique et marketing digital 
-community manager 
-travaux de maçonnerie générale rénovation BTP création musicale personnalisé à la demande pour dédicace mariage et autres 
-`
-
-},
-
-{
-
-
-questions:[
-"Merci",
-"ok",
-"bye",
-"au-revoir",
-"a bientôt",
-"après",
-"bne nuit",
-"merci bcp",
-
-
-],
-
-
-reponse:
-
-`
- oups : 
-ok si je peux faire autre chose n'hésitez ☺️
-`
-
-},
-
-{
-
-
-questions:[
-
-"gentil",
-"sympa",
-"whaou",
-
-],
-
-
-reponse:
-
-`
- oups : 
-c'est un plaisir de vous servir 
-si je peux faire autre chose n'hésitez ☺️
-`
-
-},
-
-
-
-{
-questions:[
-
-"Michel",
-"Mr michel", 
-" le boss ",
-"le responsable",
-"qui gère les problème",
-"Michel",
-"le chef",
-"conflit"
-
-
-],
-
-réponse:
-`
-💥 c'est l'admin
-`
-},
-
-{
-
-
-questions:[
-
-"fond de commerce",
-" immobilier",
-"maison",
-"chambre",
-"studio",
-"immeuble",
-"à vendre",
-"louer",
-"recherche",
-"emplacement",
-"voiture ",
-"moto",
-"animal",
-"bateau",
-"camion",
-"taxi",
-"bus",
-"car",
-"terrain"
-
-
-
-],
-
-
-reponse:
-
-`
- vente et location :
-vous voulez acquérir où trouver preneur auprès de mes multiples abonnés contact l'admin 
- a WhatsAp 
-`
-
-},
-
-
-
-
-{
-
-
-questions:[
-
-"nounou",
-"ménagère",
-"jardinier",
-"manutentionnaire",
-"commerciaux",
-"manœuvre ",
-"paysagiste"
-
-],
-
-
-reponse:
-
-`
-🌹 contact admin réserver  5000 XAF de commissions merci ☺️:
-
-
-`
-
-},
-
-
-{
-
-
-questions:[
-
-"localisation",
-"situé ou",
-"vous êtes où"
-
-],
-
-
-reponse:
-
-"yaoundé nyom3 "
-
-}
-
-
-
-];
-
-
-
-
-
-
-// ==========================
-// MOTEUR IA
-// ==========================
-
-
-function AIResponse(question){
-
-
-let q=question
-.toLowerCase()
-.normalize("NFD")
-.replace(/[\u0300-\u036f]/g,"");
-
-
-
-for(let bloc of BASE_CONNAISSANCE){
-
-
-for(let mot of bloc.questions){
-
-
-let m=mot
-.toLowerCase()
-.normalize("NFD")
-.replace(/[\u0300-\u036f]/g,"");
-
-
-
-if(q.includes(m)){
-
-
-return bloc.reponse;
-
-
-}
-
-
-}
-
-
-
-}
-
-
-
-return `
-
-oups 😳 désolée.
-
-Pour plus d'informations contactez MR Michel :
-
-📞+237656050097
-
-💬 WhatsApp +237670035609
-
-`;
-
-}
-
-
-
-
-
-// ==========================
-// MENU
-// ==========================
-
-
-function openMenu(){
 
 document
-.getElementById("sideMenu")
-.classList.toggle("active");
+.getElementById("closeMenu")
+.onclick=function(){
 
-}
+menu.classList.remove("active");
+
+};
+
 
 
 
@@ -1962,16 +582,10 @@ document.addEventListener(
 function(e){
 
 
-let menu=document.getElementById("sideMenu");
-
-let btn=document.querySelector(".hamburger");
-
-
-
 if(
 !menu.contains(e.target)
 &&
-!btn.contains(e.target)
+e.target!==menuBtn
 ){
 
 menu.classList.remove("active");
@@ -1984,57 +598,187 @@ menu.classList.remove("active");
 
 
 
+const SERVICES_WHATSAPP = [
 
-
-// ==========================
-// MODE SOMBRE
-// ==========================
-
-
-function toggleDark(){
-
-document.body.classList.toggle("dark");
-
-
-if(document.body.classList.contains("dark")){
-
-localStorage.setItem("theme","dark");
-
-}else{
-
-localStorage.removeItem("theme");
-
+{
+nom:"🏠 contact admin pour partennariat d'affaire ",
+numero:"237670035609",
+message:"Bonjour, je suis intéressé par vos services immobiliers."
 }
 
-}
+];
 
 
-// charger automatiquement le mode sombre
+function afficherServices(){
 
-if(localStorage.getItem("theme")==="dark"){
+let conteneur=document.getElementById("listeServices");
 
-document.body.classList.add("dark");
+conteneur.innerHTML="";
 
-}
+SERVICES_WHATSAPP.forEach(function(service){
 
+let bouton=document.createElement("button");
 
+bouton.textContent=service.nom;
 
-// ==========================
-// ADMIN
-// ==========================
+bouton.onclick=function(){
 
+window.open(
+"https://wa.me/"+service.numero+
+"?text="+encodeURIComponent(service.message),
+"_blank"
+);
 
-function checkAdmin(){
+};
 
-document.getElementById("adminPopup").style.display="flex";
+conteneur.appendChild(bouton);
+
+});
 
 }
 
 
 
-function closeAdmin(){
+// ===============================
+// BOUTONS MENU
+// ===============================
 
-document.getElementById("adminPopup").style.display="none";
+
+document
+.getElementById("services")
+.onclick=function(){
+
+
+ajouterIA(`
+
+📋 SERVICES LESFACILITATEURS
+
+🌍 création site web
+🖥️ community manager 
+💰 e-commerce
+🏠 Immobilier
+🏠 travaux de maconnerie  btp
+🚗 automobiles
+💼 Emploi
+🌱 Agronomie
+🛒 Shopping
+📦 Fournisseurs
+💰 grossiste
+
+`);
+
+
+menu.classList.remove("active");
+
+
+};
+
+
+
+
+
+document
+.getElementById("help")
+.onclick=function(){
+
+
+ajouterIA(`
+
+❓ AIDE
+
+
+Exemple :
+
+"Je cherche une chambre à Yaoundé"
+
+
+Précisez :
+
+📍 Ville
+
+🏘 Quartier
+
+💰 Budget
+
+
+`);
+
+
+menu.classList.remove("active");
+
+
+};
+
+
+
+
+
+
+
+// ===============================
+// AFFICHAGE MESSAGE IA
+// ===============================
+// ===============================
+// RECONNAISSANCE AUTOMATIQUE DES LIENS
+// ===============================
+
+function rendreLiensCliquables(texte){
+
+if(!texte) return "";
+
+return texte.replace(
+/(https?:\/\/[^\s]+)/g,
+
+function(lien){
+
+return `<a href="${lien}" 
+target="_blank"
+rel="noopener noreferrer"
+style="
+color:#0084ff;
+font-weight:bold;
+text-decoration:underline;
+">
+
+${lien}
+
+</a>`;
+
+}
+
+);
+
+}
+
+
+
+function ajouterIA(texte){
+
+
+let chat =
+document.getElementById("chat");
+
+
+
+chat.innerHTML += `
+
+<div class="message ai">
+
+<b>🤖 Assistant IA</b>
+
+<br><br>
+
+${rendreLiensCliquables(texte)}
+
+</div>
+
+`;
+
+
+
+chat.scrollTop =
+chat.scrollHeight;
+
 
 }
 
@@ -2042,47 +786,884 @@ document.getElementById("adminPopup").style.display="none";
 
 
 
-// ==========================
-// INVITATION
-// ==========================
-
-
-function inviteUsers(){
-
-
-let lien=window.location.href;
-
-
-document.getElementById("inviteLink").value=lien;
 
 
 
-if(navigator.clipboard){
+// ===============================
+// AFFICHAGE MESSAGE CLIENT
+// ===============================
 
-navigator.clipboard.writeText(lien);
+
+function ajouterUtilisateur(texte){
 
 
-alert(
-"Lien copié ✅"
+let chat =
+document.getElementById("chat");
+
+
+
+chat.innerHTML += `
+
+<div class="message user">
+
+${texte}
+
+</div>
+
+`;
+
+
+
+chat.scrollTop =
+chat.scrollHeight;
+
+
+}
+
+
+
+
+
+
+
+
+// ===============================
+// BOUTON ENVOYER
+// ===============================
+
+
+document
+.getElementById("send")
+.onclick=function(){
+
+envoyerMessage();
+
+};
+
+
+
+
+
+
+// ENTRER POUR ENVOYER
+
+
+document
+.getElementById("message")
+.addEventListener(
+"keypress",
+function(e){
+
+
+if(e.key==="Enter"){
+
+envoyerMessage();
+
+}
+
+
+});
+
+
+
+
+
+
+
+// ===============================
+// FONCTION ENVOI
+// ===============================
+
+
+
+
+// =================================
+// PARTIE 3
+// MEMOIRE + ANNONCES ADMIN + RECHERCHE
+// =================================
+
+
+
+// ===============================
+// MEMOIRE LOCALE
+// ===============================
+
+
+let historique = 
+JSON.parse(
+localStorage.getItem("historiqueIA")
+)
+||
+[];
+
+
+
+
+function sauvegarderHistorique(role,texte){
+
+
+historique.push({
+
+role:role,
+
+texte:texte,
+
+date:new Date().toLocaleString()
+
+});
+
+
+localStorage.setItem(
+
+"historiqueIA",
+
+JSON.stringify(historique)
+
 );
 
 
 }
 
 
+
+
+
+
+// Modification affichage utilisateur
+
+
+const ancienUtilisateur =
+ajouterUtilisateur;
+
+
+ajouterUtilisateur=function(texte){
+
+
+ancienUtilisateur(texte);
+
+
+sauvegarderHistorique(
+"user",
+texte
+);
+
+
+};
+
+
+
+
+
+// Modification affichage IA
+
+
+const ancienneIA =
+ajouterIA;
+
+
+ajouterIA=function(texte){
+
+
+ancienneIA(texte);
+
+
+sauvegarderHistorique(
+"ia",
+texte
+);
+
+
+};
+
+
+
+
+
+
+
+// ===============================
+// ANNONCES ADMINISTRATEUR
+// ===============================
+
+
+
+const ANNONCES=[
+
+
+{
+
+categorie:"immobilier",
+objet:"chambre",
+quartier:"Nyom 3",
+budget:"50000",
+description:
+"Chambre propre disponible avec accès facile",
+contact:"670035609"
+
+},
+
+{
+
+categorie:"technicien",
+objet:"disponible maintenant",
+ville:"Yaoundé",
+quartier:"nyom3",
+budget:"00",
+description:
+"technicien polyvalent disponible",
+contact:"670035609"
+
+},
+
+{
+
+categorie:"immobilier",
+objet:"studio",
+ville:"Yaoundé",
+quartier:"Emombo",
+budget:"70000",
+description:
+"Studio moderne disponible",
+contact:"670035609"
+
+},
+
+
+
+{
+
+categorie:"animal",
+
+objet:"chien de race",
+
+ville:"Douala",
+
+quartier:"Akwa",
+
+budget:" vendu",
+description:
+"Chien de race disponible",
+
+contact:"670035609"
+
+},
+
+{
+
+categorie:"personnalite",
+objet:"chef de bloc",
+ville:"Yaoundé",
+quartier:"nyom3",
+budget:"",
+description:
+"papa alexandee desiree",
+contact:"677082166"
+
+},
+{
+
+categorie:"agronomie",
+objet:"poulet",
+ville:"Yaoundé",
+quartier:"Mbankomo",
+budget: "vendu",
+description:
+"Poulets d'élevage disponibles",
+contact:"670035609"
+
+},
+
+
+
+
+];
+
+
+
+const BASE_CONNAISSANCE=[
+
+{
+questions:[
+"bonjour","salut","hello","bonsoir","bjr","slt","bsr","s'lut"
+],
+reponse:
+"Salut 👋 comment allez-vous ? Qu'est-ce que je peux faire pour vous ?"
+},
+
+
+{
+questions:[
+"quartier saint joseph",
+"st joseph",
+"nanfan",
+"chef debloc"
+],
+reponse:
+"Quartier Saint Joseph situé à 5 km après le dispensaire Messassi 👋\n\nVisitez le site officiel :\nhttps://quartier-saint-joseph.vercel.app/"
+},
+
+
+{
+questions:[
+"site",
+"site web",
+"page officielle",
+"ets lesfacilitateurs",
+"lesfacilitateurs"
+],
+
+reponse:`
+
+🏢 ETS LESFACILITATEURS
+
+👤 Directeur Général : Mr Kono Michel
+
+📍 Localisation : Yaoundé Nyom 3
+
+🌐 Site officiel :
+https://lesfacilitateurs.vercel.app/
+
+`
+
+},
+
+
+{
+questions:[
+"création site web",
+"besoin de site web",
+"marketing digital",
+"community manager"
+],
+reponse:
+"🌐 Création de sites web professionnels à partir de 50000 FCFA selon vos besoins."
+},
+
+
+{
+questions:[
+"emploi",
+"travail",
+"recrutement",
+"job",
+"cherche emploi"
+],
+reponse:
+"💼 Inscrivez-vous gratuitement ici :\nhttps://workshopkmer.vercel.app/#job1"
+},
+
+
+{
+questions:[
+"formation"
+],
+reponse:
+"🎓 Formations vidéo en ligne avec attestation de participation."
+},
+
+
+{
+questions:[
+"document",
+"devis",
+"cv",
+"lettre motivation"
+],
+reponse:
+"💼 Création de documents professionnels :\nhttps://mini-secretariat.vercel.app/"
+},
+
+
+{
+questions:[
+"musique",
+"chanson",
+"dédicace",
+"mariage"
+],
+reponse:
+"🎵pour vos ceremonies de mariages dedicaces anniversaires et autres Création musicale personnalisee assistée par IA :\nhttps://label-lfg-music-production.vercel.app/"
+},
+
+
+{
+questions:[
+"services",
+"prestations",
+"offres"
+],
+reponse:
+"📋 Nos services :\nDéveloppement web, marketing digital, BTP, création musicale, visibilité en ligne."
+},
+
+
+{
+questions:[
+"localisation",
+"situé où",
+"vous êtes où"
+],
+reponse:
+"📍 Yaoundé Nyom 3"
+}
+
+];
+
+
+
+// ===============================
+// ANALYSE BESOIN
+// ===============================
+
+
+function analyserBesoin(message){
+
+
+let q =
+message.toLowerCase();
+
+
+
+let resultat=[];
+
+
+
+ANNONCES.forEach(function(a){
+
+
+
+let texte=
+
+(
+a.categorie+
+" "+
+a.objet+
+" "+
+a.ville+
+" "+
+a.quartier+
+" "+
+a.description
+
+).toLowerCase();
+
+
+
+
+let mots=q.split(" ");
+
+
+
+let score=0;
+
+
+
+mots.forEach(function(m){
+
+
+if(
+m.length>2
+&&
+texte.includes(m)
+){
+
+score++;
+
+}
+
+
+});
+
+
+
+if(score>0){
+
+
+resultat.push({
+
+annonce:a,
+
+score:score
+
+});
+
+
+}
+
+
+
+});
+
+
+
+
+
+resultat.sort(function(a,b){
+
+return b.score-a.score;
+
+});
+
+
+
+return resultat;
+
 }
 
 
 
 
 
-</script>
-<script>
 
 
-// ==========================
-// SYSTEME STATUTS
-// ==========================
+
+// ===============================
+// REMPLACEMENT REPONSE IA
+// ===============================
+
+
+
+function chercherConnaissance(message){
+
+    let texte = message.toLowerCase();
+
+    let meilleurScore = 0;
+    let meilleureReponse = null;
+
+    BASE_CONNAISSANCE.forEach(function(item){
+
+        let score = 0;
+
+        item.questions.forEach(function(q){
+
+            q = q.toLowerCase();
+
+            if(texte.includes(q)){
+                score += 100;
+            }
+
+            let mots = q.split(/\s+/);
+
+            mots.forEach(function(mot){
+
+                if(
+                    mot.length > 2 &&
+                    texte.includes(mot)
+                ){
+                    score++;
+                }
+
+            });
+
+        });
+
+        if(score > meilleurScore){
+
+            meilleurScore = score;
+            meilleureReponse = item.reponse;
+
+        }
+
+    });
+
+    return meilleureReponse;
+
+}
+
+
+function envoyerMessage(){
+
+    let input=document.getElementById("message");
+    let texte=input.value.trim();
+
+    if(texte==="") return;
+
+    ajouterUtilisateur(texte);
+
+    input.value="";
+
+    setTimeout(function(){
+
+        let reponse="";
+
+        // Recherche dans la base de connaissances
+        let connaissance = chercherConnaissance(texte);
+
+        if(connaissance){
+            reponse += connaissance + "\n\n";
+        }
+
+        // Recherche dans les annonces
+        let annonces = analyserBesoin(texte);
+
+        if(annonces.length){
+
+            let a = annonces[0].annonce;
+
+            reponse += `
+━━━━━━━━━━━━━━
+
+📢 ANNONCE DISPONIBLE
+
+📌 ${a.objet}
+
+📝 ${a.description}
+
+📍 ${a.ville}
+
+🏘 ${a.quartier}
+
+💰 ${a.budget} FCFA
+
+📞 ${a.contact}
+`;
+        }
+
+        // Si rien trouvé
+        if(reponse===""){
+
+            reponse=`
+😔oups Je n'ai trouvé aucune information.
+
+Essayez de préciser :
+
+📌 votre besoin
+
+📍 votre ville
+
+🏘 votre quartier
+
+💰 votre budget
+`;
+        }
+
+        ajouterIA(reponse);
+
+    },500);
+
+}
+
+// =================================
+// INVITATION
+// =================================
+
+
+document
+.getElementById("invite")
+.onclick=function(){
+
+
+let lien=window.location.href;
+
+
+
+if(navigator.share){
+
+
+navigator.share({
+
+title:"Assistant IA Lesfacilitateurs",
+
+text:"Découvrez mon assistant IA",
+
+url:lien
+
+
+});
+
+
+}
+
+else{
+
+
+navigator.clipboard.writeText(lien);
+
+
+alert(
+"Lien d'invitation copié"
+);
+
+
+}
+
+
+};
+
+
+
+
+
+// =================================
+// MODE SOMBRE
+// =================================
+
+
+
+document
+.getElementById("dark")
+.onclick=function(){
+
+
+document.body.classList.toggle("sombre");
+
+
+
+if(
+document.body.classList.contains("sombre")
+){
+
+
+localStorage.setItem(
+"theme",
+"sombre"
+);
+
+
+}
+
+else{
+
+
+localStorage.removeItem(
+"theme"
+);
+
+
+}
+
+
+
+};
+
+
+
+
+
+
+// RESTAURATION THEME AU DEMARRAGE
+
+
+if(
+localStorage.getItem("theme")
+==="sombre"
+){
+
+
+document.body.classList.add(
+"sombre"
+);
+
+
+}
+
+// =================================
+// CHARGER HISTORIQUE AU DEMARRAGE
+// =================================
+
+function chargerHistorique(){
+
+
+let historique =
+JSON.parse(
+localStorage.getItem("historiqueIA")
+)
+||[];
+
+
+let chat=document.getElementById("chat");
+
+
+if(historique.length===0){
+
+return;
+
+}
+
+
+
+chat.innerHTML="";
+
+
+historique.forEach(function(m){
+
+
+if(m.role==="user"){
+
+
+chat.innerHTML+=`
+
+<div class="message user">
+
+${rendreLiensCliquables(m.texte)}
+
+</div>
+
+`;
+
+
+
+}
+
+else{
+
+
+chat.innerHTML+=`
+
+<div class="message ai">
+
+<b>🤖 Assistant IA</b>
+
+<br><br>
+
+${rendreLiensCliquables(m.texte)}
+
+</div>
+
+`;
+
+}
+
+
+});
+
+
+chat.scrollTop=chat.scrollHeight;
+
+
+}
+
+
+
+
+
+
+
+
+// Lancement automatique
+
+window.addEventListener("load",function(){
+
+    chargerHistorique();
+
+    afficherServices();
+
+    document.getElementById("statuts").onclick=function(){
+
+        afficherStatuts();
+
+        menu.classList.remove("active");
+
+    };
+
+    document.getElementById("fermerStatuts").onclick=function(){
+
+        document.getElementById("fenetreStatuts").style.display="none";
+
+    };
+
+});
+
 
 
 const STATUTS=[
@@ -2094,351 +1675,187 @@ url:"https://raw.githubusercontent.com/Lfg237/image-st-joseph-/main/178422652456
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/workshopkmer/main/file_00000000c1c081fb8aa8eff416a898a0.png"
 },
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000915072439b84baf5b0824a43.png"
 },
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000009154720aa02f9fc54e37e139.png"
 },
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000226871fdb7585d562d4a1b12.png"
 },
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_0000000064f0720a911a3e5868b2625a.png"
 },
-
-
-
-
-
 {
 type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/d-p-t-image-Lesfacilitateurs-/main/IMG_20260124_122540_490.jpg"},
-
+url:"https://raw.githubusercontent.com/Lfg237/d-p-t-image-Lesfacilitateurs-/main/IMG_20260124_122540_490.jpg"
+},
 {
 type:"audio",
 url:"https://raw.githubusercontent.com/Lfg237/audio-/main/nom%20de%20dieu%20.mp3"
 },
-
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/IMG-20260305-WA0011.jpg"
 },
-
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/affiche_compressee.jpg"
 },
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260319_152611056.jpg"
 },
-
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
 },
- 
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/Polish_20260223_163236698.png"
 },
-
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(61)_202605010818_1.jpg"
 },
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(60)_202605010818_1.jpg"
 },
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260309_161104091.jpg"
 },
-
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000000370720a9aedc5f4906f90da.png"
 },
-
-
- 
 {
 type:"image",
 url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
 },
-
-
-
 {
 type:"iframe",
 url:"https://archive.org/embed/in-shot-20250618-050312535"
 }
-
-
 ];
 
 
 
-let statusIndex=0;
 
 
+function afficherStatuts(){
 
-// OUVRIR STATUT
+let zone=document.getElementById("listeStatuts");
 
+zone.innerHTML="";
 
-function openStatus(){
+STATUTS.forEach(function(s){
 
+if(s.type==="image"){
 
-document.getElementById(
-"statusViewer"
-).style.display="flex";
-
-
-showStatus();
-
-
-}
-
-
-
-// AFFICHER STATUT
-
-
-function showStatus(){
-
-
-let box=document.getElementById(
-"statusContent"
-);
-
-
-let statut=STATUTS[statusIndex];
-
-
-
-if(statut.type==="image"){
-
-
-box.innerHTML=`
-
-<img src="${statut.url}">
-
+zone.innerHTML+=`
+<img src="${s.url}"
+style="
+width:100%;
+max-width:700px;
+display:block;
+margin:20px auto;
+border-radius:15px;
+">
 `;
 
-
-
 }
 
+else if(s.type==="audio"){
 
-
-
-else if(statut.type==="audio"){
-
-
-box.innerHTML=`
-
-<div style="
-color:white;
-text-align:center;
+zone.innerHTML+=`
+<audio controls
+style="
+width:100%;
+margin:20px 0;
 ">
-
-<h2>🎵 Audio</h2>
-
-
-<audio controls autoplay>
-
-
-<source src="${statut.url}">
-
+<source src="${s.url}">
 </audio>
-
-
-</div>
-
 `;
-
-
 
 }
 
+else if(s.type==="iframe"){
 
-
-
-
-else if(statut.type==="video"){
-
-
-box.innerHTML=`
-
-<video
-
-autoplay
-
-playsinline
-
-controls
-
-controlslist="nofullscreen"
-
-style="
-width:90%;
-max-height:75vh;
-object-fit:contain;
-">
-
-
-<source src="${statut.url}">
-
-
-</video>
-
-`;
-
-
-
-}
-
-
-
-
-else{
-
-
-box.innerHTML=`
-
+zone.innerHTML+=`
 <iframe
-
-src="${statut.url}"
-
+src="${s.url}"
 style="
-width:90%;
-height:75vh;
+width:100%;
+height:500px;
 border:none;
-border-radius:20px;
+margin-top:20px;
 ">
-
 </iframe>
-
 `;
 
-
-
 }
-
-
-
-}
-
-
-
-
-// SUIVANT
-
-
-function nextStatus(){
-
-
-statusIndex++;
-
-
-if(statusIndex>=STATUTS.length){
-
-statusIndex=0;
-
-}
-
-
-showStatus();
-
-
-}
-
-
-
-
-// PRECEDENT
-
-
-function previousStatus(){
-
-
-statusIndex--;
-
-
-if(statusIndex<0){
-
-statusIndex=STATUTS.length-1;
-
-}
-
-
-showStatus();
-
-
-}
-
-
-
-
-
-// FERMER
-
-
-
-
-function closeStatus(){
-
-document.getElementById(
-"statusViewer"
-).style.display="none";
-
-
-}
-
-
-
-
-// OUVERTURE AUTOMATIQUE
-
-
-window.addEventListener(
-"load",
-function(){
-
-
-setTimeout(function(){
-
-
-openStatus();
-
-
-},1500);
-
-
 
 });
 
+document.getElementById("fenetreStatuts").style.display="block";
 
+}
+
+
+document.getElementById("statuts").onclick=function(){
+
+afficherStatuts();
+
+menu.classList.remove("active");
+
+};
+
+document.getElementById("fermerStatuts").onclick=function(){
+
+document.getElementById("fenetreStatuts").style.display="none";
+
+};
 
 </script>
+
+<div id="fenetreStatuts" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:#000;
+overflow:auto;
+z-index:99999;
+padding:20px;
+">
+
+<button id="fermerStatuts"
+style="
+position:fixed;
+top:10px;
+right:10px;
+background:red;
+color:white;
+border:none;
+padding:12px;
+border-radius:10px;
+z-index:100000;
+">
+❌ Fermer
+</button>
+
+<div id="listeStatuts"></div>
+
+</div>
 </body>
 
 </html>
