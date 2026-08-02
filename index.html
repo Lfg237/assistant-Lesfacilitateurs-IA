@@ -754,13 +754,9 @@ ${lien}
 
 function ajouterIA(texte){
 
+let chat=document.getElementById("chat");
 
-let chat =
-document.getElementById("chat");
-
-
-
-chat.innerHTML += `
+chat.innerHTML+=`
 
 <div class="message ai">
 
@@ -770,18 +766,31 @@ chat.innerHTML += `
 
 ${rendreLiensCliquables(texte)}
 
+<br><br>
+
+<a href="https://wa.me/237670035609?text=${encodeURIComponent("Bonjour, je souhaite un spot publicitaire ou un partenariat commercial.")}"
+target="_blank"
+style="
+display:inline-block;
+background:#25D366;
+color:white;
+text-decoration:none;
+padding:8px 12px;
+border-radius:20px;
+font-size:13px;
+font-weight:bold;
+margin-top:8px;
+">
+📢 WhatsApp : Spot publicitaire / Partenariat commercial
+</a>
+
 </div>
 
 `;
 
-
-
-chat.scrollTop =
-chat.scrollHeight;
-
+chat.scrollTop=chat.scrollHeight;
 
 }
-
 
 
 
@@ -1437,13 +1446,9 @@ function envoyerMessage(){
 😔oups Je n'ai trouvé aucune information.
 
 Essayez de préciser :
-
 📌 votre besoin
-
 📍 votre ville
-
 🏘 votre quartier
-
 💰 votre budget
 `;
         }
@@ -1604,9 +1609,30 @@ if(m.role==="user"){
 
 chat.innerHTML+=`
 
-<div class="message user">
+<div class="message ai">
+
+<b>🤖 Assistant IA</b>
+
+<br><br>
 
 ${rendreLiensCliquables(m.texte)}
+
+<br><br>
+
+<a href="https://wa.me/237670035609?text=${encodeURIComponent("Bonjour, je souhaite un spot publicitaire ou un partenariat commercial.")}"
+target="_blank"
+style="
+display:inline-block;
+background:#25D366;
+color:white;
+text-decoration:none;
+padding:8px 12px;
+border-radius:20px;
+font-size:13px;
+font-weight:bold;
+">
+📢 WhatsApp : Spot publicitaire / Partenariat commercial
+</a>
 
 </div>
 
