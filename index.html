@@ -512,7 +512,37 @@ ASSISTANT IA LESFACILITATEURS
 
 
 
+<div id="fenetreStatuts" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:#000;
+overflow:auto;
+z-index:99999;
+padding:20px;
+">
 
+<button id="fermerStatuts"
+style="
+position:fixed;
+top:10px;
+right:10px;
+background:red;
+color:white;
+border:none;
+padding:12px;
+border-radius:10px;
+z-index:100000;
+">
+❌ Fermer
+</button>
+
+<div id="listeStatuts"></div>
+
+</div>
 
 
 <script>
@@ -1023,10 +1053,9 @@ contact:"×××××"
 categorie:"réalisation",
 objet:" projet",
 ville:"Yaoundé",
-quartier:"Emombo",
-budget:"70000",
-description: "projet réalisé :
-https://r-alisations.vercel.app/",
+quartier:"ras",
+budget:"ras",
+description: "projet réalisé : https://r-alisations.vercel.app/",
 contact:"×××××"
 
 },
@@ -1685,220 +1714,241 @@ chat.scrollTop=chat.scrollHeight;
 
 // Lancement automatique
 
-window.addEventListener("load",function(){
+window.addEventListener("load", function(){
 
     chargerHistorique();
 
     afficherServices();
 
-    document.getElementById("statuts").onclick=function(){
-
-        afficherStatuts();
-
-        menu.classList.remove("active");
-
-    };
-
-    document.getElementById("fermerStatuts").onclick=function(){
-
-        document.getElementById("fenetreStatuts").style.display="none";
-
-    };
-
 });
 
 
+const STATUTS = [
 
-const STATUTS=[
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/image-st-joseph-/main/1784226524564.jpg"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/workshopkmer/main/file_00000000c1c081fb8aa8eff416a898a0.png"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000915072439b84baf5b0824a43.png"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000009154720aa02f9fc54e37e139.png"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000226871fdb7585d562d4a1b12.png"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_0000000064f0720a911a3e5868b2625a.png"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/d-p-t-image-Lesfacilitateurs-/main/IMG_20260124_122540_490.jpg"
-},
-{
-type:"audio",
-url:"https://raw.githubusercontent.com/Lfg237/audio-/main/nom%20de%20dieu%20.mp3"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/IMG-20260305-WA0011.jpg"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/affiche_compressee.jpg"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260319_152611056.jpg"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/Polish_20260223_163236698.png"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(61)_202605010818_1.jpg"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(60)_202605010818_1.jpg"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260309_161104091.jpg"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000000370720a9aedc5f4906f90da.png"
-},
-{
-type:"image",
-url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
-},
-{
-type:"iframe",
-url:"https://archive.org/embed/in-shot-20250618-050312535"
-}
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/image-st-joseph-/main/1784226524564.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/workshopkmer/main/file_00000000c1c081fb8aa8eff416a898a0.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000915072439b84baf5b0824a43.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000009154720aa02f9fc54e37e139.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000226871fdb7585d562d4a1b12.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_0000000064f0720a911a3e5868b2625a.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/d-p-t-image-Lesfacilitateurs-/main/IMG_20260124_122540_490.jpg"
+    },
+
+    {
+        type:"audio",
+        url:"https://raw.githubusercontent.com/Lfg237/audio-/main/nom%20de%20dieu%20.mp3"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/IMG-20260305-WA0011.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/affiche_compressee.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260319_152611056.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/Polish_20260223_163236698.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(61)_202605010818_1.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(60)_202605010818_1.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260309_161104091.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000000370720a9aedc5f4906f90da.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
+    },
+
+    {
+        type:"iframe",
+        url:"https://archive.org/embed/in-shot-20250618-050312535"
+    }
+
 ];
 
 
-
-
+// ======================================
+// AFFICHER LES STATUTS
+// ======================================
 
 function afficherStatuts(){
 
-let zone=document.getElementById("listeStatuts");
+    const zone = document.getElementById("listeStatuts");
 
-zone.innerHTML="";
+    zone.innerHTML = "";
 
-STATUTS.forEach(function(s){
+    STATUTS.forEach(function(s){
 
-if(s.type==="image"){
+        if(s.type === "image"){
 
-zone.innerHTML+=`
-<img src="${s.url}"
-style="
-width:100%;
-max-width:700px;
-display:block;
-margin:20px auto;
-border-radius:15px;
-">
-`;
+            zone.innerHTML += `
+                <img
+                    src="${s.url}"
+                    style="
+                        width:100%;
+                        max-width:700px;
+                        display:block;
+                        margin:20px auto;
+                        border-radius:15px;
+                    "
+                >
+            `;
+
+        }
+
+
+        else if(s.type === "audio"){
+
+            zone.innerHTML += `
+                <audio
+                    controls
+                    style="
+                        width:100%;
+                        margin:20px 0;
+                    "
+                >
+                    <source src="${s.url}" type="audio/mpeg">
+                </audio>
+            `;
+
+        }
+
+
+        else if(s.type === "iframe"){
+
+            zone.innerHTML += `
+                <iframe
+                    src="${s.url}"
+                    style="
+                        width:100%;
+                        height:500px;
+                        border:none;
+                        margin-top:20px;
+                    "
+                    allowfullscreen
+                ></iframe>
+            `;
+
+        }
+
+    });
+
+
+    document.getElementById("fenetreStatuts").style.display = "block";
 
 }
 
-else if(s.type==="audio"){
 
-zone.innerHTML+=`
-<audio controls
-style="
-width:100%;
-margin:20px 0;
-">
-<source src="${s.url}">
-</audio>
-`;
+// ======================================
+// BOUTON STATUTS
+// ======================================
 
-}
+document.getElementById("statuts").onclick = function(){
 
-else if(s.type==="iframe"){
+    afficherStatuts();
 
-zone.innerHTML+=`
-<iframe
-src="${s.url}"
-style="
-width:100%;
-height:500px;
-border:none;
-margin-top:20px;
-">
-</iframe>
-`;
+    menu.classList.remove("active");
 
-}
+};
+
+
+// ======================================
+// FERMER LES STATUTS
+// ======================================
+
+document.getElementById("fermerStatuts").onclick = function(){
+
+    document.getElementById("fenetreStatuts").style.display = "none";
+
+};
+
+
+// ======================================
+// FERMER AVEC ESC
+// ======================================
+
+document.addEventListener("keydown", function(e){
+
+    if(e.key === "Escape"){
+
+        document.getElementById("fenetreStatuts").style.display = "none";
+
+    }
 
 });
 
-document.getElementById("fenetreStatuts").style.display="block";
 
-}
+// ======================================
+// DÉMARRAGE
+// ======================================
 
+window.addEventListener("load", function(){
 
-document.getElementById("statuts").onclick=function(){
+    chargerHistorique();
 
-afficherStatuts();
+    afficherServices();
 
-menu.classList.remove("active");
-
-};
-
-document.getElementById("fermerStatuts").onclick=function(){
-
-document.getElementById("fenetreStatuts").style.display="none";
-
-};
+});
 
 </script>
-
-<div id="fenetreStatuts" style="
-display:none;
-position:fixed;
-top:0;
-left:0;
-right:0;
-bottom:0;
-background:#000;
-overflow:auto;
-z-index:99999;
-padding:20px;
-">
-
-<button id="fermerStatuts"
-style="
-position:fixed;
-top:10px;
-right:10px;
-background:red;
-color:white;
-border:none;
-padding:12px;
-border-radius:10px;
-z-index:100000;
-">
-❌ Fermer
-</button>
-
-<div id="listeStatuts"></div>
-
-</div>
 </body>
 
 </html>
+
+   
