@@ -9,7 +9,6 @@
 
 <title>ASSISTANT IA LESFACILITATEURS</title>
 
-
 <style>
 
 *{
@@ -17,502 +16,599 @@ box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
 
-
 body{
-
 margin:0;
 height:100vh;
 overflow:hidden;
 background:#efeae2;
-
 }
 
-
-/* HEADER FIXE */
+/* HEADER */
 
 .header{
-
 position:fixed;
-
 top:0;
 left:0;
 right:0;
-
 height:70px;
-
 background:#075e54;
-
 color:white;
-
 display:flex;
-
 align-items:center;
-
 padding:10px;
-
 gap:15px;
-
 z-index:1000;
-
 }
-
 
 .menu-btn{
-
 background:none;
-
 border:none;
-
 color:white;
-
 font-size:30px;
-
 cursor:pointer;
-
 }
-
-
 
 .avatar{
-
 width:45px;
-
 height:45px;
-
 border-radius:50%;
-
 background:white;
-
 display:flex;
-
 align-items:center;
-
 justify-content:center;
-
 font-size:25px;
-
 }
-
-
-
 
 /* MENU */
 
 .menu{
+position:fixed;
+top:0;
+left:-300px;
+width:280px;
+height:100%;
+background:white;
+padding:20px;
+z-index:3000;
+transition:.3s;
+box-shadow:5px 0 15px #0005;
+overflow-y:auto;
+}
+
+.menu.active{
+left:0;
+}
+
+.menu button{
+width:100%;
+padding:15px;
+margin-bottom:10px;
+border:none;
+border-radius:10px;
+background:#128c7e;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* CHAT */
+
+.chat{
+position:fixed;
+top:70px;
+bottom:75px;
+left:0;
+right:0;
+overflow-y:auto;
+padding:10px;
+background:#efeae2;
+font-size:16px;
+}
+
+.message{
+max-width:75%;
+padding:6px 10px;
+margin:5px 0;
+border-radius:12px;
+line-height:1.3;
+font-size:14px;
+word-wrap:break-word;
+white-space:pre-wrap;
+}
+
+.user{
+background:#dcf8c6;
+margin-left:auto;
+color:#111;
+border-bottom-right-radius:3px;
+}
+
+.ai{
+background:white;
+margin-right:auto;
+color:#111;
+border-bottom-left-radius:3px;
+}
+
+/* FOOTER */
+
+.footer{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+height:75px;
+background:white;
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px;
+z-index:5000;
+}
+
+#message{
+flex:1;
+height:50px;
+border-radius:25px;
+border:1px solid #ccc;
+padding:0 20px;
+font-size:16px;
+}
+
+#send{
+width:55px;
+height:55px;
+border-radius:50%;
+border:none;
+background:#25d366;
+color:white;
+font-size:25px;
+cursor:pointer;
+}
+
+/* ============================= */
+/* FENÊTRE ANNONCES */
+/* ============================= */
+
+#fenetreAnnonces{
+display:none;
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:#efeae2;
+overflow-y:auto;
+z-index:99999;
+padding-bottom:30px;
+}
+
+.annonces-header{
+position:sticky;
+top:0;
+z-index:20;
+background:#075e54;
+color:white;
+min-height:70px;
+padding:10px 15px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+box-shadow:0 2px 10px #0005;
+}
+
+.annonces-header b{
+display:block;
+font-size:17px;
+}
+
+.annonces-header small{
+display:block;
+margin-top:4px;
+}
+
+#fermerAnnonces{
+background:red;
+color:white;
+border:none;
+padding:10px 12px;
+border-radius:10px;
+font-size:16px;
+}
+
+/* RECHERCHE */
+
+.annonces-recherche{
+position:sticky;
+top:70px;
+z-index:15;
+background:white;
+padding:10px;
+}
+
+#rechercheAnnonce{
+width:100%;
+height:48px;
+border:1px solid #ccc;
+border-radius:25px;
+padding:0 18px;
+font-size:15px;
+outline:none;
+}
+
+/* CATEGORIES */
+
+#categoriesAnnonces{
+display:flex;
+gap:8px;
+overflow-x:auto;
+padding:10px;
+background:#f5f5f5;
+}
+
+.categorie-annonce{
+flex:none;
+border:none;
+padding:10px 15px;
+border-radius:20px;
+background:#128c7e;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.categorie-annonce.active{
+background:#075e54;
+}
+
+/* VILLE */
+
+.titre-ville{
+margin:15px 10px 8px;
+padding:10px 12px;
+background:#075e54;
+color:white;
+border-radius:10px;
+font-weight:bold;
+}
+
+/* ANNONCES */
+
+/* ============================= */
+/* ZONE DES ANNONCES */
+/* ============================= */
+
+#listeAnnonces{
+padding:0 0 20px 0;
+}
+
+/* Chaque catégorie possède sa zone verticale */
+
+.groupe-annonces{
+
+display:flex;
+
+flex-direction:column;
+
+gap:12px;
+
+padding:0 10px 15px 10px;
+
+}
+
+/* Carte annonce */
+
+.carte-annonce{
+
+width:100%;
+
+background:white;
+
+border-radius:14px;
+
+padding:14px;
+
+box-shadow:0 2px 8px #0002;
+
+border-left:4px solid #25d366;
+
+flex-shrink:0;
+
+}
+
+/* Sur téléphone */
+
+@media(max-width:600px){
+
+.carte-annonce{
+
+width:100%;
+
+}
+
+}
+
+/* Scroll vertical général */
+
+#fenetreAnnonces{
+
+display:none;
 
 position:fixed;
 
 top:0;
 
-left:-300px;
-
-width:280px;
-
-height:100%;
-
-background:white;
-
-padding:20px;
-
-z-index:3000;
-
-transition:.3s;
-
-box-shadow:5px 0 15px #0005;
-
-}
-
-
-
-.menu.active{
-
-left:0;
-
-}
-
-
-
-.menu button{
-
-width:100%;
-
-padding:15px;
-
-margin-bottom:10px;
-
-border:none;
-
-border-radius:10px;
-
-background:#128c7e;
-
-color:white;
-
-font-weight:bold;
-
-}
-
-
-
-
-/* ZONE CHAT */
-
-
-.chat{
-
-position:fixed;
-
-top:70px;
-
-bottom:75px;
-
 left:0;
 
 right:0;
-
-overflow-y:auto;
-
-padding:10px;
-
-background:#efeae2;
-
-font-size:16px;
-
-}
-
-
-
-.message{
-
-max-width:60%;
-
-padding:6px 10px;
-
-margin:5px 0;
-
-border-radius:12px;
-
-line-height:1.3;
-
-font-size:14px;
-
-word-wrap:break-word;
-
-white-space:pre-wrap;
-
-}
-
-
-/* MESSAGE UTILISATEUR */
-
-.user{
-
-background:#dcf8c6;
-
-margin-left:auto;
-
-color:#111;
-
-border-bottom-right-radius:3px;
-
-}
-
-
-.ai{
-
-background:white;
-
-margin-right:auto;
-
-color:#111;
-
-border-bottom-left-radius:3px;
-
-}
-
-/* MODE SOMBRE */
-
-body.sombre .message{
-
-color:white;
-
-}
-
-
-body.sombre .ai{
-
-background:#333;
-
-color:white;
-
-}
-
-
-body.sombre .user{
-
-background:#056162;
-
-color:white;
-
-}
-
-
-
-
-/* BARRE ENVOI */
-
-.footer{
-
-position:fixed;
 
 bottom:0;
 
-left:0;
+background:#efeae2;
 
-right:0;
+overflow-y:auto;
 
-height:75px;
+-webkit-overflow-scrolling:touch;
 
+z-index:99999;
+
+padding-bottom:30px;
+
+}
+
+.carte-annonce{
 background:white;
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-
-padding:10px;
-
-z-index:5000;
-
+border-radius:14px;
+padding:13px;
+box-shadow:0 2px 8px #0002;
+border-left:4px solid #25d366;
 }
 
+.carte-annonce .badge{
+display:inline-block;
+background:#e8f5e9;
+color:#087f23;
+padding:5px 9px;
+border-radius:15px;
+font-size:11px;
+font-weight:bold;
+margin-bottom:8px;
+}
 
-
-#message{
-
-flex:1;
-
-height:50px;
-
-border-radius:25px;
-
-border:1px solid #ccc;
-
-padding:0 20px;
-
+.carte-annonce h3{
+margin:3px 0 8px;
 font-size:16px;
-
+color:#075e54;
 }
 
+.carte-annonce p{
+margin:5px 0;
+font-size:13px;
+line-height:1.4;
+}
 
+.carte-annonce .contact{
+font-weight:bold;
+color:#075e54;
+margin-top:10px;
+}
 
-#send{
+.actions-annonce{
+display:flex;
+gap:7px;
+margin-top:12px;
+}
 
-width:55px;
+.actions-annonce a{
+flex:1;
+text-align:center;
+text-decoration:none;
+padding:9px 5px;
+border-radius:20px;
+color:white;
+font-size:12px;
+font-weight:bold;
+}
 
-height:55px;
+.btn-appeler{
+background:#128c7e;
+}
 
-border-radius:50%;
-
-border:none;
-
+.btn-whatsapp{
 background:#25d366;
+}
 
-color:white;
+.aucune-annonce{
+margin:30px 15px;
+padding:20px;
+text-align:center;
+background:white;
+border-radius:15px;
+}
 
-font-size:25px;
+#finAnnonces{
+text-align:center;
+padding:25px;
+color:#777;
+}
+/* ============================= */
+/* CARTES ANNONCES MULTICOLORES */
+/* ============================= */
 
-cursor:pointer;
+.carte-annonce{
+
+    width:100%;
+
+    border-radius:16px;
+
+    padding:15px;
+
+    margin-bottom:12px;
+
+    box-shadow:0 3px 10px #0003;
+
+    flex-shrink:0;
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
+
+    border-left:6px solid;
+
+}
+
+/* Animation au toucher */
+
+.carte-annonce:active{
+
+    transform:scale(.98);
 
 }
 
 
-body.sombre{
+/* Couleurs automatiques */
 
-background:#121212;
+.carte-annonce:nth-child(6n+1){
 
-color:white;
+    background:#e3f2fd;
+
+    border-left-color:#2196f3;
+
+}
+
+.carte-annonce:nth-child(6n+2){
+
+    background:#e8f5e9;
+
+    border-left-color:#4caf50;
+
+}
+
+.carte-annonce:nth-child(6n+3){
+
+    background:#fff3e0;
+
+    border-left-color:#ff9800;
+
+}
+
+.carte-annonce:nth-child(6n+4){
+
+    background:#fce4ec;
+
+    border-left-color:#e91e63;
+
+}
+
+.carte-annonce:nth-child(6n+5){
+
+    background:#ede7f6;
+
+    border-left-color:#673ab7;
+
+}
+
+.carte-annonce:nth-child(6n+6){
+
+    background:#e0f7fa;
+
+    border-left-color:#00acc1;
 
 }
 
 
-body.sombre .chat{
+/* Titre */
 
-background:#202020;
+.carte-annonce h3{
 
-}
+    margin:8px 0;
 
-
-body.sombre .ai{
-
-background:#2b2b2b;
-
-color:white;
+    font-size:18px;
 
 }
 
 
-body.sombre .footer{
+/* Texte */
 
-background:#1e1e1e;
+.carte-annonce p{
 
-}
+    margin:6px 0;
 
-
-body.sombre #message{
-
-background:#333;
-
-color:white;
-
-border-color:#555;
+    line-height:1.4;
 
 }
 
 
-body.sombre .menu{
+/* Badge catégorie */
 
-background:#222;
+.carte-annonce .badge{
 
-color:white;
+    display:inline-block;
+
+    padding:5px 9px;
+
+    border-radius:20px;
+
+    background:#ffffffaa;
+
+    font-size:12px;
+
+    font-weight:bold;
 
 }
 
 
-</style>
+/* Boutons */
 
+.actions-annonce{
 
-</head>
+    display:flex;
 
+    gap:8px;
 
-<body>
+    margin-top:12px;
 
+}
 
 
-<!-- HEADER -->
+.actions-annonce a{
 
-<div class="header">
+    flex:1;
 
+    text-align:center;
 
-<button class="menu-btn" id="menuBtn">
+    padding:10px;
 
-☰
+    border-radius:20px;
 
-</button>
+    color:white;
 
+    text-decoration:none;
 
-<div class="avatar">
+    font-weight:bold;
 
-🌝
+    font-size:13px;
 
-</div>
+}
 
 
-<div>
+.btn-appeler{
 
-<b>
+    background:#2196f3;
 
-ASSISTANT IA LESFACILITATEURS
+}
 
-</b>
 
-<br>
+.btn-whatsapp{
 
-<small>
+    background:#25d366;
 
-● En ligne
+}
+/* ============================= */
+/* STATUTS */
+/* ============================= */
 
-</small>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-
-<!-- MENU -->
-
-
-<div class="menu" id="menu">
-
-
-<button id="services">
-📋 Services
-</button>
-
-<div id="listeServices"></div>
-<button id="statuts">
-📺 Statuts
-</button>
-
-<button id="help">
-
-❓ Aide
-
-</button>
-
-<button id="invite">
-📢 Inviter
-</button>
-
-
-<button id="dark">
-🌙 Mode sombre
-</button>
-
-<button id="closeMenu">
-
-❌ Fermer
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-
-<!-- CHAT -->
-
-
-<!-- CHAT -->
-
-<div id="chat" class="chat"></div>
-
-
-
-
-
-<!-- ENVOI -->
-
-
-<div class="footer">
-
-
-<input id="message" placeholder="Écrire un message...">
-
-
-<button id="send">
-
-➤
-
-</button>
-
-
-</div>
-
-
-
-<div id="fenetreStatuts" style="
+#fenetreStatuts{
 display:none;
 position:fixed;
 top:0;
@@ -523,9 +619,221 @@ background:#000;
 overflow:auto;
 z-index:99999;
 padding:20px;
-">
+}
 
-<button id="fermerStatuts"
+/* MODE SOMBRE */
+
+body.sombre{
+background:#121212;
+color:white;
+}
+
+body.sombre .chat{
+background:#202020;
+}
+
+body.sombre .ai{
+background:#2b2b2b;
+color:white;
+}
+
+body.sombre .user{
+background:#056162;
+color:white;
+}
+
+body.sombre .footer{
+background:#1e1e1e;
+}
+
+body.sombre #message{
+background:#333;
+color:white;
+border-color:#555;
+}
+
+body.sombre .menu{
+background:#222;
+color:white;
+}
+
+body.sombre #fenetreAnnonces{
+background:#121212;
+}
+
+body.sombre .annonces-recherche{
+background:#1e1e1e;
+}
+
+body.sombre #rechercheAnnonce{
+background:#333;
+color:white;
+border-color:#555;
+}
+
+body.sombre #categoriesAnnonces{
+background:#181818;
+}
+
+body.sombre .carte-annonce{
+background:#2b2b2b;
+color:white;
+}
+
+body.sombre .carte-annonce h3{
+color:#25d366;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+<button class="menu-btn" id="menuBtn">
+☰
+</button>
+
+<div class="avatar">
+🌝
+</div>
+
+<div>
+
+<b>
+ASSISTANT IA LESFACILITATEURS
+</b>
+
+<br>
+
+<small>
+● En ligne
+</small>
+
+</div>
+
+</div>
+
+
+<!-- MENU -->
+
+<div class="menu" id="menu">
+
+<button id="services">
+📋 Services
+</button>
+
+<div id="listeServices"></div>
+
+<button id="statuts">
+📺 Statuts
+</button>
+
+<!-- NOUVEAU BOUTON -->
+
+<button id="annonces">
+📢 Annonces & Visibilité
+</button>
+
+<button id="invite">
+📢 Inviter
+</button>
+
+<button id="dark">
+🌙 Mode sombre
+</button>
+
+<button id="closeMenu">
+❌ Fermer
+</button>
+
+</div>
+
+
+<!-- CHAT -->
+
+<div id="chat" class="chat"></div>
+
+
+<!-- ENVOI -->
+
+<div class="footer">
+
+<input
+id="message"
+placeholder="Écrire un message..."
+>
+
+<button id="send">
+➤
+</button>
+
+</div>
+
+
+<!-- ============================= -->
+<!-- FENÊTRE ANNONCES -->
+<!-- ============================= -->
+
+<div id="fenetreAnnonces">
+
+<div class="annonces-header">
+
+<div>
+
+<b>
+📢 ANNONCES & VISIBILITÉ
+</b>
+
+<small>
+Annonces classées par ville et catégorie
+</small>
+
+</div>
+
+<button id="fermerAnnonces">
+❌
+</button>
+
+</div>
+
+
+<div class="annonces-recherche">
+
+<input
+id="rechercheAnnonce"
+type="search"
+placeholder="🔎 Rechercher une annonce, ville, quartier..."
+>
+
+</div>
+
+
+<div id="categoriesAnnonces"></div>
+
+<div id="listeAnnonces"></div>
+
+<div id="finAnnonces">
+
+♾️ De nouvelles annonces peuvent être ajoutées.
+
+</div>
+
+</div>
+
+
+<!-- ============================= -->
+<!-- FENÊTRE STATUTS -->
+<!-- ============================= -->
+
+<div id="fenetreStatuts">
+
+<button
+id="fermerStatuts"
 style="
 position:fixed;
 top:10px;
@@ -537,7 +845,9 @@ padding:12px;
 border-radius:10px;
 z-index:100000;
 ">
+
 ❌ Fermer
+
 </button>
 
 <div id="listeStatuts"></div>
@@ -548,22 +858,15 @@ z-index:100000;
 <script>
 
 
-// PARTIE 2 ARRIVERA ICI
-// =================================
-// PARTIE 2
-// MENU + ENVOI + REPONSE IA
-// =================================
+/* ================================= */
+/* MENU */
+/* ================================= */
 
+const menu =
+document.getElementById("menu");
 
-
-// ===============================
-// MENU OUVERTURE / FERMETURE
-// ===============================
-
-
-const menu = document.getElementById("menu");
-
-const menuBtn = document.getElementById("menuBtn");
+const menuBtn =
+document.getElementById("menuBtn");
 
 
 menuBtn.onclick=function(e){
@@ -575,8 +878,6 @@ menu.classList.toggle("active");
 };
 
 
-
-
 document
 .getElementById("closeMenu")
 .onclick=function(){
@@ -586,13 +887,9 @@ menu.classList.remove("active");
 };
 
 
-
-
-
 document.addEventListener(
 "click",
 function(e){
-
 
 if(
 !menu.contains(e.target)
@@ -604,16 +901,17 @@ menu.classList.remove("active");
 
 }
 
-
 });
 
 
+/* ================================= */
+/* SERVICES */
+/* ================================= */
 
-
-const SERVICES_WHATSAPP = [
+const SERVICES_WHATSAPP=[
 
 {
-nom:"🏠 contact admin pour partennariat d'affaire ",
+nom:"🏠 contact admin pour partenariat d'affaire",
 numero:"237670035609",
 message:"Bonjour, je suis intéressé par les services de l'IA"
 }
@@ -623,25 +921,38 @@ message:"Bonjour, je suis intéressé par les services de l'IA"
 
 function afficherServices(){
 
-let conteneur=document.getElementById("listeServices");
+let conteneur=
+document.getElementById("listeServices");
 
 conteneur.innerHTML="";
 
+
 SERVICES_WHATSAPP.forEach(function(service){
 
-let bouton=document.createElement("button");
+let bouton=
+document.createElement("button");
 
-bouton.textContent=service.nom;
+bouton.textContent=
+service.nom;
+
 
 bouton.onclick=function(){
 
 window.open(
-"https://wa.me/"+service.numero+
-"?text="+encodeURIComponent(service.message),
+"https://wa.me/"
++
+service.numero
++
+"?text="
++
+encodeURIComponent(
+service.message
+),
 "_blank"
 );
 
 };
+
 
 conteneur.appendChild(bouton);
 
@@ -650,28 +961,25 @@ conteneur.appendChild(bouton);
 }
 
 
-
-// ===============================
-// BOUTONS MENU
-// ===============================
-
+/* ================================= */
+/* SERVICES */
+/* ================================= */
 
 document
 .getElementById("services")
 .onclick=function(){
 
-
 ajouterIA(`
 
 📋 SERVICES LESFACILITATEURS
 
-🌀 publicité 
-🌍 marketing digital 
+🌀 publicité
+🌍 marketing digital
 🌍 création site web
-🖥️ community manager 
+🖥️ community manager
 💰 e-commerce
 🏠 Immobilier
-🏠 travaux de maconnerie  btp
+🏠 travaux de maconnerie BTP
 🚗 automobiles
 💼 Emploi
 🌱 Agronomie
@@ -681,58 +989,14 @@ ajouterIA(`
 
 `);
 
-
 menu.classList.remove("active");
-
 
 };
 
 
-
-
-
-document
-.getElementById("help")
-.onclick=function(){
-
-
-ajouterIA(`
-
-❓ AIDE
-
-
-Exemple :
-
-"Je cherche une chambre à Yaoundé"
-Précisez :
-
-📍 Ville
-
-🏘 Quartier
-
-💰 Budget
-
-💥vous avez besoin de publicité où de partenariat commercial contact l'administration 
-`);
-
-
-menu.classList.remove("active");
-
-
-};
-
-
-
-
-
-
-
-// ===============================
-// AFFICHAGE MESSAGE IA
-// ===============================
-// ===============================
-// RECONNAISSANCE AUTOMATIQUE DES LIENS
-// ===============================
+/* ================================= */
+/* LIENS CLIQUABLES */
+/* ================================= */
 
 function rendreLiensCliquables(texte){
 
@@ -740,10 +1004,10 @@ if(!texte) return "";
 
 return texte.replace(
 /(https?:\/\/[^\s]+)/g,
-
 function(lien){
 
-return `<a href="${lien}" 
+return `<a
+href="${lien}"
 target="_blank"
 rel="noopener noreferrer"
 style="
@@ -756,23 +1020,27 @@ ${lien}
 
 </a>`;
 
-}
-
-);
+});
 
 }
 
 
+/* ================================= */
+/* AFFICHAGE IA */
+/* ================================= */
 
 function ajouterIA(texte){
 
-let chat=document.getElementById("chat");
+let chat=
+document.getElementById("chat");
 
 chat.innerHTML+=`
 
 <div class="message ai">
 
-<b>🌝 Assistant IA Lesfacilitateurs</b>
+<b>
+🌝 Assistant IA Lesfacilitateurs
+</b>
 
 <br><br>
 
@@ -780,7 +1048,10 @@ ${rendreLiensCliquables(texte)}
 
 <br><br>
 
-<a href="https://wa.me/237670035609?text=${encodeURIComponent("salut 💥 merci pour l'intérêt que vous nous apportez, soyez brèf et précis sur votre besoin et nous nous chargerons de vous répondre clairement ❤️ .")}"
+<a
+href="https://wa.me/237670035609?text=${encodeURIComponent(
+"Salut 💥 merci pour l'intérêt que vous nous apportez, soyez bref et précis sur votre besoin et nous nous chargerons de vous répondre clairement ❤️."
+)}"
 target="_blank"
 style="
 display:inline-block;
@@ -793,37 +1064,31 @@ font-size:13px;
 font-weight:bold;
 margin-top:8px;
 ">
-📢 WhatsApp : contact admin préciser votre besoin et nous nous chargerons de vous répondre clairement merci❤️
+
+📢 WhatsApp : contact admin
+
 </a>
 
 </div>
 
 `;
 
-chat.scrollTop=chat.scrollHeight;
+chat.scrollTop=
+chat.scrollHeight;
 
 }
 
 
-
-
-
-
-
-// ===============================
-// AFFICHAGE MESSAGE CLIENT
-// ===============================
-
+/* ================================= */
+/* UTILISATEUR */
+/* ================================= */
 
 function ajouterUtilisateur(texte){
 
-
-let chat =
+let chat=
 document.getElementById("chat");
 
-
-
-chat.innerHTML += `
+chat.innerHTML+=`
 
 <div class="message user">
 
@@ -833,84 +1098,17 @@ ${texte}
 
 `;
 
-
-
-chat.scrollTop =
+chat.scrollTop=
 chat.scrollHeight;
 
-
 }
 
 
+/* ================================= */
+/* MÉMOIRE */
+/* ================================= */
 
-
-
-
-
-
-// ===============================
-// BOUTON ENVOYER
-// ===============================
-
-
-document
-.getElementById("send")
-.onclick=function(){
-
-envoyerMessage();
-
-};
-
-
-
-
-
-
-// ENTRER POUR ENVOYER
-
-
-document
-.getElementById("message")
-.addEventListener(
-"keypress",
-function(e){
-
-
-if(e.key==="Enter"){
-
-envoyerMessage();
-
-}
-
-
-});
-
-
-
-
-
-
-
-// ===============================
-// FONCTION ENVOI
-// ===============================
-
-
-
-
-// =================================
-// PARTIE 3
-// MEMOIRE + ANNONCES ADMIN + RECHERCHE
-// =================================
-
-
-
-// ===============================
-// MEMOIRE LOCALE
-// ===============================
-
-
-let historique = 
+let historique =
 JSON.parse(
 localStorage.getItem("historiqueIA")
 )
@@ -918,10 +1116,10 @@ localStorage.getItem("historiqueIA")
 [];
 
 
-
-
-function sauvegarderHistorique(role,texte){
-
+function sauvegarderHistorique(
+role,
+texte
+){
 
 historique.push({
 
@@ -935,244 +1133,391 @@ date:new Date().toLocaleString()
 
 
 localStorage.setItem(
-
 "historiqueIA",
-
 JSON.stringify(historique)
-
 );
 
 
 }
 
 
-
-
-
-
-// Modification affichage utilisateur
-
-
-const ancienUtilisateur =
+const ancienUtilisateur=
 ajouterUtilisateur;
 
 
 ajouterUtilisateur=function(texte){
 
-
 ancienUtilisateur(texte);
-
 
 sauvegarderHistorique(
 "user",
 texte
 );
 
-
 };
 
 
-
-
-
-// Modification affichage IA
-
-
-const ancienneIA =
+const ancienneIA=
 ajouterIA;
 
 
 ajouterIA=function(texte){
 
-
 ancienneIA(texte);
-
 
 sauvegarderHistorique(
 "ia",
 texte
 );
 
-
 };
 
 
+/* ================================= */
+/* BASE DES ANNONCES */
+/* ================================= */
 
+/*
+IMPORTANT :
 
+C'est cette même base qui est utilisée :
 
+1. par la page Annonces & Visibilité
+2. par l'IA pour répondre
 
-
-// ===============================
-// ANNONCES ADMINISTRATEUR
-// ===============================
-
-
+Pour ajouter une annonce,
+ajoute simplement un nouvel objet
+dans ce tableau.
+*/
 
 const ANNONCES=[
 
+/* =========================
+   💼 EMPLOI
+========================= */
 
 {
-
-categorie:"immobilier",
-objet:"chambre",
-quartier:"Nyom 3",
-budget:"50000",
-description:
-"Chambre propre disponible avec accès facile",
-contact:"xxxxxxxx"
-
-},
-
-{
-
-categorie:"technicien",
-objet:"disponible maintenant",
+categorie:"emplois",
+objet:"Ménagère disponible",
 ville:"Yaoundé",
-quartier:"nyom3",
-budget:"00",
-description:
-"technicien polyvalent disponible",
+quartier:"Nkomo",
+age:"23 ans",
+budget:"À négocier",
+description:"Ménagère sérieuse et disponible.",
 contact:"670035609"
-
 },
 
 {
+categorie:"emplois",
+objet:"Nounou disponible",
+ville:"Yaoundé",
+quartier:"Bastos",
+age:"27 ans",
+budget:"À négocier",
+description:"Nounou expérimentée disponible.",
+contact:"690000001"
+},
 
+{
+categorie:"emplois",
+objet:"Chauffeur disponible",
+ville:"Douala",
+quartier:"Akwa",
+age:"32 ans",
+budget:"À négocier",
+description:"Chauffeur professionnel disponible.",
+contact:"690000002"
+},
+
+{
+categorie:"emplois",
+objet:"Maçon disponible",
+ville:"Yaoundé",
+quartier:"Messassi",
+age:"29 ans",
+budget:"À négocier",
+description:"Maçon expérimenté disponible pour travaux.",
+contact:"690000003"
+},
+
+
+/* =========================
+   🏠 IMMOBILIER
+========================= */
+
+{
 categorie:"immobilier",
-objet:"studio",
+objet:"Chambre moderne à louer",
+ville:"Yaoundé",
+quartier:"Nyom 3",
+age:"",
+budget:"50000 FCFA",
+description:"Chambre moderne avec accès facile.",
+contact:"690000004"
+},
+
+{
+categorie:"immobilier",
+objet:"Studio à louer",
 ville:"Yaoundé",
 quartier:"Emombo",
-budget:"70000",
-description:
-"Studio moderne disponible",
-contact:"×××××"
-
-},
-{
-
-categorie:"réalisation",
-objet:" projet",
-ville:"Yaoundé",
-quartier:"ras",
-budget:"ras",
-description: "projet réalisé : https://r-alisations.vercel.app/",
-contact:"×××××"
-
+age:"",
+budget:"70000 FCFA",
+description:"Studio propre et sécurisé.",
+contact:"690000005"
 },
 
-
-
 {
-
-categorie:"animal",
-
-objet:"chien de race",
-
+categorie:"immobilier",
+objet:"Appartement à louer",
 ville:"Douala",
-
-quartier:"Akwa",
-
-budget:" vendu",
-description:
-"Chien de race disponible",
-
-contact:"×××÷×"
-
+quartier:"Bonamoussadi",
+age:"",
+budget:"150000 FCFA",
+description:"Appartement moderne disponible.",
+contact:"690000006"
 },
 
+
+/* =========================
+   🌱 AGRONOMIE
+========================= */
+
 {
-
-categorie:"personnalite",
-objet:"chef de bloc",
-ville:"Yaoundé",
-quartier:"nyom3",
-budget:"",
-description:
-"papa alexandre désirée",
-contact:"677082166"
-
-},
-{
-
 categorie:"agronomie",
-objet:"poulet",
+objet:"Poulets de chair",
 ville:"Yaoundé",
 quartier:"Mbankomo",
-budget: "vendu",
-description:
-"Poulets d'élevage disponibles",
-contact:"670035609"
-
+age:"",
+budget:"5000 FCFA",
+description:"Poulets de chair disponibles.",
+contact:"690000007"
 },
 
 {
-
-categorie:"emplois",
-objet:"demande où recherche",
-ville:"Yaoundé  Douala et partout au Cameroun",
-quartier:"prêt de ta localisation",
-budget: "a négocier",
-description:
-"agence de placement nous recrutons postuler via le numéro c'est gratuit",
-contact:"670035609"
-
+categorie:"agronomie",
+objet:"Maïs à vendre",
+ville:"Bafoussam",
+quartier:"Djeleng",
+age:"",
+budget:"À négocier",
+description:"Maïs disponible en quantité.",
+contact:"690000008"
 },
 
 {
-
-categorie:"emplacement",
-objet:"à vendre ou à louer",
-ville:"partout au Cameroun",
-quartier:"prêt de ta localisation",
-budget: "a négocier",
-description:
-"vous avez un emplacement a vendre ou a louer contacter nous au numéro",
-contact:"670035609"
-
+categorie:"agronomie",
+objet:"Porcelets disponibles",
+ville:"Yaoundé",
+quartier:"Nkolbisson",
+age:"",
+budget:"À négocier",
+description:"Porcelets d'élevage disponibles.",
+contact:"690000009"
 },
 
-{
 
+/* =========================
+   🛒 E-COMMERCE
+========================= */
+
+{
 categorie:"e-commerce",
-objet:"à vendre ou à louer",
-ville:"partout au Cameroun",
-quartier:"prêt de ta localisation",
-budget: "a négocier",
-description:
-"vous avez un article à vendre  contacter nous au numéro",
-contact:"670035609"
-
+objet:"Téléphone Samsung",
+ville:"Yaoundé",
+quartier:"Mvan",
+age:"",
+budget:"150000 FCFA",
+description:"Téléphone Samsung en très bon état.",
+contact:"690000010"
 },
 
+{
+categorie:"e-commerce",
+objet:"Téléviseur Smart TV",
+ville:"Douala",
+quartier:"Akwa",
+age:"",
+budget:"250000 FCFA",
+description:"Smart TV disponible.",
+contact:"690000011"
+},
+
+{
+categorie:"e-commerce",
+objet:"Chaussures homme",
+ville:"Yaoundé",
+quartier:"Mokolo",
+age:"",
+budget:"15000 FCFA",
+description:"Chaussures homme disponibles.",
+contact:"690000012"
+},
+
+
+/* =========================
+   🔧 TECHNICIENS
+========================= */
+
+{
+categorie:"technicien",
+objet:"Électricien disponible",
+ville:"Yaoundé",
+quartier:"Nlongkak",
+age:"35 ans",
+budget:"À négocier",
+description:"Électricien professionnel disponible.",
+contact:"690000013"
+},
+
+{
+categorie:"technicien",
+objet:"Plombier disponible",
+ville:"Douala",
+quartier:"Deido",
+age:"38 ans",
+budget:"À négocier",
+description:"Plombier disponible pour interventions.",
+contact:"690000014"
+},
+
+{
+categorie:"technicien",
+objet:"Climaticien",
+ville:"Yaoundé",
+quartier:"Bastos",
+age:"30 ans",
+budget:"À négocier",
+description:"Installation et entretien de climatiseurs.",
+contact:"690000015"
+},
+
+
+/* =========================
+   🐕 ANIMAUX
+========================= */
+
+{
+categorie:"animal",
+objet:"Chien de race",
+ville:"Douala",
+quartier:"Akwa",
+age:"1 an",
+budget:"À négocier",
+description:"Chien de race disponible.",
+contact:"690000016"
+},
+
+{
+categorie:"animal",
+objet:"Chiots disponibles",
+ville:"Yaoundé",
+quartier:"Odza",
+age:"3 mois",
+budget:"À négocier",
+description:"Chiots disponibles.",
+contact:"690000017"
+},
+
+
+/* =========================
+   📍 EMPLACEMENTS
+========================= */
+
+{
+categorie:"emplacement",
+objet:"Terrain à vendre",
+ville:"Yaoundé",
+quartier:"Nkolbisson",
+age:"",
+budget:"À négocier",
+description:"Terrain disponible à la vente.",
+contact:"690000018"
+},
+
+{
+categorie:"emplacement",
+objet:"Boutique à louer",
+ville:"Douala",
+quartier:"Deido",
+age:"",
+budget:"100000 FCFA",
+description:"Boutique bien située à louer.",
+contact:"690000019"
+},
+
+
+/* =========================
+   🏗️ RÉALISATIONS
+========================= */
+
+{
+categorie:"réalisation",
+objet:"Projet BTP réalisé",
+ville:"Yaoundé",
+quartier:"Nyom 3",
+age:"",
+budget:"",
+description:"Projet réalisé par Lesfacilitateurs : https://r-alisations.vercel.app/",
+contact:"670035609"
+},
+
+{
+categorie:"réalisation",
+objet:"Projet de construction",
+ville:"Douala",
+quartier:"Bonabéri",
+age:"",
+budget:"",
+description:"Travaux de construction réalisés.",
+contact:"690000020"
+}
 
 ];
 
 
+/* ================================= */
+/* BASE CONNAISSANCE IA */
+/* ================================= */
 
 const BASE_CONNAISSANCE=[
 
 {
+
 questions:[
-"bonjour","salut","hello","bonsoir","bjr","slt","bsr","s'lut"
+"bonjour",
+"salut",
+"hello",
+"bonsoir",
+"bjr",
+"slt",
+"bsr",
+"s'lut"
 ],
+
 reponse:
 "Salut 👋 comment allez-vous ? Qu'est-ce que je peux faire pour vous ?"
+
 },
 
 
 {
+
 questions:[
 "quartier saint joseph",
 "st joseph",
 "nanfan",
 "chef debloc"
 ],
+
 reponse:
 "Quartier Saint Joseph situé à 5 km après le dispensaire Messassi 👋\n\nVisitez le site officiel :\nhttps://quartier-saint-joseph.vercel.app/"
+
 },
 
 
 {
+
 questions:[
 "site Lesfacilitateurs",
 "site web Lesfacilitateurs",
@@ -1190,6 +1535,7 @@ reponse:`
 📍 Localisation : Yaoundé Nyom 3
 
 🌐 Site officiel :
+
 https://lesfacilitateurs.vercel.app/
 
 `
@@ -1198,98 +1544,120 @@ https://lesfacilitateurs.vercel.app/
 
 
 {
+
 questions:[
 "création site web",
 "besoin de site web",
 "marketing digital",
 "community manager"
 ],
+
 reponse:
-"🌐 Création de sites web professionnels à partir de 50000 FCFA selon vos besoins.contact admin pour plus d'informations"
+"🌐 Création de sites web professionnels à partir de 50000 FCFA selon vos besoins. Contact admin pour plus d'informations."
+
 },
 
 
 {
+
 questions:[
 "emploi",
 "travail",
 "recrutement",
 "job",
 "cherche emploi",
-"ménagère résidente où non ",
-"nounou résidente ou non",
+"ménagère",
+"nounou",
 "ferrailleurs",
-"cofrreurs",
+"coffreurs",
 "maçon",
 "technicien",
 "charpentier",
 "mecanicien",
-"chauffeur",
-
-
+"chauffeur"
 ],
+
 reponse:
-"💼 nous recrutons postuler à What's contact admin ou consultez la liste des chercheurs emploi Inscrivez-vous gratuitement ici  :\nhttps://workshopkmer.vercel.app/#job1"
+"💼 Nous recrutons. Vous pouvez consulter les annonces disponibles dans 📢 Annonces & Visibilité ou postuler via :\nhttps://workshopkmer.vercel.app/#job1"
+
 },
 
+
 {
+
 questions:[
 "réalisation",
 "réalisations",
 "projet réalisé",
 "qu'est ce que vous avez déjà réalisé",
 "qu'est ce que vous avez déjà fait",
-"vos réactions "
+"vos réalisations"
 ],
+
 reponse:
-"🎓 visitez ce lien pour avoir plus d'informations sur nos différents réalisation https://r-alisations.vercel.app/."
+"🎓 Visitez ce lien pour avoir plus d'informations sur nos différentes réalisations : https://r-alisations.vercel.app/."
+
 },
 
+
 {
+
 questions:[
 "formation"
 ],
+
 reponse:
 "🎓 Formations vidéo en ligne avec attestation de participation."
+
 },
 
 
 {
+
 questions:[
 "document",
 "devis",
 "cv",
 "lettre motivation"
 ],
+
 reponse:
 "💼 Création de documents professionnels :\nhttps://mini-secretariat.vercel.app/"
+
 },
 
 
-
 {
+
 questions:[
 "musique",
 "chanson",
 "dédicace",
 "mariage"
 ],
+
 reponse:
-"🎵pour vos ceremonies de mariages dedicaces anniversaires et autres Création musicale personnalisee assistée par IA :\nhttps://label-lfg-music-production.vercel.app/"
+"🎵 Pour vos cérémonies de mariages, dédicaces, anniversaires et autres : création musicale personnalisée assistée par IA :\nhttps://label-lfg-music-production.vercel.app/"
+
 },
 
 
 {
+
 questions:[
 "services",
 "prestations",
 "offres"
 ],
+
 reponse:
 "📋 Nos services :\nDéveloppement web, marketing digital, BTP, création musicale, visibilité en ligne."
+
 },
 
+a
 {
+
 questions:[
 "admin",
 "contact",
@@ -1297,101 +1665,184 @@ questions:[
 "dg",
 "directeur général"
 ],
+
 reponse:
-"📋 Mr Michel contact What's :+237670035609."
+"📋 Mr Michel contact WhatsApp : +237670035609."
+
 },
 
-{
-questions:[
-"réalisation",
-"travaux réalisés",
-"travaux effectués"
-],
-reponse:
-"https://r-alisations.vercel.app/"
-},
 
 {
+
 questions:[
 "localisation",
 "situé où",
 "vous êtes où"
 ],
+
 reponse:
 "📍 Yaoundé Nyom 3"
+
 }
 
 ];
 
-
-
-// ===============================
-// ANALYSE BESOIN
-// ===============================
-
+/* ================================= */
+/* RECHERCHE DANS LES ANNONCES */
+/* ================================= */
 
 function analyserBesoin(message){
 
+let q=
+message
+.toLowerCase()
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"");
 
-let q =
-message.toLowerCase();
 
+let mots=
+q.split(/\s+/)
+.filter(function(m){
+
+return m.length>2;
+
+});
 
 
 let resultat=[];
 
 
-
 ANNONCES.forEach(function(a){
 
 
+let texte=`
 
-let texte=
+${a.categorie || ""}
 
-(
-a.categorie+
-" "+
-a.objet+
-" "+
-a.ville+
-" "+
-a.quartier+
-" "+
-a.description
+${a.objet || ""}
 
-).toLowerCase();
+${a.ville || ""}
 
+${a.quartier || ""}
 
+${a.age || ""}
 
+${a.budget || ""}
 
-let mots=q.split(" ");
+${a.description || ""}
 
+${a.contact || ""}
+
+`
+.toLowerCase()
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"");
 
 
 let score=0;
 
 
-
 mots.forEach(function(m){
 
-
-if(
-m.length>2
-&&
-texte.includes(m)
-){
+if(texte.includes(m)){
 
 score++;
 
 }
 
-
 });
 
 
+/*
+Mots importants
+*/
+
+if(
+q.includes("menagere")
+&&
+texte.includes("menagere")
+){
+
+score+=8;
+
+}
+
+
+if(
+q.includes("nkomo")
+&&
+texte.includes("nkomo")
+){
+
+score+=8;
+
+}
+
+
+if(
+q.includes("yaounde")
+&&
+texte.includes("yaounde")
+){
+
+score+=5;
+
+}
+
+
+if(
+q.includes("douala")
+&&
+texte.includes("douala")
+){
+
+score+=5;
+
+}
+
+
+if(
+q.includes("chambre")
+&&
+texte.includes("chambre")
+){
+
+score+=7;
+
+}
+
+
+if(
+q.includes("studio")
+&&
+texte.includes("studio")
+){
+
+score+=7;
+
+}
+
+
+if(
+q.includes("maçon")
+||
+q.includes("macon")
+){
+
+if(
+texte.includes("maçon")
+||
+texte.includes("macon")
+){
+
+score+=6;
+
+}
+
+}
+
 
 if(score>0){
-
 
 resultat.push({
 
@@ -1401,15 +1852,9 @@ score:score
 
 });
 
-
 }
 
-
-
 });
-
-
-
 
 
 resultat.sort(function(a,b){
@@ -1419,335 +1864,991 @@ return b.score-a.score;
 });
 
 
-
 return resultat;
 
 }
 
 
-
-
-
-
-
-
-// ===============================
-// REMPLACEMENT REPONSE IA
-// ===============================
-
-
+/* ================================= */
+/* RECHERCHE BASE CONNAISSANCE */
+/* ================================= */
 
 function chercherConnaissance(message){
 
-    let texte = message.toLowerCase();
+let texte=
+message.toLowerCase();
 
-    let meilleurScore = 0;
-    let meilleureReponse = null;
 
-    BASE_CONNAISSANCE.forEach(function(item){
+let meilleurScore=0;
 
-        let score = 0;
+let meilleureReponse=null;
 
-        item.questions.forEach(function(q){
 
-            q = q.toLowerCase();
+BASE_CONNAISSANCE.forEach(function(item){
 
-            if(texte.includes(q)){
-                score += 100;
-            }
+let score=0;
 
-            let mots = q.split(/\s+/);
 
-            mots.forEach(function(mot){
+item.questions.forEach(function(q){
 
-                if(
-                    mot.length > 2 &&
-                    texte.includes(mot)
-                ){
-                    score++;
-                }
+q=q.toLowerCase();
 
-            });
 
-        });
+if(texte.includes(q)){
 
-        if(score > meilleurScore){
-
-            meilleurScore = score;
-            meilleureReponse = item.reponse;
-
-        }
-
-    });
-
-    return meilleureReponse;
+score+=100;
 
 }
 
 
-function envoyerMessage(){
+let mots=
+q.split(/\s+/);
 
-    let input=document.getElementById("message");
-    let texte=input.value.trim();
 
-    if(texte==="") return;
+mots.forEach(function(mot){
 
-    ajouterUtilisateur(texte);
+if(
+mot.length>2
+&&
+texte.includes(mot)
+){
 
-    input.value="";
-
-    setTimeout(function(){
-
-        let reponse="";
-
-        // Recherche dans la base de connaissances
-        let connaissance = chercherConnaissance(texte);
-
-        if(connaissance){
-            reponse += connaissance + "\n\n";
-        }
-
-        // Recherche dans les annonces
-        let annonces = analyserBesoin(texte);
-
-        if(annonces.length){
-
-            let a = annonces[0].annonce;
-
-            reponse += `
-━━━━━━━━━━━━━━
-
-📢 ANNONCE DISPONIBLE
-
-📌 ${a.objet}
-
-📝 ${a.description}
-
-📍 ${a.ville}
-
-🏘 ${a.quartier}
-
-💰 ${a.budget} FCFA
-
-📞 ${a.contact}
-`;
-        }
-
-        // Si rien trouvé
-        if(reponse===""){
-
-            reponse=`
-😔oups Je n'ai trouvé aucune information.
-
-Essayez de préciser :
-📌 votre besoin
-📍 votre ville
-🏘 votre quartier
-💰 votre budget
-`;
-        }
-
-        ajouterIA(reponse);
-
-    },500);
+score++;
 
 }
 
-// =================================
-// INVITATION
-// =================================
-
-
-document
-.getElementById("invite")
-.onclick=function(){
-
-
-let lien=window.location.href;
-
-
-
-if(navigator.share){
-
-
-navigator.share({
-
-title:"Assistant IA Lesfacilitateurs",
-
-text:"Découvrez mon assistant IA",
-
-url:lien
-
+});
 
 });
 
 
-}
+if(score>meilleurScore){
 
-else{
+meilleurScore=score;
 
-
-navigator.clipboard.writeText(lien);
-
-
-alert(
-"Lien d'invitation copié"
-);
-
+meilleureReponse=
+item.reponse;
 
 }
 
-
-};
-
+});
 
 
-
-
-// =================================
-// MODE SOMBRE
-// =================================
-
-
-
-document
-.getElementById("dark")
-.onclick=function(){
-
-
-document.body.classList.toggle("sombre");
-
-
-
-if(
-document.body.classList.contains("sombre")
-){
-
-
-localStorage.setItem(
-"theme",
-"sombre"
-);
-
-
-}
-
-else{
-
-
-localStorage.removeItem(
-"theme"
-);
-
+return meilleureReponse;
 
 }
 
 
+/* ================================= */
+/* ENVOYER MESSAGE */
+/* ================================= */
 
-};
+function envoyerMessage(){
 
-
-
-
-
-
-// RESTAURATION THEME AU DEMARRAGE
-
-
-if(
-localStorage.getItem("theme")
-==="sombre"
-){
+let input=
+document.getElementById("message");
 
 
-document.body.classList.add(
-"sombre"
-);
+let texte=
+input.value.trim();
 
 
-}
-
-// =================================
-// CHARGER HISTORIQUE AU DEMARRAGE
-// =================================
-
-function chargerHistorique(){
-
-
-let historique =
-JSON.parse(
-localStorage.getItem("historiqueIA")
-)
-||[];
-
-
-let chat=document.getElementById("chat");
-
-
-if(historique.length===0){
+if(texte===""){
 
 return;
 
 }
 
 
-
-chat.innerHTML="";
-
-
-historique.forEach(function(m){
+ajouterUtilisateur(texte);
 
 
-if(m.role==="user"){
+input.value="";
 
 
-chat.innerHTML+=`
+setTimeout(function(){
 
-<div class="message ai">
 
-<b>🌝 Assistant IA Lesfacilitateurs</b>
+let reponse="";
 
-<br><br>
 
-${rendreLiensCliquables(m.texte)}
+/*
+1 — BASE DE CONNAISSANCE
+*/
 
-<br><br>
+let connaissance=
+chercherConnaissance(texte);
 
-<a href="https://wa.me/237670035609?text=${encodeURIComponent("Bonjour, je souhaite un spot publicitaire ou un partenariat commercial.")}"
-target="_blank"
-style="
-display:inline-block;
-background:#25D366;
-color:white;
-text-decoration:none;
-padding:8px 12px;
-border-radius:20px;
-font-size:13px;
-font-weight:bold;
-">
-📢 WhatsApp : Spot publicitaire / Partenariat commercial
-</a>
 
-</div>
+if(connaissance){
+
+reponse+=
+connaissance
++
+"\n\n";
+
+}
+
+
+/*
+2 — RECHERCHE ANNONCES
+*/
+
+let annonces=
+analyserBesoin(texte);
+
+
+if(annonces.length){
+
+
+reponse+=`
+
+📢 ANNONCES CORRESPONDANTES
 
 `;
 
 
+/*
+Maximum 5 annonces dans
+la réponse de l'IA
+*/
+
+let limite=
+Math.min(
+annonces.length,
+5
+);
+
+
+for(
+let i=0;
+i<limite;
+i++
+){
+
+
+let a=
+annonces[i].annonce;
+
+
+reponse+=`
+
+━━━━━━━━━━━━━━
+
+📌 ${a.objet || "Annonce"}
+
+📝 ${a.description || ""}
+
+📍 ${a.ville || "Ville non précisée"}
+
+🏘️ ${a.quartier || "Quartier non précisé"}
+
+${a.age ? "🎂 Âge : "+a.age+"\n" : ""}
+
+${a.budget ? "💰 Budget/Prix : "+a.budget+"\n" : ""}
+
+📞 ${a.contact || "Contact non précisé"}
+
+`;
+
+}
+
+}
+
+
+/*
+3 — RIEN TROUVÉ
+*/
+
+if(reponse===""){
+
+reponse=`
+
+😔 Oups, je n'ai trouvé aucune information.
+
+Essayez de préciser :
+
+📌 votre besoin
+
+📍 votre ville
+
+🏘️ votre quartier
+
+💰 votre budget
+
+📢 Vous pouvez également consulter
+Annonces & Visibilité.
+
+`;
+
+}
+
+
+ajouterIA(reponse);
+
+
+},500);
+
+}
+
+
+/* ================================= */
+/* BOUTON ENVOYER */
+/* ================================= */
+
+document
+.getElementById("send")
+.onclick=function(){
+
+envoyerMessage();
+
+};
+
+
+/* ================================= */
+/* ENTRÉE CLAVIER */
+/* ================================= */
+
+document
+.getElementById("message")
+.addEventListener(
+"keypress",
+function(e){
+
+if(e.key==="Enter"){
+
+envoyerMessage();
+
+}
+
+});
+
+
+/* ================================= */
+/* ANNONCES — FENÊTRE */
+/* ================================= */
+
+const fenetreAnnonces=
+document.getElementById(
+"fenetreAnnonces"
+);
+
+
+const listeAnnonces=
+document.getElementById(
+"listeAnnonces"
+);
+
+
+const categoriesAnnonces=
+document.getElementById(
+"categoriesAnnonces"
+);
+
+
+const rechercheAnnonce=
+document.getElementById(
+"rechercheAnnonce"
+);
+
+
+let categorieActuelle=
+"toutes";
+a
+
+/* ================================= */
+/* OUVRIR ANNONCES */
+/* ================================= */
+
+document
+.getElementById("annonces")
+.onclick=function(){
+
+afficherAnnonces();
+
+fenetreAnnonces.style.display=
+"block";
+
+menu.classList.remove(
+"active"
+);
+
+};
+
+
+/* ================================= */
+/* FERMER ANNONCES */
+/* ================================= */
+
+document
+.getElementById("fermerAnnonces")
+.onclick=function(){
+
+fenetreAnnonces.style.display=
+"none";
+
+};
+
+
+/* ================================= */
+/* NOM CATÉGORIE */
+/* ================================= */
+
+function nomCategorie(cat){
+
+if(cat==="toutes")
+return "📢 Toutes";
+
+if(cat==="immobilier")
+return "🏠 Immobilier";
+
+if(cat==="emplois")
+return "💼 Emploi";
+
+if(cat==="technicien")
+return "🔧 Techniciens";
+
+if(cat==="agronomie")
+return "🌱 Agronomie";
+
+if(cat==="animal")
+return "🐕 Animaux";
+
+if(cat==="e-commerce")
+return "🛒 Commerce";
+
+if(cat==="réalisation")
+return "🏗️ Réalisations";
+
+if(cat==="personnalite")
+return "👤 Personnalités";
+
+if(cat==="emplacement")
+return "📍 Emplacements";
+
+return "📢 "+cat;
+
+}
+
+
+/* ================================= */
+/* AFFICHER CATÉGORIES */
+/* ================================= */
+
+function afficherCategories(){
+
+let categories=[
+"toutes"
+];
+
+
+ANNONCES.forEach(function(a){
+
+if(
+a.categorie
+&&
+!categories.includes(
+a.categorie
+)
+){
+
+categories.push(
+a.categorie
+);
+
+}
+
+});
+
+
+categoriesAnnonces.innerHTML="";
+
+
+categories.forEach(function(cat){
+
+let bouton=
+document.createElement(
+"button"
+);
+
+
+bouton.className=
+"categorie-annonce";
+
+
+if(
+cat===
+categorieActuelle
+){
+
+bouton.classList.add(
+"active"
+);
+
+}
+
+
+bouton.textContent=
+nomCategorie(cat);
+
+
+bouton.onclick=function(){
+
+categorieActuelle=
+cat;
+
+afficherCategories();
+
+afficherAnnonces();
+
+};
+
+
+categoriesAnnonces.appendChild(
+bouton
+);
+
+});
+
+}
+
+
+/* ================================= */
+/* AFFICHER ANNONCES */
+/* ================================= */
+
+function afficherAnnonces(){
+
+    afficherCategories();
+
+    let recherche =
+        rechercheAnnonce.value
+        .toLowerCase()
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"");
+
+
+    /* ============================= */
+    /* FILTRAGE */
+    /* ============================= */
+
+    let annoncesFiltrees = ANNONCES.filter(function(a){
+
+        let categorieOK =
+            categorieActuelle === "toutes"
+            ||
+            a.categorie === categorieActuelle;
+
+
+        let texte = (
+
+            (a.categorie || "") + " " +
+            (a.objet || "") + " " +
+            (a.ville || "") + " " +
+            (a.quartier || "") + " " +
+            (a.age || "") + " " +
+            (a.budget || "") + " " +
+            (a.description || "") + " " +
+            (a.contact || "")
+
+        )
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"");
+
+
+        let rechercheOK =
+            recherche === ""
+            ||
+            texte.includes(recherche);
+
+
+        return categorieOK && rechercheOK;
+
+    });
+
+
+    let zone =
+        document.getElementById("listeAnnonces");
+
+
+    zone.innerHTML = "";
+
+
+    /* ============================= */
+    /* AUCUNE ANNONCE */
+    /* ============================= */
+
+    if(annoncesFiltrees.length === 0){
+
+        zone.innerHTML = `
+
+        <div class="aucune-annonce">
+
+            😔
+
+            <br><br>
+ <b>
+            Aucune annonce trouvée
+            </b>
+
+            <br><br>
+
+            Essayez une autre catégorie,
+            une autre ville ou un autre mot.
+
+        </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* ============================= */
+    /* REGROUPEMENT PAR VILLE */
+    /* ============================= */
+
+    let villes = {};
+
+
+    annoncesFiltrees.forEach(function(a){
+
+        let ville =
+            a.ville || "Autres";
+
+
+        if(!villes[ville]){
+
+            villes[ville] = [];
+
+        }
+
+
+        villes[ville].push(a);
+
+    });
+
+
+    /* ============================= */
+    /* AFFICHAGE PAR VILLE */
+    /* ============================= */
+
+    Object.keys(villes).forEach(function(ville){
+
+        let bloc =
+            document.createElement("div");
+
+
+        bloc.innerHTML = `
+
+        <div class="titre-ville">
+
+            📍 ANNONCES DE
+            ${ville.toUpperCase()}
+
+        </div>
+
+        `;
+
+
+        let groupe =
+            document.createElement("div");
+
+
+        groupe.className =
+            "groupe-annonces";
+
+
+        /* ============================= */
+        /* CHAQUE ANNONCE */
+        /* ============================= */
+
+        villes[ville].forEach(function(a){
+
+            let numero =
+                (a.contact || "")
+                .replace(/\D/g,"");
+
+
+            let numeroWA =
+                numero;
+
+
+            if(
+                numero &&
+                !numero.startsWith("237")
+            ){
+
+                numeroWA =
+                    "237" + numero;
+
+            }
+
+
+            let carte =
+                document.createElement("div");
+
+
+            carte.className =
+                "carte-annonce";
+
+
+            carte.innerHTML = `
+
+            <span class="badge">
+
+                ${nomCategorie(
+                    a.categorie
+                )}
+
+            </span>
+
+
+            <h3>
+
+                ${a.objet || "Annonce"}
+
+            </h3>
+
+
+            <p>
+
+                📝
+
+                ${a.description || ""}
+
+            </p>
+
+
+            ${
+                a.ville
+                ?
+                `
+                <p>
+
+                    📍 <b>Ville :</b>
+
+                    ${a.ville}
+
+                </p>
+                `
+                :
+                ""
+            }
+
+
+            ${
+                a.quartier
+                ?
+                `
+                <p>
+
+                    🏘️ <b>Quartier :</b>
+
+                    ${a.quartier}
+
+                </p>
+                `
+                :
+                ""
+            }
+
+
+            ${
+                a.age
+                ?
+                `
+                <p>
+
+                    🎂 <b>Âge :</b>
+
+                    ${a.age}
+
+                </p>
+                `
+                :
+                ""
+            }
+
+
+            ${
+                a.budget
+                ?
+                `
+                <p>
+
+                    💰 <b>Prix/Budget :</b>
+
+                    ${a.budget}
+
+                </p>
+                `
+                :
+                ""
+            }
+
+
+            ${
+                a.contact
+                ?
+                `
+                <p class="contact">
+
+                    📞 ${a.contact}
+
+                </p>
+                `
+                :
+                ""
+            }
+
+
+            <div class="actions-annonce">
+
+
+                ${
+                    numero
+                    ?
+                    `
+                    <a
+                    class="btn-appeler"
+                    href="tel:+${numeroWA}"
+                    >
+
+                    📞 Appeler
+
+                    </a>
+                    `
+                    :
+                    ""
+                }
+
+
+                ${
+                    numero
+                    ?
+                    `
+                    <a
+                    class="btn-whatsapp"
+                    href="https://wa.me/${numeroWA}?text=${encodeURIComponent(
+                        "Bonjour, je suis intéressé par votre annonce : "
+                        +
+                        (a.objet || "")
+                    )}"
+                    target="_blank"
+                    >
+
+                    💬 WhatsApp
+
+                    </a>
+                    `
+                    :
+                    ""
+                }
+
+
+            </div>
+
+            `;
+
+
+            groupe.appendChild(
+                carte
+            );
+
+        });
+
+
+        bloc.appendChild(
+            groupe
+        );
+
+
+        zone.appendChild(
+            bloc
+        );
+
+    });
+
+
+    /* ============================= */
+    /* RETOUR EN HAUT */
+    /* ============================= */
+
+    document
+    .getElementById("fenetreAnnonces")
+    .scrollTop = 0;
+
+}
+
+
+/* ================================= */
+/* RECHERCHE EN DIRECT */
+/* ================================= */
+
+rechercheAnnonce
+.addEventListener(
+"input",
+function(){
+
+afficherAnnonces();
+
+});
+
+/* ================================= */
+/* FIN PARTIE 2 */
+/* ================================= */
+
+
+/* ================================= */
+/* INVITATION */
+/* ================================= */
+
+document
+.getElementById("invite")
+.onclick=function(){
+
+let lien=
+window.location.href;
+
+
+if(
+navigator.share
+){
+
+navigator.share({
+
+title:
+"Assistant IA Lesfacilitateurs",
+
+text:
+"Découvrez mon assistant IA",
+
+url:lien
+
+});
+
+}
+
+else if(
+navigator.clipboard
+){
+
+navigator.clipboard
+.writeText(lien);
+
+alert(
+"Lien d'invitation copié"
+);
+
+}
+
+};
+
+
+/* ================================= */
+/* MODE SOMBRE */
+/* ================================= */
+
+document
+.getElementById("dark")
+.onclick=function(){
+
+document.body
+.classList
+.toggle("sombre");
+
+
+if(
+document.body.classList.contains(
+"sombre"
+)
+){
+
+localStorage.setItem(
+"theme",
+"sombre"
+);
 
 }
 
 else{
 
+localStorage.removeItem(
+"theme"
+);
+
+}
+
+};
+
+
+/* ================================= */
+/* RESTAURATION MODE SOMBRE */
+/* ================================= */
+
+if(
+localStorage.getItem("theme")
+===
+"sombre"
+){
+
+document.body.classList.add(
+"sombre"
+);
+
+}
+
+
+/* ================================= */
+/* CHARGER HISTORIQUE */
+/* ================================= */
+
+function chargerHistorique(){
+
+let historique=
+JSON.parse(
+localStorage.getItem(
+"historiqueIA"
+)
+)
+||
+[];
+
+
+let chat=
+document.getElementById(
+"chat"
+);
+
+
+if(
+historique.length===0
+){
+
+return;
+
+}
+
+
+chat.innerHTML="";
+
+
+historique.forEach(
+function(m){
+
+if(
+m.role==="user"
+){
 
 chat.innerHTML+=`
 
-<div class="message ai">
+<div class="message user">
 
-<b>🌝 Assistant IA Lesfacilitateurs</b>
-
-<br><br>
-
-${rendreLiensCliquables(m.texte)}
+${m.texte}
 
 </div>
 
@@ -1755,259 +2856,397 @@ ${rendreLiensCliquables(m.texte)}
 
 }
 
+else{
+
+chat.innerHTML+=`
+
+<div class="message ai">
+
+<b>
+🌝 Assistant IA Lesfacilitateurs
+</b>
+
+<br><br>
+
+${rendreLiensCliquables(
+m.texte
+)}
+
+</div>
+
+`;
+
+}
 
 });
 
 
-chat.scrollTop=chat.scrollHeight;
-
+chat.scrollTop=
+chat.scrollHeight;
 
 }
 
 
+/* ================================= */
+/* STATUTS */
+/* ================================= */
 
+const STATUTS=[
 
+{
 
+type:"image",
 
+url:
+"https://raw.githubusercontent.com/Lfg237/image-st-joseph-/main/1784226524564.jpg"
 
+},
 
-// Lancement automatique
+{
 
-window.addEventListener("load", function(){
+type:"image",
 
-    chargerHistorique();
+url:
+"https://raw.githubusercontent.com/Lfg237/workshopkmer/main/file_00000000c1c081fb8aa8eff416a898a0.png"
 
-    afficherServices();
+},
 
-});
+{
 
+type:"image",
 
-const STATUTS = [
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000915072439b84baf5b0824a43.png"
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/image-st-joseph-/main/1784226524564.jpg"
-    },
+},
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/workshopkmer/main/file_00000000c1c081fb8aa8eff416a898a0.png"
-    },
+{
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000915072439b84baf5b0824a43.png"
-    },
+type:"image",
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000009154720aa02f9fc54e37e139.png"
-    },
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000009154720aa02f9fc54e37e139.png"
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000226871fdb7585d562d4a1b12.png"
-    },
+},
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_0000000064f0720a911a3e5868b2625a.png"
-    },
+{
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/d-p-t-image-Lesfacilitateurs-/main/IMG_20260124_122540_490.jpg"
-    },
+type:"image",
 
-    {
-        type:"audio",
-        url:"https://raw.githubusercontent.com/Lfg237/audio-/main/nom%20de%20dieu%20.mp3"
-    },
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000226871fdb7585d562d4a1b12.png"
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/IMG-20260305-WA0011.jpg"
-    },
+},
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/affiche_compressee.jpg"
-    },
+{
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260319_152611056.jpg"
-    },
+type:"image",
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
-    },
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_0000000064f0720a911a3e5868b2625a.png"
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/Polish_20260223_163236698.png"
-    },
+},
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(61)_202605010818_1.jpg"
-    },
+{
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(60)_202605010818_1.jpg"
-    },
+type:"image",
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260309_161104091.jpg"
-    },
+url:
+"https://raw.githubusercontent.com/Lfg237/d-p-t-image-Lesfacilitateurs-/main/IMG_20260124_122540_490.jpg"
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000000370720a9aedc5f4906f90da.png"
-    },
+},
 
-    {
-        type:"image",
-        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
-    },
+{
 
-    {
-        type:"iframe",
-        url:"https://archive.org/embed/in-shot-20250618-050312535"
-    }
+type:"audio",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/audio-/main/nom%20de%20dieu%20.mp3"
+
+},
+
+{
+
+type:"image",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/IMG-20260305-WA0011.jpg"
+
+},
+
+{
+
+type:"image",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/affiche_compressee.jpg"
+
+},
+
+{
+
+type:"image",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260319_152611056.jpg"
+
+},
+
+{
+
+type:"image",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
+
+},
+
+{
+
+type:"image",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/Polish_20260223_163236698.png"
+
+},
+
+{
+
+type:"image",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(61)_202605010818_1.jpg"
+
+},
+
+{
+
+type:"image",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(60)_202605010818_1.jpg"
+
+},
+
+{
+
+type:"image",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260309_161104091.jpg"
+
+},
+
+{
+
+type:"image",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000000370720a9aedc5f4906f90da.png"
+
+},
+
+{
+
+type:"image",
+
+url:
+"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
+
+},
+
+{
+
+type:"iframe",
+
+url:
+"https://archive.org/embed/in-shot-20250618-050312535"
+
+}
 
 ];
 
 
-// ======================================
-// AFFICHER LES STATUTS
-// ======================================
+/* ================================= */
+/* AFFICHER STATUTS */
+/* ================================= */
 
 function afficherStatuts(){
 
-    const zone = document.getElementById("listeStatuts");
-
-    zone.innerHTML = "";
-
-    STATUTS.forEach(function(s){
-
-        if(s.type === "image"){
-
-            zone.innerHTML += `
-                <img
-                    src="${s.url}"
-                    style="
-                        width:100%;
-                        max-width:700px;
-                        display:block;
-                        margin:20px auto;
-                        border-radius:15px;
-                    "
-                >
-            `;
-
-        }
+const zone=
+document.getElementById(
+"listeStatuts"
+);
 
 
-        else if(s.type === "audio"){
-
-            zone.innerHTML += `
-                <audio
-                    controls
-                    style="
-                        width:100%;
-                        margin:20px 0;
-                    "
-                >
-                    <source src="${s.url}" type="audio/mpeg">
-                </audio>
-            `;
-
-        }
+zone.innerHTML="";
 
 
-        else if(s.type === "iframe"){
-
-            zone.innerHTML += `
-                <iframe
-                    src="${s.url}"
-                    style="
-                        width:100%;
-                        height:500px;
-                        border:none;
-                        margin-top:20px;
-                    "
-                    allowfullscreen
-                ></iframe>
-            `;
-
-        }
-
-    });
+STATUTS.forEach(
+function(s){
 
 
-    document.getElementById("fenetreStatuts").style.display = "block";
+if(
+s.type==="image"
+){
+
+zone.innerHTML+=`
+
+<img
+src="${s.url}"
+style="
+width:100%;
+max-width:700px;
+display:block;
+margin:20px auto;
+border-radius:15px;
+"
+>
+
+`;
 
 }
 
 
-// ======================================
-// BOUTON STATUTS
-// ======================================
+else if(
+s.type==="audio"
+){
 
-document.getElementById("statuts").onclick = function(){
+zone.innerHTML+=`
 
-    afficherStatuts();
+<audio
+controls
+style="
+width:100%;
+margin:20px 0;
+"
+>
 
-    menu.classList.remove("active");
+<source
+src="${s.url}"
+type="audio/mpeg"
+>
+
+</audio>
+
+`;
+
+}
+
+
+else if(
+s.type==="iframe"
+){
+
+zone.innerHTML+=`
+
+<iframe
+src="${s.url}"
+style="
+width:100%;
+height:500px;
+border:none;
+margin-top:20px;
+"
+allowfullscreen
+></iframe>
+
+`;
+
+}
+
+});
+
+
+document
+.getElementById(
+"fenetreStatuts"
+)
+.style.display="block";
+
+}
+
+
+/* ================================= */
+/* BOUTON STATUTS */
+/* ================================= */
+
+document
+.getElementById("statuts")
+.onclick=function(){
+
+afficherStatuts();
+
+menu.classList.remove(
+"active"
+);
 
 };
 
 
-// ======================================
-// FERMER LES STATUTS
-// ======================================
+/* ================================= */
+/* FERMER STATUTS */
+/* ================================= */
 
-document.getElementById("fermerStatuts").onclick = function(){
+document
+.getElementById(
+"fermerStatuts"
+)
+.onclick=function(){
 
-    document.getElementById("fenetreStatuts").style.display = "none";
+document
+.getElementById(
+"fenetreStatuts"
+)
+.style.display="none";
 
 };
 
 
-// ======================================
-// FERMER AVEC ESC
-// ======================================
+/* ================================= */
+/* TOUCHE ESC */
+/* ================================= */
 
-document.addEventListener("keydown", function(e){
+document.addEventListener(
+"keydown",
+function(e){
 
-    if(e.key === "Escape"){
+if(
+e.key==="Escape"
+){
 
-        document.getElementById("fenetreStatuts").style.display = "none";
+document
+.getElementById(
+"fenetreStatuts"
+)
+.style.display="none";
 
-    }
+
+fenetreAnnonces
+.style.display="none";
+
+}
 
 });
 
 
-// ======================================
-// DÉMARRAGE
-// ======================================
+/* ================================= */
+/* DÉMARRAGE */
+/* ================================= */
 
-window.addEventListener("load", function(){
+window.addEventListener(
+"load",
+function(){
 
-    chargerHistorique();
+chargerHistorique();
 
-    afficherServices();
+afficherServices();
 
 });
+
 
 </script>
+
 </body>
 
 </html>
-
-   
