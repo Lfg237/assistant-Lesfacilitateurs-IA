@@ -1108,12 +1108,25 @@ chat.scrollHeight;
 /* MÉMOIRE */
 /* ================================= */
 
-let historique =
-JSON.parse(
-localStorage.getItem("historiqueIA")
-)
-||
-[];
+let historique = [];
+
+try {
+    historique = JSON.parse(
+        localStorage.getItem("historiqueIA") || "[]"
+    );
+
+    if (!Array.isArray(historique)) {
+        historique = [];
+    }
+
+} catch (e) {
+
+    console.warn("Historique corrompu, réinitialisation.");
+
+    historique = [];
+
+    localStorage.removeItem("historiqueIA");
+}
 
 
 function sauvegarderHistorique(
