@@ -3374,7 +3374,6 @@ rechercheAnnonce.addEventListener(
 /* FIN PARTIE 2 */
 /* ================================= */
 
-
 /* ================================= */
 /* INVITATION */
 /* ================================= */
@@ -3383,43 +3382,100 @@ document
 .getElementById("invite")
 .onclick=function(){
 
-let lien=
-window.location.href;
+    const lien =
+        window.location.href;
+
+    if(
+        navigator.share
+    ){
+
+        navigator.share({
+
+            title:
+            "Assistant IA Lesfacilitateurs",
+
+            text:
+            "Découvrez mon assistant IA",
+
+            url:lien
+
+        }).catch(function(e){
+
+            console.log(
+                "Partage annulé ou indisponible.",
+                e
+            );
+
+        });
+
+        return;
+
+    }
 
 
-if(
-navigator.share
-){
+    if(
+        navigator.clipboard &&
+        window.isSecureContext
+    ){
 
-navigator.share({
+        navigator.clipboard
+        .writeText(lien)
+        .then(function(){
 
-title:
-"Assistant IA Lesfacilitateurs",
+            alert(
+                "Lien d'invitation copié"
+            );
 
-text:
-"Découvrez mon assistant IA",
+        })
+        .catch(function(){
 
-url:lien
+            alert(
+                "Impossible de copier automatiquement le lien."
+            );
 
-});
+        });
 
-}
+        return;
 
-else if(
-navigator.clipboard
-){
+    }
 
-navigator.clipboard
-.writeText(lien);
 
-alert(
-"Lien d'invitation copié"
-);
+    /* Solution compatible avec les anciens navigateurs */
 
-}
+    try{
+
+        const zone =
+            document.createElement("textarea");
+
+        zone.value = lien;
+
+        zone.style.position =
+            "fixed";
+
+        zone.style.opacity =
+            "0";
+
+        document.body.appendChild(zone);
+
+        zone.select();
+
+        document.execCommand("copy");
+
+        document.body.removeChild(zone);
+
+        alert(
+            "Lien d'invitation copié"
+        );
+
+    }catch(e){
+
+        alert(
+            "Lien : " + lien
+        );
+
+    }
 
 };
-
 
 /* ================================= */
 /* MODE SOMBRE */
@@ -3429,31 +3485,35 @@ document
 .getElementById("dark")
 .onclick=function(){
 
-document.body
-.classList
-.toggle("sombre");
+    document.body.classList.toggle("sombre");
 
+    try{
 
-if(
-document.body.classList.contains(
-"sombre"
-)
-){
+        if(
+            document.body.classList.contains("sombre")
+        ){
 
-localStorage.setItem(
-"theme",
-"sombre"
-);
+            localStorage.setItem(
+                "theme",
+                "sombre"
+            );
 
-}
+        }else{
 
-else{
+            localStorage.removeItem(
+                "theme"
+            );
 
-localStorage.removeItem(
-"theme"
-);
+        }
 
-}
+    }catch(e){
+
+        console.warn(
+            "Impossible de sauvegarder le thème.",
+            e
+        );
+
+    }
 
 };
 
@@ -3462,19 +3522,28 @@ localStorage.removeItem(
 /* RESTAURATION MODE SOMBRE */
 /* ================================= */
 
-if(
-localStorage.getItem("theme")
-===
-"sombre"
-){
+try{
 
-document.body.classList.add(
-"sombre"
-);
+    if(
+        localStorage.getItem("theme")
+        ===
+        "sombre"
+    ){
+
+        document.body.classList.add(
+            "sombre"
+        );
+
+    }
+
+}catch(e){
+
+    console.warn(
+        "Thème local indisponible.",
+        e
+    );
 
 }
-
-
 /* ================================= */
 /* CHARGER HISTORIQUE */
 /* ================================= */
