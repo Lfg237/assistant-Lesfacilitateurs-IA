@@ -1734,83 +1734,105 @@ chat.scrollHeight;
 
 
 /* ================================= */
-/* MÉMOIRE */
+/* MÉMOIRE — VERSION SÉCURISÉE */
 /* ================================= */
 
 let historique = [];
 
-try {
-    historique = JSON.parse(
-        localStorage.getItem("historiqueIA") || "[]"
-    );
+function chargerMemoire(){
 
-    if (!Array.isArray(historique)) {
+    try{
+
+        const sauvegarde =
+            localStorage.getItem("historiqueIA");
+
+        if(sauvegarde){
+
+            const data =
+                JSON.parse(sauvegarde);
+
+            if(Array.isArray(data)){
+                historique = data;
+            }
+
+        }
+
+    }catch(e){
+
+        console.warn(
+            "Mémoire locale indisponible.",
+            e
+        );
+
         historique = [];
+
     }
 
-} catch (e) {
-
-    console.warn("Historique corrompu, réinitialisation.");
-
-    historique = [];
-
-    localStorage.removeItem("historiqueIA");
 }
 
 
-function sauvegarderHistorique(
-role,
-texte
-){
+function sauvegarderHistorique(role, texte){
 
-historique.push({
+    try{
 
-role:role,
+        historique.push({
 
-texte:texte,
+            role: role,
+            texte: String(texte || ""),
+            date: new Date().toLocaleString()
 
-date:new Date().toLocaleString()
+        });
 
-});
+        localStorage.setItem(
+            "historiqueIA",
+            JSON.stringify(historique)
+        );
 
+    }catch(e){
 
-localStorage.setItem(
-"historiqueIA",
-JSON.stringify(historique)
-);
+        console.warn(
+            "Impossible de sauvegarder l'historique.",
+            e
+        );
 
+    }
 
 }
 
 
-const ancienUtilisateur=
-ajouterUtilisateur;
+chargerMemoire();
 
 
-ajouterUtilisateur=function(texte){
+const ancienneFonctionUtilisateur =
+    ajouterUtilisateur;
 
-ancienUtilisateur(texte);
 
-sauvegarderHistorique(
-"user",
-texte
-);
+ajouterUtilisateur =
+function(texte){
+
+    ancienneFonctionUtilisateur(texte);
+
+    sauvegarderHistorique(
+        "user",
+        texte
+    );
 
 };
 
 
-const ancienneIA=
-ajouterIA;
+const ancienneFonctionIA =
+    ajouterIA;
 
 
-ajouterIA=function(texte){
+ajouterIA =
+function(texte){
 
-ancienneIA(texte);
+    ancienneFonctionIA(texte);
 
-sauvegarderHistorique(
-"ia",
-texte
-);
+    sauvegarderHistorique(
+        "ia",
+        texte
+    );
 
 };
 
