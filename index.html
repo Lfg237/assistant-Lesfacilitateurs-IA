@@ -2288,82 +2288,50 @@ return "📢 "+cat;
 /* AFFICHER CATÉGORIES */
 /* ================================= */
 
-function afficherCategories(){
+                    function afficherCategories(){
 
-let categories=[
-"toutes"
-];
+    let categories = ["toutes"];
 
+    ANNONCES.forEach(function(a){
 
-ANNONCES.forEach(function(a){
+        if(
+            a.categorie &&
+            !categories.includes(a.categorie)
+        ){
+            categories.push(a.categorie);
+        }
 
-if(
-a.categorie
-&&
-!categories.includes(
-a.categorie
-)
-){
+    });
 
-categories.push(
-a.categorie
-);
+    categoriesAnnonces.innerHTML = "";
 
-}
+    categories.forEach(function(cat){
 
-});
+        let bouton = document.createElement("button");
 
+        bouton.className = "categorie-annonce";
 
-categoriesAnnonces.innerHTML="";
+        if(cat === categorieActuelle){
+            bouton.classList.add("active");
+        }
 
+        bouton.textContent = nomCategorie(cat);
 
-categories.forEach(function(cat){
+        bouton.onclick = function(){
 
-let bouton=
-document.createElement(
-"button"
-);
+            categorieActuelle = cat;
 
+            afficherCategories();
 
-bouton.className=
-"categorie-annonce";
+            afficherAnnonces();
 
+        };
 
-if (cat === categorieActuelle) {
-    bouton.classList.add("active");
-}
+        categoriesAnnonces.appendChild(bouton);
 
-bouton.classList.add(
-"active"
-);
+    });
 
-}
-
-
-bouton.textContent=
-nomCategorie(cat);
-
-
-bouton.onclick=function(){
-
-categorieActuelle=
-cat;
-
-afficherCategories();
-
-afficherAnnonces();
-
-};
-
-
-categoriesAnnonces.appendChild(
-bouton
-);
-
-});
-
-}
-
+} 
 
 /* ================================= */
 /* AFFICHER ANNONCES */
