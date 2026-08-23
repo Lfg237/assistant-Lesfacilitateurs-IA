@@ -2861,14 +2861,25 @@ document.body.classList.add(
 
 function chargerHistorique(){
 
-let historique=
-JSON.parse(
-localStorage.getItem(
-"historiqueIA"
-)
-)
-||
-[];
+let historique = [];
+
+try {
+
+    historique = JSON.parse(
+        localStorage.getItem("historiqueIA") || "[]"
+    );
+
+    if (!Array.isArray(historique)) {
+        historique = [];
+    }
+
+} catch (e) {
+
+    historique = [];
+
+    localStorage.removeItem("historiqueIA");
+
+}
 
 
 let chat=
