@@ -275,7 +275,6 @@ body.sombre .admin-box{background:#17201f;color:#fff}body.sombre .admin-auth inp
 </div>
 
 <script>
-
 /* =========================================================
    PARTIE 1 — OUTILS + DONNÉES
 ========================================================= */
@@ -339,7 +338,6 @@ const fenetreStatuts=document.getElementById("fenetreStatuts");
 const fermerStatuts=document.getElementById("fermerStatuts");
 const listeStatuts=document.getElementById("listeStatuts");
 
-
 /* =========================================================
    MENU PRINCIPAL
 ========================================================= */
@@ -384,7 +382,6 @@ e.stopPropagation();
 listeServices.style.display=(listeServices.style.display==="none"||listeServices.style.display==="")?"block":"none";
 });
 }
-
 
 /* =========================================================
    MESSAGES
@@ -560,7 +557,6 @@ actions.appendChild(appel);actions.appendChild(whatsapp);carte.appendChild(actio
 return carte;
 }
 
-
 /* =========================================================
    ANNONCES — AFFICHER LES ANNONCES
 ========================================================= */
@@ -580,6 +576,7 @@ if(!contenu.includes(recherche))return false;
 }
 return true;
 });
+
 if(!annoncesFiltrees.length){
 const aucune=document.createElement("div");
 aucune.className="aucune-annonce";
@@ -627,7 +624,6 @@ if(menu)menu.classList.remove("active");
 });
 
 if(listeAnnonces)listeAnnonces.innerHTML="";
-
 
 /* =========================================================
    PARTIE SUIVANTE — STATUTS
@@ -699,7 +695,6 @@ if(fenetreStatuts)fenetreStatuts.style.display="none";
 });
 }
 
-
 /* =========================================================
    INVITER
 ========================================================= */
@@ -745,7 +740,6 @@ if(darkBtn)darkBtn.textContent="☀️ Mode clair";
    INITIALISER LES STATUTS
    (après chargement de la mémoire IA)
 ========================================================= */
-
 
 /* =========================================================
    MESSAGE D'ACCUEIL
@@ -842,11 +836,12 @@ function adminRafraichir(){
  const lsvc=document.getElementById("listeServicesAdmin"),lsw=document.getElementById("listeServicesWhatsappAdmin"),lr=document.getElementById("listeRegles"),lrep=document.getElementById("listeReponses"),lrec=document.getElementById("listeRecos"),lm=document.getElementById("listeMedias"),la=document.getElementById("listeAnnoncesAdmin"),ls=document.getElementById("listeStatutsAdmin");
  if(lsvc)lsvc.innerHTML=AI_MEMORY.services.map((x,i)=>{const nom=typeof x==="string"?x:(x?.nom||"");return `<div class="admin-card"><b>🛠️ ${escapeAdmin(nom)}</b><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('services',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('services',${i})">🗑️ Supprimer</button></div></div>`}).join("")||'<div class="admin-note">Aucun service.</div>';
  if(lsw)lsw.innerHTML=AI_MEMORY.servicesWhatsapp.map((x,i)=>`<div class="admin-card"><b>📞 ${escapeAdmin(x.nom||"Service WhatsApp")}</b><div>📱 ${escapeAdmin(x.numero||"")}</div><div>${escapeAdmin(x.message||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('servicesWhatsapp',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('servicesWhatsapp',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucun service WhatsApp ajouté.</div>';
- if(lr)lr.innerHTML=AI_MEMORY.regles.map((x,i)=>`<div class="admin-card"><b>🧠 ${escapeAdmin(x.titre||"Règle")}</b><div>${escapeAdmin(x.texte||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('regles',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('regles',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune règle ajoutée.</div>';
+ if(lr)lr.innerHTML=AI_MEMORY.regles.map((x,i)=>`<div class="admin-card"><b>🧠
+${escapeAdmin(x.titre||"Règle")}</b><div>${escapeAdmin(x.texte||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('regles',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('regles',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune règle ajoutée.</div>';
  if(lrep)lrep.innerHTML=AI_MEMORY.connaissances.map((x,i)=>`<div class="admin-card"><b>📚 ${escapeAdmin((x.questions||[]).join(", "))}</b><div>${escapeAdmin(x.reponse||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('connaissances',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('connaissances',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune connaissance ajoutée.</div>';
  if(lrec)lrec.innerHTML=AI_MEMORY.recommandations.map((x,i)=>`<div class="admin-card"><b>⭐ ${escapeAdmin(x.titre||"Recommandation")}</b><div>${escapeAdmin(x.texte||"")}</div>${x.url?`<div>🌐 ${escapeAdmin(x.url)}</div>`:""}<div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('recommandations',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('recommandations',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune recommandation.</div>';
  if(lm)lm.innerHTML=AI_MEMORY.medias.map((x,i)=>x&&x.type!=="reponse"?`<div class="admin-card"><b>🖼️ ${escapeAdmin(x.questions||"Média")}</b><div>🌐 ${escapeAdmin(x.url||"")}</div><div>${escapeAdmin(x.contexte||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('medias',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('medias',${i})">🗑️ Supprimer</button></div></div>`:"").join("")||'<div class="admin-note">Aucun média ajouté.</div>';
-if(la)la.innerHTML=AI_MEMORY.annonces.map((x,i)=>`<div class="admin-card"><b>📢 ${escapeAdmin(x.objet||"Annonce")}</b><div>${escapeAdmin([x.categorie,x.ville,x.quartier,x.age,x.budget,x.description,x.contact].filter(Boolean).join(" • "))}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('annonces',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('annonces',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune annonce.</div>';
+ if(la)la.innerHTML=AI_MEMORY.annonces.map((x,i)=>`<div class="admin-card"><b>📢 ${escapeAdmin(x.objet||"Annonce")}</b><div>${escapeAdmin([x.categorie,x.ville,x.quartier,x.age,x.budget,x.description,x.contact].filter(Boolean).join(" • "))}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('annonces',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('annonces',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune annonce.</div>';
  if(ls)ls.innerHTML=AI_MEMORY.statuts.map((x,i)=>`<div class="admin-card"><b>📺 ${escapeAdmin(x.titre||"Statut")}</b><div>${escapeAdmin(x.type||"texte")} ${x.expiresAt?"• expiration "+escapeAdmin(x.expiresAt):""}</div><div>${escapeAdmin(x.contenu||"")}</div>${x.url?`<div>🌐 ${escapeAdmin(x.url)}</div>`:""}<div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('statuts',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('statuts',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucun statut.</div>';
  rendreTableauMemoire();
 }
@@ -920,7 +915,7 @@ async function chargerMemoireAPI(show,forceReplace=false){
   return true;
  }catch(e){
   try{
-   const secours=await fetch("data/ai-memory.json?t="+Date.now(),{cache:"no-store"});
+const secours=await fetch("data/ai-memory.json?t="+Date.now(),{cache:"no-store"});
    if(!secours.ok)throw new Error("HTTP "+secours.status);
    const memSecours=normaliserMemoire(await secours.json());
    const nbSecours=Object.keys(memSecours).filter(k=>Array.isArray(memSecours[k])).reduce((n,k)=>n+memSecours[k].length,0);
@@ -961,7 +956,6 @@ function chargerMemoireLocale(){
     else { AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE)); sauvegarderMemoireLocale(); appliquerMemoireIA(); }
   }catch(e){ console.warn("MEMOIRE LOCALE",e); AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE)); try{sauvegarderMemoireLocale()}catch(_){} try{appliquerMemoireIA()}catch(_){} }
 }
-
 async function initialiserAdmin(){
  chargerMemoireLocale(); appliquerMemoireIA(); adminRafraichir();
  const ab=document.getElementById("adminBtn");if(ab)ab.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();ouvrirAdmin();});
