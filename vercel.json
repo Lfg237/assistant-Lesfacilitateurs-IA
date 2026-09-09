@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/admin-login.js": {
+      "maxDuration": 10
+    },
+    "api/ai-memory.js": {
+      "maxDuration": 20
+    }
+  }
+}
