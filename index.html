@@ -797,27 +797,45 @@ function adminOuvert(){return document.getElementById("fenetreAdmin")}
 function ouvrirAdmin(){const f=adminOuvert();if(!f){alert("❌ Fenêtre administration introuvable.");return}f.style.display="block";f.style.visibility="visible";f.style.opacity="1";f.setAttribute("aria-hidden","false");const c=document.getElementById("adminCode");if(c){setTimeout(()=>c.focus(),50)}}
 window.ouvrirAdministrationIA=ouvrirAdmin
 function fermerAdmin(){const f=adminOuvert();if(f){f.style.display="none";f.setAttribute("aria-hidden","true");document.body.style.overflow=""}}
+
 async function connexionAdmin(){
- const code=document.getElementById("adminCode").value.trim();
- if(code!==ADMIN_CODE){alert("❌ Code administrateur incorrect.");return}
- const r=await fetch("/api/admin-login",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({code})
-});
+  const code=document.getElementById("adminCode").value.trim();
 
-const d=await r.json().catch(()=>({}));
+  if(!code){
+    alert("❌ Entrez le code administrateur.");
+    return;
+  }
 
-if(!r.ok){
-  alert("❌ "+(d.error||"Connexion administrateur refusée."));
-  return;
+  try{
+    const r=await fetch("/api/admin-login",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({code})
+    });
+
+    const d=await r.json().catch(()=>({}));
+
+    if(!r.ok){
+      alert("❌ "+(d.error||"Connexion administrateur refusée."));
+      return;
+    }
+
+    ADMIN_SESSION_TOKEN=d.token;
+
+    document.getElementById("adminPanel").style.display="block";
+    document.getElementById("adminCode").value="";
+
+    adminRafraichir();
+
+    await chargerMemoireAPI(true);
+
+  }catch(e){
+    alert("❌ Erreur de connexion : "+e.message);
+  }
 }
 
-ADMIN_SESSION_TOKEN=d.token; document.getElementById("adminPanel").style.display="block";
- document.getElementById("adminCode").value="";
- adminRafraichir();
- // L'administration affiche d'abord la mémoire locale. La synchronisation distante est manuelle.
-}
 function toutesLesInfosAdmin(){
  const out=[];
  AI_MEMORY.services.forEach((x,i)=>out.push({type:"services",index:i,icone:"🛠️",nom:"Service",titre:typeof x==="string"?x:(x.nom||"Service"),texte:typeof x==="string"?x:(x.description||x.nom||""),url:""}));
