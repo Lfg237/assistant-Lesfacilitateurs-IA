@@ -800,8 +800,20 @@ function fermerAdmin(){const f=adminOuvert();if(f){f.style.display="none";f.setA
 async function connexionAdmin(){
  const code=document.getElementById("adminCode").value.trim();
  if(code!==ADMIN_CODE){alert("❌ Code administrateur incorrect.");return}
- ADMIN_SESSION_TOKEN=btoa("lfg-admin:"+Date.now()+":"+code);
- document.getElementById("adminPanel").style.display="block";
+ const r=await fetch("/api/admin-login",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({code})
+});
+
+const d=await r.json().catch(()=>({}));
+
+if(!r.ok){
+  alert("❌ "+(d.error||"Connexion administrateur refusée."));
+  return;
+}
+
+ADMIN_SESSION_TOKEN=d.token; document.getElementById("adminPanel").style.display="block";
  document.getElementById("adminCode").value="";
  adminRafraichir();
  // L'administration affiche d'abord la mémoire locale. La synchronisation distante est manuelle.
