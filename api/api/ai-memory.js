@@ -1,365 +1,407 @@
 const crypto = require("crypto");
 
-const GITHUB_API = "https://api.github.com";
+const GH = "https://api.github.com";
 
 function send(res, status, data) {
-  res
-    .status(status)
+  res.status(status)
     .setHeader("Content-Type", "application/json; charset=utf-8")
+    .setHeader("Cache-Control", "no-store")
     .end(JSON.stringify(data));
 }
 
-function base64Decode(value) {
-  return Buffer.from(value, "base64").toString("utf8");
-}
-
-function base64Encode(value) {
-  return Buffer.from(value, "utf8").toString("base64");
-}
-
-function safeEqual(a, b) {
-  const A = Buffer.from(String(a || ""));
-  const B = Buffer.from(String(b || ""));
-
-  if (A.length !== B.length) return false;
-
-  return crypto.timingSafeEqual(A, B);
-}
-
-function verifyToken(token, secret) {
+function verify(token, secret) {
   try {
-    const parts = String(token || "").split(".");
+    const [body, signature] = String(token || "").split(".");
 
-    if (parts.length !== 2) return false;
-
-    const payloadBase64 = parts[0];
-    const signature = parts[1];
+    if (!body || !signature) return false;
 
     const expected = crypto
       .createHmac("sha256", secret)
-      .update(payloadBase64)
+      .update(body)
       .digest("base64url");
 
-    if (!safeEqual(signature, expected)) {
+    if (
+      signature.length !== expected.length ||
+      !crypto.timingSafeEqual(
+        Buffer.from(signature),
+        Buffer.from(expected)
+      )
+    ) {
       return false;
     }
 
     const payload = JSON.parse(
-      Buffer.from(payloadBase64, "base64url").toString("utf8")
+      Buffer.from(body, "base64url").toString("utf8")
     );
 
-    if (payload.role !== "admin") return false;
-
-    if (!payload.exp || Math.floor(Date.now() / 1000) > payload.exp) {
-      return false;
-    }
-
-    return true;
-
-  } catch (e) {
+    return (
+      payload.role === "admin" &&
+      Number(payload.exp) > Math.floor(Date.now() / 1000)
+    );
+  } catch {
     return false;
   }
 }
 
-function getToken(req) {
-  const authorization = req.headers.authorization || "";
-
-  if (authorization.startsWith("Bearer ")) {
-    return authorization.substring(7).trim();
-  }
-
-  return String(req.headers["x-admin-token"] || "").trim();
-}
-
-function normalize(data) {
+function cfg() {
   return {
-    version: Number(data.version || 3),
-
-    servicesWhatsapp: Array.isArray(data.servicesWhatsapp)
-      ? data.servicesWhatsapp
-      : [],
-
-    services: Array.isArray(data.services)
-      ? data.services
-      : [],
-
-    connaissances: Array.isArray(data.connaissances)
-      ? data.connaissances
-      : [],
-
-    regles: Array.isArray(data.regles)
-      ? data.regles
-      : [],
-
-    recommandations: Array.isArray(data.recommandations)
-      ? data.recommandations
-      : [],
-
-    medias: Array.isArray(data.medias)
-      ? data.medias
-      : [],
-
-    annonces: Array.isArray(data.annonces)
-      ? data.annonces
-      : [],
-
-    statuts: Array.isArray(data.statuts)
-      ? data.statuts
-      : []
+    token: process.env.GITHUB_TOKEN,
+    owner: process.env.GITHUB_OWNER,
+    repo: process.env.GITHUB_REPO,
+    branch: process.env.GITHUB_BRANCH || "main",
+    path:
+      process.env.GITHUB_MEMORY_PATH ||
+      "data/ai-memory.json",
+    secret: process.env.ADMIN_SESSION_SECRET
   };
 }
 
-function githubHeaders(token) {
+function ghHeaders(c) {
   return {
-    "Authorization": `Bearer ${token}`,
-    "Accept": "application/vnd.github+json",
-    "Content-Type": "application/json",
+    Accept: "application/vnd.github+json",
+    Authorization: "Bearer " + c.token,
     "X-GitHub-Api-Version": "2022-11-28",
-    "User-Agent": "LFG-Assistant-IA"
+    "Content-Type": "application/json"
   };
 }
 
-async function getGithubFile({
-  token,
-  owner,
-  repo,
-  path,
-  branch
-}) {
-  const url =
-    `${GITHUB_API}/repos/${encodeURIComponent(owner)}` +
-    `/${encodeURIComponent(repo)}/contents/${path}` +
-    `?ref=${encodeURIComponent(branch)}`;
+function githubUrl(c) {
+  return (
+    GH +
+    "/repos/" +
+    encodeURIComponent(c.owner) +
+    "/" +
+    encodeURIComponent(c.repo) +
+    "/contents/" +
+    c.path
+  );
+}
 
-  const response = await fetch(url, {
-    method: "GET",
-    headers: githubHeaders(token)
+async function getFile(c) {
+  const url =
+    githubUrl(c) +
+    "?ref=" +
+    encodeURIComponent(c.branch);
+
+  const r = await fetch(url, {
+    headers: ghHeaders(c)
   });
 
-  const data = await response.json().catch(() => ({}));
+  const text = await r.text();
 
-  if (!response.ok) {
-    const error = new Error(
-      data.message || `GitHub HTTP ${response.status}`
-    );
+  let data = {};
+  try {
+    data = JSON.parse(text || "{}");
+  } catch {}
 
-    error.status = response.status;
-
-    throw error;
+  if (r.status === 404) {
+    return {
+      exists: false,
+      status: 404,
+      githubMessage: data.message || "Not Found",
+      url
+    };
   }
 
-  if (!data.content) {
-    throw new Error("Le fichier GitHub ne contient aucune donnée.");
+  if (!r.ok) {
+    throw new Error(
+      "GitHub GET " +
+        r.status +
+        " : " +
+        (data.message || text || "Erreur GitHub")
+    );
+  }
+
+  let decoded;
+
+  try {
+    decoded = Buffer.from(
+      String(data.content || "").replace(/\n/g, ""),
+      "base64"
+    ).toString("utf8");
+  } catch {
+    throw new Error(
+      "Le fichier GitHub est illisible."
+    );
+  }
+
+  let memory;
+
+  try {
+    memory = JSON.parse(decoded);
+  } catch {
+    throw new Error(
+      "Le fichier GitHub existe mais son contenu JSON est invalide."
+    );
   }
 
   return {
+    exists: true,
     sha: data.sha,
-    content: base64Decode(data.content.replace(/\n/g, ""))
+    data: memory,
+    url
   };
 }
 
-async function saveGithubFile({
-  token,
-  owner,
-  repo,
-  path,
-  branch,
-  sha,
-  content
-}) {
-  const url =
-    `${GITHUB_API}/repos/${encodeURIComponent(owner)}` +
-    `/${encodeURIComponent(repo)}/contents/${path}`;
+function normalize(m) {
+  m = m && typeof m === "object" ? m : {};
 
-  const body = {
-    message: "Mise à jour de la mémoire IA LESFACILITATEURS",
-    content: base64Encode(content),
-    branch: branch
+  return {
+    version: Number(m.version || 4),
+    updatedAt:
+      m.updatedAt ||
+      new Date().toISOString(),
+
+    servicesWhatsapp:
+      Array.isArray(m.servicesWhatsapp)
+        ? m.servicesWhatsapp
+        : [],
+
+    services:
+      Array.isArray(m.services)
+        ? m.services
+        : [],
+
+    connaissances:
+      Array.isArray(m.connaissances)
+        ? m.connaissances
+        : [],
+
+    regles:
+      Array.isArray(m.regles)
+        ? m.regles
+        : [],
+
+    recommandations:
+      Array.isArray(m.recommandations)
+        ? m.recommandations
+        : [],
+
+    medias:
+      Array.isArray(m.medias)
+        ? m.medias
+        : [],
+
+    annonces:
+      Array.isArray(m.annonces)
+        ? m.annonces
+        : [],
+
+    statuts:
+      Array.isArray(m.statuts)
+        ? m.statuts
+        : []
   };
+}
 
-  if (sha) {
-    body.sha = sha;
+function diagnostic404(c, phase, githubMessage) {
+  const owner = String(c.owner || "");
+  const repo = String(c.repo || "");
+
+  if (!owner || !repo) {
+    return {
+      error: "Configuration GitHub incomplète.",
+      detail:
+        "GITHUB_OWNER ou GITHUB_REPO est vide.",
+      phase
+    };
   }
 
-  const response = await fetch(url, {
-    method: "PUT",
-    headers: githubHeaders(token),
-    body: JSON.stringify(body)
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    const error = new Error(
-      data.message || `GitHub HTTP ${response.status}`
-    );
-
-    error.status = response.status;
-
-    throw error;
+  if (phase === "lecture") {
+    return {
+      error:
+        "GitHub a répondu 404 pendant la lecture.",
+      detail:
+        "Vérifiez GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH et GITHUB_TOKEN. Un dépôt privé auquel le token n'a pas accès peut également répondre 404.",
+      github:
+        githubMessage || "Not Found",
+      repository:
+        owner + "/" + repo,
+      branch: c.branch,
+      path: c.path,
+      phase
+    };
   }
 
-  return data;
+  return {
+    error:
+      "GitHub a répondu 404 pendant la publication.",
+    detail:
+      "Le dépôt indiqué par GITHUB_OWNER/GITHUB_REPO est introuvable pour le token, ou le token n'a pas les droits nécessaires sur ce dépôt.",
+    github:
+      githubMessage || "Not Found",
+    repository:
+      owner + "/" + repo,
+    branch: c.branch,
+    path: c.path,
+    phase
+  };
 }
 
 module.exports = async (req, res) => {
+  const c = cfg();
 
-  const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.GITHUB_OWNER;
-  const repo = process.env.GITHUB_REPO;
-  const branch = process.env.GITHUB_BRANCH || "main";
-  const path =
-    process.env.GITHUB_MEMORY_PATH ||
-    "data/ai-memory.json";
+  const missing = [];
 
-  const adminSecret =
-    process.env.ADMIN_SESSION_SECRET;
+  if (!c.token) missing.push("GITHUB_TOKEN");
+  if (!c.owner) missing.push("GITHUB_OWNER");
+  if (!c.repo) missing.push("GITHUB_REPO");
+  if (!c.secret)
+    missing.push("ADMIN_SESSION_SECRET");
 
-  /*
-   * Vérification de la configuration
-   */
-  if (!token || !owner || !repo) {
+  if (missing.length) {
     return send(res, 500, {
-      error:
-        "Configuration GitHub incomplète dans Vercel."
+      error: "Variables Vercel manquantes.",
+      missing
     });
   }
 
-  /*
-   * GET
-   * Les utilisateurs peuvent récupérer
-   * la mémoire publique.
-   */
-  if (req.method === "GET") {
+  try {
+    /* =========================
+       LECTURE DE LA MÉMOIRE
+       ========================= */
 
-    try {
+    if (req.method === "GET") {
+      const f = await getFile(c);
 
-      const file = await getGithubFile({
-        token,
-        owner,
-        repo,
-        path,
-        branch
-      });
+      if (!f.exists) {
+        return send(
+          res,
+          404,
+          diagnostic404(
+            c,
+            "lecture",
+            f.githubMessage
+          )
+        );
+      }
 
-      let memory;
+      return send(
+        res,
+        200,
+        normalize(f.data)
+      );
+    }
 
-      try {
-        memory = JSON.parse(file.content);
-      } catch (e) {
-        return send(res, 500, {
+    /* =========================
+       PUBLICATION DE LA MÉMOIRE
+       ========================= */
+
+    if (req.method === "POST") {
+      const authorization =
+        req.headers.authorization || "";
+
+      const xAdminToken =
+        req.headers["x-admin-token"] || "";
+
+      const sessionToken =
+        authorization.startsWith("Bearer ")
+          ? authorization.slice(7)
+          : xAdminToken;
+
+      if (!verify(sessionToken, c.secret)) {
+        return send(res, 401, {
           error:
-            "Le fichier ai-memory.json contient un JSON invalide."
+            "Session administrateur invalide ou expirée."
         });
       }
 
-      return send(res, 200, normalize(memory));
-
-    } catch (e) {
-
-      return send(res, e.status || 500, {
-        error:
-          "Impossible de lire la mémoire GitHub.",
-        detail: e.message
-      });
-
-    }
-  }
-
-  /*
-   * POST
-   * Seul l'administrateur connecté
-   * peut modifier la mémoire.
-   */
-  if (req.method === "POST") {
-
-    if (!adminSecret) {
-      return send(res, 500, {
-        error:
-          "ADMIN_SESSION_SECRET manque dans Vercel."
-      });
-    }
-
-    const adminToken = getToken(req);
-
-    if (!verifyToken(adminToken, adminSecret)) {
-      return send(res, 401, {
-        error:
-          "Session administrateur invalide ou expirée."
-      });
-    }
-
-    try {
-
-      const body =
+      const input =
         typeof req.body === "string"
           ? JSON.parse(req.body || "{}")
-          : (req.body || {});
+          : req.body || {};
 
-      const memory = normalize(body);
+      const memory = normalize(input);
 
-      const content =
-        JSON.stringify(memory, null, 2) + "\n";
+      const old = await getFile(c);
 
-      /*
-       * On récupère le SHA actuel.
-       * GitHub en a besoin pour modifier le fichier.
-       */
-      let currentFile = null;
+      const payload = {
+        message:
+          "Mise à jour de la mémoire IA LESFACILITATEURS",
 
-      try {
+        content: Buffer.from(
+          JSON.stringify(memory, null, 2),
+          "utf8"
+        ).toString("base64"),
 
-        currentFile = await getGithubFile({
-          token,
-          owner,
-          repo,
-          path,
-          branch
-        });
+        branch: c.branch
+      };
 
-      } catch (e) {
-
-        /*
-         * Si le fichier n'existe pas encore,
-         * on pourra le créer sans SHA.
-         */
-        if (e.status !== 404) {
-          throw e;
-        }
+      if (old.exists && old.sha) {
+        payload.sha = old.sha;
       }
 
-      const result = await saveGithubFile({
-        token,
-        owner,
-        repo,
-        path,
-        branch,
-        sha: currentFile ? currentFile.sha : undefined,
-        content
-      });
+      const r = await fetch(
+        githubUrl(c),
+        {
+          method: "PUT",
+          headers: ghHeaders(c),
+          body: JSON.stringify(payload)
+        }
+      );
+
+      const text = await r.text();
+
+      let data = {};
+
+      try {
+        data = JSON.parse(text || "{}");
+      } catch {}
+
+      if (!r.ok) {
+        if (r.status === 404) {
+          return send(
+            res,
+            404,
+            diagnostic404(
+              c,
+              "publication",
+              data.message || text
+            )
+          );
+        }
+
+        return send(res, r.status, {
+          error:
+            "GitHub HTTP " +
+            r.status +
+            " : " +
+            (data.message ||
+              text ||
+              "Erreur GitHub"),
+
+          repository:
+            c.owner + "/" + c.repo,
+
+          branch: c.branch,
+          path: c.path
+        });
+      }
 
       return send(res, 200, {
         ok: true,
         message:
-          "Mémoire IA publiée sur GitHub.",
-        commit:
-          result.commit
-            ? result.commit.sha
-            : null
+          "Mémoire IA publiée à distance.",
+
+        updatedAt: memory.updatedAt,
+
+        repository:
+          c.owner + "/" + c.repo,
+
+        branch: c.branch,
+        path: c.path
       });
-
-    } catch (e) {
-
-      return send(res, e.status || 500, {
-        error:
-          "Impossible de publier la mémoire IA.",
-        detail: e.message
-      });
-
     }
-  }
 
-  return send(res, 405, {
-    error: "Méthode non autorisée"
-  });
+    return send(res, 405, {
+      error: "Méthode non autorisée."
+    });
+
+  } catch (e) {
+    return send(res, 500, {
+      error:
+        e.message ||
+        "Erreur serveur."
+    });
+  }
 };
