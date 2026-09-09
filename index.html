@@ -480,7 +480,6 @@ setTimeout(function(){afficherReponseIA(obtenirReponse(demande))},250);
 if(sendBtn)sendBtn.addEventListener("click",function(){envoyerMessage(messageInput?messageInput.value:"")});
 if(messageInput)messageInput.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();envoyerMessage(messageInput.value)}});
 
-
 /* =========================================================
    ANNONCES — CATÉGORIES
 ========================================================= */
@@ -625,6 +624,7 @@ if(menu)menu.classList.remove("active");
 
 if(listeAnnonces)listeAnnonces.innerHTML="";
 
+
 /* =========================================================
    PARTIE SUIVANTE — STATUTS
 ========================================================= */
@@ -681,7 +681,6 @@ bloc.appendChild(texte);
 listeStatuts.appendChild(bloc);
 });
 }
-
 if(statutsBtn){
 statutsBtn.addEventListener("click",function(){
 if(fenetreStatuts)fenetreStatuts.style.display="block";
@@ -694,6 +693,7 @@ fermerStatuts.addEventListener("click",function(){
 if(fenetreStatuts)fenetreStatuts.style.display="none";
 });
 }
+
 
 /* =========================================================
    INVITER
@@ -735,11 +735,11 @@ document.body.classList.add("sombre");
 if(darkBtn)darkBtn.textContent="☀️ Mode clair";
 }
 
-
 /* =========================================================
    INITIALISER LES STATUTS
    (après chargement de la mémoire IA)
 ========================================================= */
+
 
 /* =========================================================
    MESSAGE D'ACCUEIL
@@ -774,7 +774,6 @@ try{messageInput.focus()}catch(erreur){}
    L'admin modifie uniquement le cerveau de l'IA.
    La persistance distante passe par /api/ai-memory.
 ========================================================= */
-const ADMIN_CODE="2332";
 const AI_MEMORY_KEY="lfg_ai_memory_v1";
 const API_URL="/api/ai-memory";
 let ADMIN_SESSION_TOKEN="";
@@ -793,12 +792,24 @@ window.ouvrirAdministrationIA=ouvrirAdmin
 function fermerAdmin(){const f=adminOuvert();if(f){f.style.display="none";f.setAttribute("aria-hidden","true");document.body.style.overflow=""}}
 async function connexionAdmin(){
  const code=document.getElementById("adminCode").value.trim();
- if(code!==ADMIN_CODE){alert("❌ Code administrateur incorrect.");return}
- ADMIN_SESSION_TOKEN=btoa("lfg-admin:"+Date.now()+":"+code);
- document.getElementById("adminPanel").style.display="block";
- document.getElementById("adminCode").value="";
- adminRafraichir();
- // L'administration affiche d'abord la mémoire locale. La synchronisation distante est manuelle.
+ if(!code){alert("❌ Entrez le code administrateur.");return}
+ const bouton=document.getElementById("connexionAdmin");
+ if(bouton){bouton.disabled=true;bouton.textContent="⏳ Connexion...";}
+ try{
+  const r=await fetch("/api/admin-login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code})});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(d.error||("HTTP "+r.status));
+  if(!d.token)throw new Error("Le serveur n'a pas fourni de session administrateur.");
+  ADMIN_SESSION_TOKEN=d.token;
+  document.getElementById("adminPanel").style.display="block";
+  document.getElementById("adminCode").value="";
+  adminRafraichir();
+  await chargerMemoireAPI(true);
+ }catch(e){
+  alert("❌ Connexion administrateur impossible.\n\n"+e.message+"\n\nVérifiez que /api/admin-login est bien déployé sur Vercel.");
+ }finally{
+  if(bouton){bouton.disabled=false;bouton.textContent="🔓 Ouvrir l'administration";}
+ }
 }
 function toutesLesInfosAdmin(){
  const out=[];
@@ -836,8 +847,7 @@ function adminRafraichir(){
  const lsvc=document.getElementById("listeServicesAdmin"),lsw=document.getElementById("listeServicesWhatsappAdmin"),lr=document.getElementById("listeRegles"),lrep=document.getElementById("listeReponses"),lrec=document.getElementById("listeRecos"),lm=document.getElementById("listeMedias"),la=document.getElementById("listeAnnoncesAdmin"),ls=document.getElementById("listeStatutsAdmin");
  if(lsvc)lsvc.innerHTML=AI_MEMORY.services.map((x,i)=>{const nom=typeof x==="string"?x:(x?.nom||"");return `<div class="admin-card"><b>🛠️ ${escapeAdmin(nom)}</b><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('services',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('services',${i})">🗑️ Supprimer</button></div></div>`}).join("")||'<div class="admin-note">Aucun service.</div>';
  if(lsw)lsw.innerHTML=AI_MEMORY.servicesWhatsapp.map((x,i)=>`<div class="admin-card"><b>📞 ${escapeAdmin(x.nom||"Service WhatsApp")}</b><div>📱 ${escapeAdmin(x.numero||"")}</div><div>${escapeAdmin(x.message||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('servicesWhatsapp',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('servicesWhatsapp',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucun service WhatsApp ajouté.</div>';
- if(lr)lr.innerHTML=AI_MEMORY.regles.map((x,i)=>`<div class="admin-card"><b>🧠
-${escapeAdmin(x.titre||"Règle")}</b><div>${escapeAdmin(x.texte||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('regles',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('regles',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune règle ajoutée.</div>';
+ if(lr)lr.innerHTML=AI_MEMORY.regles.map((x,i)=>`<div class="admin-card"><b>🧠 ${escapeAdmin(x.titre||"Règle")}</b><div>${escapeAdmin(x.texte||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('regles',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('regles',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune règle ajoutée.</div>';
  if(lrep)lrep.innerHTML=AI_MEMORY.connaissances.map((x,i)=>`<div class="admin-card"><b>📚 ${escapeAdmin((x.questions||[]).join(", "))}</b><div>${escapeAdmin(x.reponse||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('connaissances',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('connaissances',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune connaissance ajoutée.</div>';
  if(lrec)lrec.innerHTML=AI_MEMORY.recommandations.map((x,i)=>`<div class="admin-card"><b>⭐ ${escapeAdmin(x.titre||"Recommandation")}</b><div>${escapeAdmin(x.texte||"")}</div>${x.url?`<div>🌐 ${escapeAdmin(x.url)}</div>`:""}<div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('recommandations',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('recommandations',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune recommandation.</div>';
  if(lm)lm.innerHTML=AI_MEMORY.medias.map((x,i)=>x&&x.type!=="reponse"?`<div class="admin-card"><b>🖼️ ${escapeAdmin(x.questions||"Média")}</b><div>🌐 ${escapeAdmin(x.url||"")}</div><div>${escapeAdmin(x.contexte||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('medias',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('medias',${i})">🗑️ Supprimer</button></div></div>`:"").join("")||'<div class="admin-note">Aucun média ajouté.</div>';
@@ -891,7 +901,7 @@ function rendreTableauMemoire(){
     html+=`<tr><td class="admin-type">${escapeAdmin(label.replace(/^[^A-ZÀ-Ÿa-zà-ÿ]*|[^A-ZÀ-Ÿa-zà-ÿ].*$/u,"").trim()||"Info")}</td><td class="admin-info-cell"><b>${escapeAdmin(v.titre)}</b></td><td class="admin-info-cell">${escapeAdmin(v.texte)}</td><td class="admin-info-cell">${v.url?`<a href="${escapeAdminAttr(v.url)}" target="_blank" rel="noopener noreferrer">${escapeAdmin(v.url)}</a>`:"—"}</td><td><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('${type}',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('${type}',${i})">🗑️ Supprimer</button></div></td></tr>`;
   });
  });
- const tb=document.getElementById("tableauMemoire");if(tb)tb.innerHTML=html;
+const tb=document.getElementById("tableauMemoire");if(tb)tb.innerHTML=html;
  const compteur=document.getElementById("adminCompteur");if(compteur)compteur.textContent=`📊 ${total} information${total>1?"s":""} dans les catégories • ${visible} affichée${visible>1?"s":""}`;
  const vide=document.getElementById("tableauVide");if(vide)vide.style.display=visible?"none":"block";
 }
@@ -915,7 +925,7 @@ async function chargerMemoireAPI(show,forceReplace=false){
   return true;
  }catch(e){
   try{
-const secours=await fetch("data/ai-memory.json?t="+Date.now(),{cache:"no-store"});
+   const secours=await fetch("data/ai-memory.json?t="+Date.now(),{cache:"no-store"});
    if(!secours.ok)throw new Error("HTTP "+secours.status);
    const memSecours=normaliserMemoire(await secours.json());
    const nbSecours=Object.keys(memSecours).filter(k=>Array.isArray(memSecours[k])).reduce((n,k)=>n+memSecours[k].length,0);
@@ -945,7 +955,6 @@ async function sauvegarderMemoireAPI(){
   alert("❌ La mémoire n'a pas pu être publiée à distance.\n\n"+e.message);
  }
 }
-
 function chargerMemoireLocale(){
   try{
     const brut=localStorage.getItem(AI_MEMORY_KEY);
@@ -956,6 +965,7 @@ function chargerMemoireLocale(){
     else { AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE)); sauvegarderMemoireLocale(); appliquerMemoireIA(); }
   }catch(e){ console.warn("MEMOIRE LOCALE",e); AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE)); try{sauvegarderMemoireLocale()}catch(_){} try{appliquerMemoireIA()}catch(_){} }
 }
+
 async function initialiserAdmin(){
  chargerMemoireLocale(); appliquerMemoireIA(); adminRafraichir();
  const ab=document.getElementById("adminBtn");if(ab)ab.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();ouvrirAdmin();});
@@ -976,7 +986,7 @@ async function initialiserAdmin(){
  document.getElementById("ajouterAnnonce")?.addEventListener("click",async()=>{const a={categorie:document.getElementById("adminAnnonceCategorie").value.trim()||"autre",objet:document.getElementById("adminAnnonceObjet").value.trim(),ville:document.getElementById("adminAnnonceVille").value.trim(),quartier:document.getElementById("adminAnnonceQuartier").value.trim(),age:document.getElementById("adminAnnonceAge").value.trim(),budget:document.getElementById("adminAnnonceBudget").value.trim(),description:document.getElementById("adminAnnonceDescription").value.trim(),contact:document.getElementById("adminAnnonceContact").value.trim()};if(!a.objet){alert("Indiquez le titre de l'annonce.");return}AI_MEMORY.annonces.push(a);sauvegarderMemoireLocale();document.querySelectorAll('[id^="adminAnnonce"]').forEach(e=>{if(e.id!=="adminAnnonceCategorie")e.value=""});adminRafraichir();afficherAnnonces();construireCategories();await sauvegarderMemoireAPI()});
  document.getElementById("ajouterStatut")?.addEventListener("click",async()=>{const type=document.getElementById("adminStatutType").value,titre=document.getElementById("adminStatutTitre").value.trim(),contenu=document.getElementById("adminStatutContenu").value.trim(),url=document.getElementById("adminStatutUrl").value.trim(),mime=document.getElementById("adminStatutMime").value.trim(),exp=document.getElementById("adminStatutExpiration").value; if(type!=="texte"&&!urlSecurisee(url)){alert("Ajoutez une URL http(s) valide pour ce statut.");return}if(type==="texte"&&!contenu){alert("Écrivez le contenu du statut.");return}AI_MEMORY.statuts.push({type,titre,contenu,url,mime,expiresAt:exp?new Date(exp).toISOString():""});sauvegarderMemoireLocale();["adminStatutTitre","adminStatutContenu","adminStatutUrl","adminStatutMime","adminStatutExpiration"].forEach(id=>document.getElementById(id).value="");adminRafraichir();afficherStatuts();await sauvegarderMemoireAPI()});
  document.getElementById("exporterConfig")?.addEventListener("click",exporterMemoire);
- document.getElementById("chargerRemoteConfig")?.addEventListener("click",()=>chargerMemoireAPI(true));
+document.getElementById("chargerRemoteConfig")?.addEventListener("click",()=>chargerMemoireAPI(true));
  document.getElementById("importerConfig")?.addEventListener("change",function(){const f=this.files[0];if(!f)return;const rd=new FileReader();rd.onload=async()=>{try{const d=JSON.parse(rd.result);AI_MEMORY=normaliserMemoire(d);appliquerMemoireIA();adminRafraichir();await sauvegarderMemoireAPI();alert("✅ Mémoire IA importée et publiée à distance.")}catch(e){alert("❌ JSON invalide ou publication impossible.")}};rd.readAsText(f)});
  afficherAnnonces();
  afficherStatuts();
@@ -1019,7 +1029,7 @@ function adminSecoursBoot(){
   };
   if(btn){ btn.onclick=ouvrir; btn.addEventListener("click",ouvrir,true); }
   const login=document.getElementById("connexionAdmin");
-  if(login){ login.onclick=function(e){e.preventDefault();e.stopPropagation(); const c=document.getElementById("adminCode"); if(!c||c.value.trim()!==ADMIN_CODE){alert("❌ Code administrateur incorrect.");return;} const p=document.getElementById("adminPanel"); if(p){p.style.display="block";} c.value=""; try{adminRafraichir()}catch(_){}; try{rendreTableauMemoire()}catch(_){}; }; }
+  if(login){ login.onclick=function(e){e.preventDefault();e.stopPropagation();connexionAdmin();}; }
   const code=document.getElementById("adminCode");
   if(code)code.onkeydown=function(e){if(e.key==="Enter")login&&login.click()};
   const close=document.getElementById("fermerAdmin");
