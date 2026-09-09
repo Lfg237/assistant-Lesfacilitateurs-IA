@@ -244,7 +244,7 @@ body.sombre .admin-box{background:#17201f;color:#fff}body.sombre .admin-auth inp
         </section>
         <section class="admin-section" data-admin-section="statuts">
           <div class="admin-form">
- <select id="adminStatutType">
+            <select id="adminStatutType">
               <option value="texte">📝 Texte</option>
               <option value="image">🖼️ Image</option>
               <option value="video">🎥 Vidéo</option>
@@ -343,6 +343,7 @@ const listeStatuts=document.getElementById("listeStatuts");
 /* =========================================================
    MENU PRINCIPAL
 ========================================================= */
+
 if(menuBtn){
 menuBtn.addEventListener("click",function(e){e.stopPropagation();if(menu)menu.classList.toggle("active")});
 }
@@ -482,6 +483,7 @@ setTimeout(function(){afficherReponseIA(obtenirReponse(demande))},250);
 if(sendBtn)sendBtn.addEventListener("click",function(){envoyerMessage(messageInput?messageInput.value:"")});
 if(messageInput)messageInput.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();envoyerMessage(messageInput.value)}});
 
+
 /* =========================================================
    ANNONCES — CATÉGORIES
 ========================================================= */
@@ -507,7 +509,6 @@ bouton.addEventListener("click",function(){categorieActive=categorie.id;construi
 categoriesAnnonces.appendChild(bouton);
 });
 }
-
 
 /* =========================================================
    ANNONCES — CARTE
@@ -579,7 +580,6 @@ if(!contenu.includes(recherche))return false;
 }
 return true;
 });
-
 if(!annoncesFiltrees.length){
 const aucune=document.createElement("div");
 aucune.className="aucune-annonce";
@@ -780,7 +780,7 @@ try{messageInput.focus()}catch(erreur){}
    L'admin modifie uniquement le cerveau de l'IA.
    La persistance distante passe par /api/ai-memory.
 ========================================================= */
-
+const ADMIN_CODE="2332";
 const AI_MEMORY_KEY="lfg_ai_memory_v1";
 const API_URL="/api/ai-memory";
 let ADMIN_SESSION_TOKEN="";
@@ -797,45 +797,15 @@ function adminOuvert(){return document.getElementById("fenetreAdmin")}
 function ouvrirAdmin(){const f=adminOuvert();if(!f){alert("❌ Fenêtre administration introuvable.");return}f.style.display="block";f.style.visibility="visible";f.style.opacity="1";f.setAttribute("aria-hidden","false");const c=document.getElementById("adminCode");if(c){setTimeout(()=>c.focus(),50)}}
 window.ouvrirAdministrationIA=ouvrirAdmin
 function fermerAdmin(){const f=adminOuvert();if(f){f.style.display="none";f.setAttribute("aria-hidden","true");document.body.style.overflow=""}}
-
 async function connexionAdmin(){
-  const code=document.getElementById("adminCode").value.trim();
-
-  if(!code){
-    alert("❌ Entrez le code administrateur.");
-    return;
-  }
-
-  try{
-    const r=await fetch("/api/admin-login",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({code})
-    });
-
-    const d=await r.json().catch(()=>({}));
-
-    if(!r.ok){
-      alert("❌ "+(d.error||"Connexion administrateur refusée."));
-      return;
-    }
-
-    ADMIN_SESSION_TOKEN=d.token;
-
-    document.getElementById("adminPanel").style.display="block";
-    document.getElementById("adminCode").value="";
-
-    adminRafraichir();
-
-    await chargerMemoireAPI(true);
-
-  }catch(e){
-    alert("❌ Erreur de connexion : "+e.message);
-  }
+ const code=document.getElementById("adminCode").value.trim();
+ if(code!==ADMIN_CODE){alert("❌ Code administrateur incorrect.");return}
+ ADMIN_SESSION_TOKEN=btoa("lfg-admin:"+Date.now()+":"+code);
+ document.getElementById("adminPanel").style.display="block";
+ document.getElementById("adminCode").value="";
+ adminRafraichir();
+ // L'administration affiche d'abord la mémoire locale. La synchronisation distante est manuelle.
 }
-
 function toutesLesInfosAdmin(){
  const out=[];
  AI_MEMORY.services.forEach((x,i)=>out.push({type:"services",index:i,icone:"🛠️",nom:"Service",titre:typeof x==="string"?x:(x.nom||"Service"),texte:typeof x==="string"?x:(x.description||x.nom||""),url:""}));
@@ -876,7 +846,7 @@ function adminRafraichir(){
  if(lrep)lrep.innerHTML=AI_MEMORY.connaissances.map((x,i)=>`<div class="admin-card"><b>📚 ${escapeAdmin((x.questions||[]).join(", "))}</b><div>${escapeAdmin(x.reponse||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('connaissances',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('connaissances',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune connaissance ajoutée.</div>';
  if(lrec)lrec.innerHTML=AI_MEMORY.recommandations.map((x,i)=>`<div class="admin-card"><b>⭐ ${escapeAdmin(x.titre||"Recommandation")}</b><div>${escapeAdmin(x.texte||"")}</div>${x.url?`<div>🌐 ${escapeAdmin(x.url)}</div>`:""}<div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('recommandations',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('recommandations',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune recommandation.</div>';
  if(lm)lm.innerHTML=AI_MEMORY.medias.map((x,i)=>x&&x.type!=="reponse"?`<div class="admin-card"><b>🖼️ ${escapeAdmin(x.questions||"Média")}</b><div>🌐 ${escapeAdmin(x.url||"")}</div><div>${escapeAdmin(x.contexte||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('medias',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('medias',${i})">🗑️ Supprimer</button></div></div>`:"").join("")||'<div class="admin-note">Aucun média ajouté.</div>';
- if(la)la.innerHTML=AI_MEMORY.annonces.map((x,i)=>`<div class="admin-card"><b>📢 ${escapeAdmin(x.objet||"Annonce")}</b><div>${escapeAdmin([x.categorie,x.ville,x.quartier,x.age,x.budget,x.description,x.contact].filter(Boolean).join(" • "))}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('annonces',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('annonces',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune annonce.</div>';
+if(la)la.innerHTML=AI_MEMORY.annonces.map((x,i)=>`<div class="admin-card"><b>📢 ${escapeAdmin(x.objet||"Annonce")}</b><div>${escapeAdmin([x.categorie,x.ville,x.quartier,x.age,x.budget,x.description,x.contact].filter(Boolean).join(" • "))}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('annonces',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('annonces',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune annonce.</div>';
  if(ls)ls.innerHTML=AI_MEMORY.statuts.map((x,i)=>`<div class="admin-card"><b>📺 ${escapeAdmin(x.titre||"Statut")}</b><div>${escapeAdmin(x.type||"texte")} ${x.expiresAt?"• expiration "+escapeAdmin(x.expiresAt):""}</div><div>${escapeAdmin(x.contenu||"")}</div>${x.url?`<div>🌐 ${escapeAdmin(x.url)}</div>`:""}<div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('statuts',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('statuts',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucun statut.</div>';
  rendreTableauMemoire();
 }
@@ -919,7 +889,7 @@ function rendreTableauMemoire(){
     const hay=normaliserTexte([label,v.titre,v.texte,v.url].join(" "));
     if(!recherche||hay.includes(recherche))lignes.push({i:realIndex,v});
   });
- if(!lignes.length)return;
+  if(!lignes.length)return;
   html+=`<tr class="admin-category-row"><td colspan="5">${label}<span class="admin-cat-count">${items.length} élément${items.length>1?"s":""}</span></td></tr>`;
   visible+=lignes.length;
   lignes.forEach(({i,v})=>{
