@@ -52,7 +52,7 @@ img{max-width:100%}
 .carte-annonce{width:100%;padding:16px;border-radius:17px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.10);border-left:6px solid #25d366;overflow:hidden}
 .carte-annonce h3{margin:9px 0;color:#075e54;font-size:18px}.carte-annonce p{margin:6px 0;font-size:13px;line-height:1.5}.badge{display:inline-flex;padding:6px 10px;border-radius:20px;background:#e7f3f0;color:#075e54;font-size:11px;font-weight:bold}
 .actions-annonce{display:flex;gap:8px;margin-top:14px}.actions-annonce a{flex:1;min-height:42px;display:flex;align-items:center;justify-content:center;padding:9px;border-radius:22px;color:#fff;text-decoration:none;font-size:12px;font-weight:bold}
-.btn-appeler{background:#1976d2}.btn-whatsapp{background:#25d366}
+.btn-appeler{background:#1976d2}.btn-whatsapp{background:#25d366}.btn-lien-externe{background:#075e54}
 .aucune-annonce{margin:30px 15px;padding:30px 20px;text-align:center;background:#fff;border-radius:18px;color:#667085}
 #finAnnonces{margin:10px;padding:20px 15px;text-align:center;border-radius:16px;background:#fff;color:#667085;font-size:12px;line-height:1.6}
 
@@ -78,7 +78,7 @@ body.sombre .carte-annonce p{color:#e0e5e5}body.sombre .carte-annonce h3{color:#
 .media-message img,.media-message video{display:block;width:100%;max-width:360px;max-height:430px;object-fit:cover;border-radius:12px;cursor:pointer}
 .media-message audio{display:block;width:100%;max-width:360px}
 .media-caption{font-size:11px;padding:5px 7px;color:#667085;word-break:break-all}
-#fenetreAdmin{display:none;position:fixed;inset:0;background:rgba(3,12,12,.88);z-index:9000;overflow-y:auto;padding:18px}
+#fenetreAdmin{display:none;position:fixed;inset:0;background:rgba(3,12,12,.88);z-index:100001;overflow-y:auto;padding:18px}
 .admin-box{width:100%;max-width:900px;margin:20px auto;background:#fff;border-radius:24px;box-shadow:0 20px 70px rgba(0,0,0,.35);overflow:hidden}
 .admin-head{padding:18px 20px;background:linear-gradient(135deg,#075e54,#128c7e,#25d366);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .admin-head b{font-size:18px}.admin-head small{display:block;margin-top:4px;opacity:.9}
@@ -108,7 +108,7 @@ body.sombre .admin-box{background:#17201f;color:#fff}body.sombre .admin-auth inp
 <button id="annonces" type="button">📢 Annonces & Visibilité</button>
 <button id="invite" type="button">📢 Inviter</button>
 <button id="dark" type="button">🌙 Mode sombre</button>
-<button id="adminBtn" type="button">🤖 Administration IA</button>
+<button id="adminBtn" type="button" onclick="return (window.ouvrirAdministrationIA ? window.ouvrirAdministrationIA() : (function(){var f=document.getElementById('fenetreAdmin');if(f){f.hidden=false;f.style.display='block';f.style.visibility='visible';f.style.opacity='1';f.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';var c=document.getElementById('adminCode');if(c){setTimeout(function(){c.focus()},50)}}else{alert('❌ Fenêtre administration introuvable.')}return false})()">🤖 Administration IA</button>
 <button id="closeMenu" type="button">❌ Fermer</button>
 </div>
 
@@ -149,10 +149,9 @@ body.sombre .admin-box{background:#17201f;color:#fff}body.sombre .admin-auth inp
       <button class="admin-btn" id="connexionAdmin" type="button" >🔓 Ouvrir l'administration</button>
     </div>
     <div id="adminPanel" style="display:none">
-      <button class="admin-show-all" id="afficherToutesInfosIA" type="button" style="margin-bottom:12px">📋 AFFICHER LA LISTE DE TOUTES LES INFORMATIONS DE L’IA</button>
+      <button class="admin-show-all" id="afficherToutesInfosIA" type="button" onclick="forcerMigrationEtAfficher()" style="margin-bottom:12px">📋 AFFICHER LA LISTE DE TOUTES LES INFORMATIONS DE L’IA</button>
       <div class="admin-tabs">
         <button type="button" class="admin-tab active" data-admin-tab="tout">📋 Toutes les informations</button>
-        <button type="button" class="admin-tab" data-admin-tab="services">🛠️ Services</button>
         <button type="button" class="admin-tab" data-admin-tab="servicesWhatsapp">📞 Services WhatsApp</button>
         <button type="button" class="admin-tab" data-admin-tab="regles">🧠 Règles IA</button>
         <button type="button" class="admin-tab" data-admin-tab="reponses">💬 Réponses</button>
@@ -163,13 +162,6 @@ body.sombre .admin-box{background:#17201f;color:#fff}body.sombre .admin-auth inp
         <button type="button" class="admin-tab" data-admin-tab="distance">🌐 À distance</button>
       </div>
       <div class="admin-content">
-        <section class="admin-section" data-admin-section="services">
-          <div class="admin-form">
-            <input id="adminServiceNomSimple" placeholder="Nom du service (ex: Création de sites web)">
-            <button class="admin-btn" id="ajouterServiceSimple" type="button">➕ Ajouter le service</button>
-          </div>
-          <div id="listeServicesAdmin"></div>
-        </section>
         <section class="admin-section" data-admin-section="servicesWhatsapp">
           <div class="admin-form">
             <input id="adminServiceNom" placeholder="Nom du service">
@@ -183,9 +175,8 @@ body.sombre .admin-box{background:#17201f;color:#fff}body.sombre .admin-auth inp
           <div class="admin-toolbar">
             <input id="adminRecherche" type="search" placeholder="🔎 Rechercher dans la mémoire IA...">
             <button class="admin-btn secondary" id="adminActualiser" type="button">🔄 Actualiser</button>
-            <button class="admin-btn danger" id="restaurerExemples" type="button">♻️ Restaurer les exemples</button>
           </div>
-          <div class="admin-note" style="margin-bottom:10px"><b>📋 INFORMATIONS ENREGISTRÉES</b><br>Toutes les informations actuellement chargées sont affichées ci-dessous. Les ajouts et modifications apparaissent immédiatement.</div><div id="adminCompteur" class="admin-note">0 information</div>
+          <div id="adminCompteur" class="admin-note">0 information</div>
           <div class="admin-table-wrap">
             <table class="admin-table">
               <thead><tr><th>Type</th><th>Question / titre</th><th>Information</th><th>Lien / média</th><th>Actions</th></tr></thead>
@@ -238,6 +229,7 @@ body.sombre .admin-box{background:#17201f;color:#fff}body.sombre .admin-auth inp
             <input id="adminAnnonceBudget" placeholder="Budget / prix">
             <textarea id="adminAnnonceDescription" placeholder="Description de l'annonce"></textarea>
             <input id="adminAnnonceContact" placeholder="Numéro de contact WhatsApp / téléphone">
+            <input id="adminAnnonceUrl" placeholder="Lien externe / image / vidéo (https://...)" type="url">
             <button class="admin-btn" id="ajouterAnnonce" type="button">➕ Ajouter l'annonce</button>
           </div>
           <div id="listeAnnoncesAdmin"></div>
@@ -309,7 +301,6 @@ return "tel:"+n;
    codé en dur ici.
 ========================================================= */
 
-var AI_MEMORY;
 let BASE_CONNAISSANCE=[];
 
 
@@ -338,6 +329,7 @@ const fenetreStatuts=document.getElementById("fenetreStatuts");
 const fermerStatuts=document.getElementById("fermerStatuts");
 const listeStatuts=document.getElementById("listeStatuts");
 
+
 /* =========================================================
    MENU PRINCIPAL
 ========================================================= */
@@ -360,16 +352,19 @@ if(menu&&menu.classList.contains("active")&&!menu.contains(e.target)&&e.target!=
 function afficherServicesMenu(){
 if(!listeServices)return;
 listeServices.innerHTML="";
-const services=Array.isArray(AI_MEMORY?.services)?AI_MEMORY.services:[];
+const services=[];
+(AI_MEMORY?.connaissances||[]).forEach(function(item){
+ const q=Array.isArray(item.questions)?item.questions[0]:"";
+ if(q && q.length>2)services.push(q);
+});
 if(!services.length){
  const b=document.createElement("button");b.type="button";b.textContent="🤖 Demander un service à l’IA";
  b.onclick=function(){envoyerMessage("Quels sont vos services ?");if(menu)menu.classList.remove("active");};
- listeServices.appendChild(b); return;
+ listeServices.appendChild(b);
+ return;
 }
-services.forEach(function(item){
- const service=typeof item==="string"?item:(item?.nom||"");
- if(!service)return;
- const bouton=document.createElement("button"); bouton.type="button"; bouton.textContent=service;
+services.forEach(function(service){
+ const bouton=document.createElement("button"); bouton.type="button"; bouton.textContent="💡 "+service;
  bouton.addEventListener("click",function(){envoyerMessage("Je souhaite des informations sur "+service);if(menu)menu.classList.remove("active");listeServices.style.display="none";});
  listeServices.appendChild(bouton);
 });
@@ -382,6 +377,7 @@ e.stopPropagation();
 listeServices.style.display=(listeServices.style.display==="none"||listeServices.style.display==="")?"block":"none";
 });
 }
+
 
 /* =========================================================
    MESSAGES
@@ -460,15 +456,11 @@ function obtenirReponse(texte){
  if(connaissance)return connaissance;
  const toutes=toutesLesInfosAdmin();
  const mots=t.split(/\s+/).filter(m=>m.length>=4);
- let meilleur=null,scoreMax=0;
  for(const info of toutes){
    const contenu=normaliserTexte([info.titre,info.texte].join(" "));
-   let score=0;
-   mots.forEach(m=>{if(contenu.includes(m))score+=m.length>=7?3:1;});
-   if(score>scoreMax){scoreMax=score;meilleur=info;}
+   if(mots.some(m=>contenu.includes(m)))return info.texte||info.titre;
  }
- if(meilleur)return meilleur.texte||meilleur.titre;
- return "🤖 Je n’ai pas encore cette information dans ma mémoire administrable. Ajoutez-la dans 📋 Toutes les informations de l’IA pour que je puisse répondre avec cette donnée.";
+ return "🤖 Je n’ai pas encore cette information dans ma mémoire administrable. Ajoutez-la dans 📚 Toutes les informations de l’IA pour que je puisse répondre avec cette donnée.";
 }
 
 function envoyerMessage(texte){
@@ -480,22 +472,21 @@ setTimeout(function(){afficherReponseIA(obtenirReponse(demande))},250);
 if(sendBtn)sendBtn.addEventListener("click",function(){envoyerMessage(messageInput?messageInput.value:"")});
 if(messageInput)messageInput.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();envoyerMessage(messageInput.value)}});
 
+
 /* =========================================================
    ANNONCES — CATÉGORIES
 ========================================================= */
 
-const CATEGORIES_ICONS={emplois:"💼",immobilier:"🏠",agronomie:"🌱","e-commerce":"🛒",technicien:"🔧",animal:"🐕",emplacement:"📍",réalisation:"🏗️"};
-function obtenirCategoriesAnnonces(){
- const ids=[...new Set((AI_MEMORY?.annonces||[]).map(a=>String(a?.categorie||"autre").trim()).filter(Boolean))];
- return [{id:"toutes",nom:"📋 Toutes"},...ids.sort((a,b)=>a.localeCompare(b,"fr")).map(id=>({id,nom:(CATEGORIES_ICONS[normaliserTexte(id)]||"📌")+" "+id.charAt(0).toUpperCase()+id.slice(1)}))];
-}
-let CATEGORIES=[];
+const CATEGORIES=[
+{id:"toutes",nom:"📋 Toutes"},{id:"emplois",nom:"💼 Emplois"},{id:"immobilier",nom:"🏠 Immobilier"},
+{id:"agronomie",nom:"🌱 Agronomie"},{id:"e-commerce",nom:"🛒 E-commerce"},{id:"technicien",nom:"🔧 Techniciens"},
+{id:"animal",nom:"🐕 Animaux"},{id:"emplacement",nom:"📍 Emplacements"},{id:"réalisation",nom:"🏗️ Réalisations"}
+];
 let categorieActive="toutes";
 
 function construireCategories(){
 if(!categoriesAnnonces)return;
 categoriesAnnonces.innerHTML="";
-CATEGORIES=obtenirCategoriesAnnonces();
 CATEGORIES.forEach(function(categorie){
 const bouton=document.createElement("button");
 bouton.type="button";
@@ -510,51 +501,61 @@ categoriesAnnonces.appendChild(bouton);
    ANNONCES — CARTE
 ========================================================= */
 
+function detecterMediaUrl(url){
+ try{const path=new URL(url).pathname.toLowerCase();
+  if(/\.(jpg|jpeg|png|gif|webp|avif|svg)(?:$|[?#])/.test(path)) return "image";
+  if(/\.(mp4|webm|ogg|mov|m4v)(?:$|[?#])/.test(path)) return "video";
+ }catch(e){}
+ return "externe";
+}
+
+function ajouterDescriptionAvecLiens(parent, texte){
+ const brut=String(texte||"");
+ const regex=/(https?:\/\/[^\s<]+)/gi;
+ let dernier=0,match;
+ while((match=regex.exec(brut))){
+  if(match.index>dernier) parent.appendChild(document.createTextNode(brut.slice(dernier,match.index)));
+  let url=match[0].replace(/[),.;!?]+$/g,"");
+  const reste=match[0].slice(url.length);
+  if(urlSecurisee(url)){
+   const type=detecterMediaUrl(url);
+   if(type==="image"){
+    const img=document.createElement("img"); img.src=url; img.alt="Image liée à l'annonce"; img.loading="lazy"; img.style.width="100%"; img.style.maxHeight="500px"; img.style.objectFit="contain"; img.style.display="block"; img.style.borderRadius="16px"; img.style.margin="12px 0"; img.onerror=()=>img.remove(); parent.appendChild(img);
+   }else if(type==="video"){
+    const video=document.createElement("video"); video.controls=true; video.playsInline=true; video.preload="metadata"; video.src=url; video.style.width="100%"; video.style.maxHeight="500px"; video.style.display="block"; video.style.borderRadius="16px"; video.style.margin="12px 0"; video.onerror=()=>video.remove(); parent.appendChild(video);
+   }else{
+    const a=document.createElement("a"); a.href=url; a.target="_blank"; a.rel="noopener noreferrer"; a.textContent=url; a.style.color="#0b84ff"; a.style.fontWeight="700"; a.style.wordBreak="break-all"; parent.appendChild(a);
+   }
+  }else parent.appendChild(document.createTextNode(url));
+  if(reste) parent.appendChild(document.createTextNode(reste));
+  dernier=match.index+match[0].length;
+ }
+ if(dernier<brut.length) parent.appendChild(document.createTextNode(brut.slice(dernier)));
+}
+
 function creerCarteAnnonce(annonce){
-const carte=document.createElement("article");
-carte.className="carte-annonce";
-
-const badge=document.createElement("span");
-badge.className="badge";
-badge.textContent=annonce.categorie||"Annonce";
-carte.appendChild(badge);
-
-const titre=document.createElement("h3");
-titre.textContent=annonce.objet||"Annonce";
-carte.appendChild(titre);
-
-if(annonce.ville||annonce.quartier){
-const lieu=document.createElement("p");
-lieu.textContent="📍 "+[annonce.ville,annonce.quartier].filter(Boolean).join(" — ");
-carte.appendChild(lieu);
+ const carte=document.createElement("article"); carte.className="carte-annonce";
+ const badge=document.createElement("span"); badge.className="badge"; badge.textContent=annonce.categorie||"Annonce"; carte.appendChild(badge);
+ const titre=document.createElement("h3"); titre.textContent=annonce.objet||"Annonce"; carte.appendChild(titre);
+ if(annonce.ville||annonce.quartier){const lieu=document.createElement("p");lieu.textContent="📍 "+[annonce.ville,annonce.quartier].filter(Boolean).join(" — ");carte.appendChild(lieu);}
+ if(annonce.age){const age=document.createElement("p");age.textContent="👤 Âge : "+annonce.age;carte.appendChild(age);}
+ if(annonce.budget){const budget=document.createElement("p");budget.textContent="💰 Budget/Prix : "+annonce.budget;carte.appendChild(budget);}
+ if(annonce.description){const desc=document.createElement("p");desc.appendChild(document.createTextNode("📝 "));ajouterDescriptionAvecLiens(desc,annonce.description);carte.appendChild(desc);}
+ const actions=document.createElement("div"); actions.className="actions-annonce";
+ if(annonce.url && urlSecurisee(annonce.url)){
+ const u=annonce.url.trim(); const mediaType=detecterMediaUrl(u);
+ if(mediaType==="image"){
+  const image=document.createElement("img"); image.src=u; image.alt=annonce.objet||"Image de l'annonce"; image.loading="lazy"; image.style.width="100%"; image.style.maxHeight="500px"; image.style.objectFit="contain"; image.style.display="block"; image.style.borderRadius="16px"; image.style.margin="12px 0"; image.onerror=function(){this.remove();}; carte.insertBefore(image,actions);
+ }else if(mediaType==="video"){
+  const video=document.createElement("video"); video.controls=true; video.playsInline=true; video.preload="metadata"; video.src=u; video.style.width="100%"; video.style.maxHeight="500px"; video.style.display="block"; video.style.borderRadius="16px"; video.style.margin="12px 0"; video.onerror=function(){this.remove();}; carte.insertBefore(video,actions);
+ }else{
+  const lien=document.createElement("a"); lien.className="btn-lien-externe"; lien.href=u; lien.target="_blank"; lien.rel="noopener noreferrer"; lien.textContent="🔗 Ouvrir le site externe"; actions.appendChild(lien);
+ }
+}
+ if(annonce.contact){const appel=document.createElement("a");appel.className="btn-appeler";appel.href=lienTelephone(annonce.contact);appel.textContent="📞 Appeler";actions.appendChild(appel);const whatsapp=document.createElement("a");whatsapp.className="btn-whatsapp";whatsapp.href=lienWhatsApp(annonce.contact,"Bonjour, je suis intéressé par votre annonce : "+(annonce.objet||"Annonce"));whatsapp.target="_blank";whatsapp.rel="noopener noreferrer";whatsapp.textContent="💬 WhatsApp";actions.appendChild(whatsapp);}
+ if(actions.children.length)carte.appendChild(actions); return carte;
 }
 
-if(annonce.age){
-const age=document.createElement("p");age.textContent="👤 Âge : "+annonce.age;carte.appendChild(age);
-}
-if(annonce.budget){
-const budget=document.createElement("p");budget.textContent="💰 Budget/Prix : "+annonce.budget;carte.appendChild(budget);
-}
-if(annonce.description){
-const desc=document.createElement("p");desc.textContent="📝 "+annonce.description;carte.appendChild(desc);
-}
-
-const actions=document.createElement("div");
-actions.className="actions-annonce";
-
-const appel=document.createElement("a");
-appel.className="btn-appeler";
-appel.href=lienTelephone(annonce.contact);
-appel.textContent="📞 Appeler";
-
-const whatsapp=document.createElement("a");
-whatsapp.className="btn-whatsapp";
-whatsapp.href=lienWhatsApp(annonce.contact,"Bonjour, je suis intéressé par votre annonce : "+(annonce.objet||"Annonce"));
-whatsapp.target="_blank";whatsapp.rel="noopener noreferrer";whatsapp.textContent="💬 WhatsApp";
-
-actions.appendChild(appel);actions.appendChild(whatsapp);carte.appendChild(actions);
-return carte;
-}
 
 /* =========================================================
    ANNONCES — AFFICHER LES ANNONCES
@@ -606,9 +607,11 @@ if(rechercheAnnonce)rechercheAnnonce.addEventListener("input",afficherAnnonces);
 if(annoncesBtn){
 annoncesBtn.addEventListener("click",function(){
 if(fenetreAnnonces)fenetreAnnonces.style.display="block";
+construireCategories();
 if(menu)menu.classList.remove("active");
 });
 }
+
 
 if(fermerAnnonces){
 fermerAnnonces.addEventListener("click",function(){if(fenetreAnnonces)fenetreAnnonces.style.display="none"});
@@ -622,6 +625,7 @@ if(menu)menu.classList.remove("active");
 }
 });
 
+construireCategories();
 if(listeAnnonces)listeAnnonces.innerHTML="";
 
 
@@ -668,10 +672,10 @@ video.appendChild(source);bloc.appendChild(video);
 const audio=document.createElement("audio");
 audio.controls=true;audio.preload="metadata";audio.src=statut.url;audio.style.width="100%";bloc.appendChild(audio);
 }else if(statut.type==="iframe"){
-const iframe=document.createElement("iframe");
-iframe.src=statut.url;iframe.loading="lazy";iframe.allowFullscreen=true;
-iframe.style.width="100%";iframe.style.minHeight="500px";iframe.style.border="0";iframe.style.borderRadius="16px";
-bloc.appendChild(iframe);
+const lien=document.createElement("a");
+lien.href=statut.url;lien.target="_blank";lien.rel="noopener noreferrer";lien.textContent="🔗 Ouvrir le site externe";
+lien.style.display="block";lien.style.textAlign="center";lien.style.padding="14px";lien.style.margin="12px 0";lien.style.borderRadius="24px";lien.style.background="#128c7e";lien.style.color="#fff";lien.style.textDecoration="none";lien.style.fontWeight="bold";
+bloc.appendChild(lien);
 }else{
 const texte=document.createElement("div");
 texte.textContent=statut.contenu||"";
@@ -681,6 +685,7 @@ bloc.appendChild(texte);
 listeStatuts.appendChild(bloc);
 });
 }
+
 if(statutsBtn){
 statutsBtn.addEventListener("click",function(){
 if(fenetreStatuts)fenetreStatuts.style.display="block";
@@ -702,7 +707,7 @@ if(fenetreStatuts)fenetreStatuts.style.display="none";
 if(inviteBtn){
 inviteBtn.addEventListener("click",async function(){
 const url=window.location.href;
-const texte="🤖 ASSISTANT IA LESFACILITATEURS\n\nDécouvrez l'assistant et ses informations.\n\n"+url;
+const texte="🤖 ASSISTANT IA LESFACILITATEURS\n\nDécouvrez nos services, annonces, emplois, immobilier, e-commerce et bien plus encore.\n\n"+url;
 try{
 if(navigator.share){
 await navigator.share({title:"ASSISTANT IA LESFACILITATEURS",text:texte,url:url});
@@ -715,7 +720,6 @@ prompt("Copiez ce message :",texte);
 if(menu)menu.classList.remove("active");
 });
 }
-
 
 /* =========================================================
    MODE SOMBRE
@@ -735,6 +739,7 @@ document.body.classList.add("sombre");
 if(darkBtn)darkBtn.textContent="☀️ Mode clair";
 }
 
+
 /* =========================================================
    INITIALISER LES STATUTS
    (après chargement de la mémoire IA)
@@ -747,8 +752,7 @@ if(darkBtn)darkBtn.textContent="☀️ Mode clair";
 
 setTimeout(function(){
 if(chat&&chat.children.length===0){
-const accueil=(AI_MEMORY?.statuts||[]).find(x=>x&&x.type==="texte"&&x.contenu)||"👋 Bienvenue ! Comment puis-je vous aider ?";
-afficherReponseIA(accueil);
+afficherReponseIA("👋 Bienvenue sur ASSISTANT IA LESFACILITATEURS !\n\nJe peux vous renseigner sur nos services, les annonces, l'emploi, l'immobilier, l'agronomie, le commerce, les techniciens, les réalisations, les formations et bien plus encore.\n\nComment puis-je vous aider ?");
 }
 },200);
 
@@ -774,47 +778,144 @@ try{messageInput.focus()}catch(erreur){}
    L'admin modifie uniquement le cerveau de l'IA.
    La persistance distante passe par /api/ai-memory.
 ========================================================= */
+const ADMIN_CODE="2332";
 const AI_MEMORY_KEY="lfg_ai_memory_v1";
 const API_URL="/api/ai-memory";
-let ADMIN_SESSION_TOKEN="";
-const AI_MEMORY_ORIGINALE={"version":3,"updatedAt":"","servicesWhatsapp":[{"nom":"🏠 Contact admin pour partenariat d'affaire","numero":"237670035609","message":"Bonjour, je suis intéressé par les services de l'IA"}],"services":[{"nom":"💻 Création de sites web"},{"nom":"📱 Création d'applications"},{"nom":"🎨 Création de logos"},{"nom":"🖼️ Création de flyers"},{"nom":"🎬 Montage vidéo"},{"nom":"🎵 Création musicale"},{"nom":"🤖 Solutions IA"},{"nom":"📢 Publicité et visibilité"},{"nom":"💼 Services professionnels"},{"nom":"🛒 Boutique en ligne"},{"nom":"💳 Solutions de paiement"},{"nom":"📄 Création de documents"},{"nom":"🏗️ Travaux publics et BTP"},{"nom":"📡 Installation et maintenance"}],"connaissances":[{"questions":["bonjour","salut","hello","bonsoir","bjr","slt","bsr","s'lut"],"reponse":"Salut 👋 comment allez-vous ? Qu'est-ce que je peux faire pour vous ?"},{"questions":["quartier saint joseph","st joseph","nanfan","chef debloc"],"reponse":"Quartier Saint Joseph situé à 5 km après le dispensaire Messassi 👋\n\nVisitez le site officiel :\nhttps://quartier-saint-joseph.vercel.app/"},{"questions":["site Lesfacilitateurs","site web Lesfacilitateurs","page officielle","ets lesfacilitateurs","lesfacilitateurs"],"reponse":"🏢 ETS LESFACILITATEURS\n\n👤 Directeur Général : Mr Kono Michel\n\n📍 Localisation : Yaoundé Nyom 3\n\n🌐 Site officiel :\n\nhttps://lesfacilitateurs.vercel.app/"},{"questions":["création site web","besoin de site web","marketing digital","community manager"],"reponse":"🌐 Création de sites web professionnels à partir de 50000 FCFA selon vos besoins. Contact admin pour plus d'informations."},{"questions":["emploi","travail","recrutement","job","cherche emploi","ménagère","nounou","ferrailleurs","coffreurs","maçon","technicien","charpentier","mecanicien","chauffeur"],"reponse":"💼 Nous recrutons. Vous pouvez consulter les annonces disponibles dans 📢 Annonces & Visibilité ou postuler via :\nhttps://workshopkmer.vercel.app/#job1"},{"questions":["réalisation","réalisations","projet réalisé","qu'est ce que vous avez déjà réalisé","qu'est ce que vous avez déjà fait","vos réalisations"],"reponse":"🎓 Visitez ce lien pour avoir plus d'informations sur nos différentes réalisations : https://r-alisations.vercel.app/."},{"questions":["espionnage de téléphone","contrôle de téléphone","surveillez un téléphone","espionner un téléphone"],"reponse":"Je ne peux pas fournir de méthode permettant de surveiller ou détourner les communications d'une autre personne sans son consentement. 🔐\n\nSi vous cherchez à gérer votre propre téléphone ou votre propre ligne, dites-moi ce que vous souhaitez faire et je vous guiderai."},{"questions":["formation"],"reponse":"🎓 Formations vidéo en ligne avec attestation de participation.\n\nDécouvrez la formation portrait 100% vidéos :\n\nhttps://lfgpay.vercel.app/?article=eyJpZCI6IkFSVC1NVDZBVEhKTy1CNjhWTVciLCJzZWxsZXIiOiJsb3ZlbGluZSBraW5pdXkiLCJuYW1lIjoiZm9ybWF0aW9uIHBvcnRyYWl0ICAxMDAlIHZpZGVvcyIsInR5cGUiOiJsaW5rIiwiZGVzY3JpcHRpb24iOiJmb3JtYXRpb24gZGlzcG9uaWJsZSDDoCB0w6lsw6lncmFtIDEwMCUgdmlkw6lvcyIsInByaWNlIjoxMDAsImxpbmsiOiJodHRwczovL3QubWUva1VHUHVWLTN0VTgxa056TmsifQ==."},{"questions":["document","devis","cv","lettre motivation"],"reponse":"💼 Création de documents professionnels :\nhttps://mini-secretariat.vercel.app/"},{"questions":["musique","chanson","dédicace","mariage"],"reponse":"🎵 Pour vos cérémonies de mariages, dédicaces, anniversaires et autres : création musicale personnalisée assistée par IA :\nhttps://label-lfg-music-production.vercel.app/"},{"questions":["services","prestations","offres"],"reponse":"📋 Nos services :\nDéveloppement web, marketing digital, BTP, création musicale, visibilité en ligne."},{"questions":["admin","contact","responsable","dg","directeur général"],"reponse":"📋 Mr Michel contact WhatsApp : +237670035609."},{"questions":["ok","merci","d'accord","bye","bien reçu"],"reponse":"ok 🌝."},{"questions":["billetterie","réservation","inscription","e-commerce","vente en ligne"],"reponse":"📍 Contact admin pour la création d'un compte vendeur et commencez à vendre en ligne automatiquement :\nhttps://lfgpay.vercel.app/"},{"questions":["localisation","situé où","vous êtes où"],"reponse":"📍 Yaoundé Nyom 3"}],"regles":[],"recommandations":[],"medias":[],"annonces":[{"categorie":"emplois","objet":"Ménagère disponible","ville":"Yaoundé","quartier":"Nkomo","age":"23 ans","budget":"À négocier","description":"Ménagère sérieuse et disponible.","contact":"670035609"},{"categorie":"emplois","objet":"Nounou disponible","ville":"Yaoundé","quartier":"Bastos","age":"27 ans","budget":"À négocier","description":"Nounou expérimentée disponible.","contact":"690000001"},{"categorie":"emplois","objet":"Chauffeur disponible","ville":"Douala","quartier":"Akwa","age":"32 ans","budget":"À négocier","description":"Chauffeur professionnel disponible.","contact":"690000002"},{"categorie":"emplois","objet":"Maçon disponible","ville":"Yaoundé","quartier":"Messassi","age":"29 ans","budget":"À négocier","description":"Maçon expérimenté disponible.","contact":"690000003"},{"categorie":"immobilier","objet":"Chambre moderne à louer","ville":"Yaoundé","quartier":"Nyom 3","age":"","budget":"50000 FCFA","description":"Chambre moderne avec accès facile.","contact":"690000004"},{"categorie":"immobilier","objet":"Studio à louer","ville":"Yaoundé","quartier":"Emombo","age":"","budget":"70000 FCFA","description":"Studio propre et sécurisé.","contact":"690000005"},{"categorie":"immobilier","objet":"Appartement à louer","ville":"Douala","quartier":"Bonamoussadi","age":"","budget":"150000 FCFA","description":"Appartement moderne disponible.","contact":"690000006"},{"categorie":"agronomie","objet":"Poulets de chair","ville":"Yaoundé","quartier":"Mbankomo","age":"","budget":"5000 FCFA","description":"Poulets de chair disponibles.","contact":"690000007"},{"categorie":"agronomie","objet":"Maïs à vendre","ville":"Bafoussam","quartier":"Djeleng","age":"","budget":"À négocier","description":"Maïs disponible en quantité.","contact":"690000008"},{"categorie":"agronomie","objet":"Porcelets disponibles","ville":"Yaoundé","quartier":"Nkolbisson","age":"","budget":"À négocier","description":"Porcelets d'élevage disponibles.","contact":"690000009"},{"categorie":"e-commerce","objet":"Téléphone Samsung","ville":"Yaoundé","quartier":"Mvan","age":"","budget":"150000 FCFA","description":"Téléphone Samsung en très bon état.","contact":"690000010"},{"categorie":"e-commerce","objet":"Téléviseur Smart TV","ville":"Douala","quartier":"Akwa","age":"","budget":"250000 FCFA","description":"Smart TV disponible.","contact":"690000011"},{"categorie":"e-commerce","objet":"Chaussures homme","ville":"Yaoundé","quartier":"Mokolo","age":"","budget":"15000 FCFA","description":"Chaussures homme disponibles.","contact":"690000012"},{"categorie":"technicien","objet":"Électricien disponible","ville":"Yaoundé","quartier":"Nlongkak","age":"35 ans","budget":"À négocier","description":"Électricien professionnel disponible.","contact":"690000013"},{"categorie":"technicien","objet":"Plombier disponible","ville":"Douala","quartier":"Deido","age":"38 ans","budget":"À négocier","description":"Plombier disponible pour interventions.","contact":"690000014"},{"categorie":"technicien","objet":"Climaticien","ville":"Yaoundé","quartier":"Bastos","age":"30 ans","budget":"À négocier","description":"Installation et entretien de climatiseurs.","contact":"690000015"},{"categorie":"animal","objet":"Chien de race","ville":"Douala","quartier":"Akwa","age":"1 an","budget":"À négocier","description":"Chien de race disponible.","contact":"690000016"},{"categorie":"animal","objet":"Chiots disponibles","ville":"Yaoundé","quartier":"Odza","age":"3 mois","budget":"À négocier","description":"Chiots disponibles.","contact":"690000017"},{"categorie":"emplacement","objet":"Terrain à vendre","ville":"Yaoundé","quartier":"Nkolbisson","age":"","budget":"À négocier","description":"Terrain disponible à la vente.","contact":"690000018"},{"categorie":"emplacement","objet":"Boutique à louer","ville":"Douala","quartier":"Deido","age":"","budget":"100000 FCFA","description":"Boutique bien située à louer.","contact":"690000019"},{"categorie":"réalisation","objet":"Projet BTP réalisé","ville":"Yaoundé","quartier":"Nyom 3","age":"","budget":"","description":"Projet réalisé par Lesfacilitateurs : https://r-alisations.vercel.app/","contact":"670035609"},{"categorie":"réalisation","objet":"Projet de construction","ville":"Douala","quartier":"Bonabéri","age":"","budget":"","description":"Travaux de construction réalisés par Lesfacilitateurs.","contact":"670035609"}],"statuts":[{"type":"texte","contenu":"📢 Bienvenue sur ASSISTANT IA LESFACILITATEURS !"}]};
-AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE));
-CATEGORIES=obtenirCategoriesAnnonces();
-construireCategories();
+let ADMIN_CONNECTE=false;
+const AI_MEMORY_ORIGINALE={"version":3,"updatedAt":"","servicesWhatsapp":[{"nom":"🏠 Contact admin pour partenariat d'affaire","numero":"237670035609","message":"Bonjour, je suis intéressé par les services de l'IA"}],"services":[{"nom":"💻 Création de sites web"},{"nom":"📱 Création d'applications"},{"nom":"🎨 Création de logos"},{"nom":"🖼️ Création de flyers"},{"nom":"🎬 Montage vidéo"},{"nom":"🎵 Création musicale"},{"nom":"🤖 Solutions IA"},{"nom":"📢 Publicité et visibilité"},{"nom":"💼 Services professionnels"},{"nom":"🛒 Boutique en ligne"},{"nom":"💳 Solutions de paiement"},{"nom":"📄 Création de documents"},{"nom":"🏗️ Travaux publics et BTP"},{"nom":"📡 Installation et maintenance"}],"connaissances":[{"questions":["bonjour","salut","hello","bonsoir","bjr","slt","bsr","s'lut"],"reponse":"Salut 👋 comment allez-vous ? Qu'est-ce que je peux faire pour vous ?"},{"questions":["quartier saint joseph","st joseph","nanfan","chef debloc"],"reponse":"Quartier Saint Joseph situé à 5 km après le dispensaire Messassi 👋\n\nVisitez le site officiel :\nhttps://quartier-saint-joseph.vercel.app/"},{"questions":["site Lesfacilitateurs","site web Lesfacilitateurs","page officielle","ets lesfacilitateurs","lesfacilitateurs"],"reponse":"🏢 ETS LESFACILITATEURS\n\n👤 Directeur Général : Mr Kono Michel\n\n📍 Localisation : Yaoundé Nyom 3\n\n🌐 Site officiel :\n\nhttps://lesfacilitateurs.vercel.app/"},{"questions":["création site web","besoin de site web","marketing digital","community manager"],"reponse":"🌐 Création de sites web professionnels à partir de 50000 FCFA selon vos besoins. Contact admin pour plus d'informations."},{"questions":["emploi","travail","recrutement","job","cherche emploi","ménagère","nounou","ferrailleurs","coffreurs","maçon","technicien","charpentier","mecanicien","chauffeur"],"reponse":"💼 Nous recrutons. Vous pouvez consulter les annonces disponibles dans 📢 Annonces & Visibilité ou postuler via :\nhttps://workshopkmer.vercel.app/#job1"},{"questions":["réalisation","réalisations","projet réalisé","qu'est ce que vous avez déjà réalisé","qu'est ce que vous avez déjà fait","vos réalisations"],"reponse":"🎓 Visitez ce lien pour avoir plus d'informations sur nos différentes réalisations : https://r-alisations.vercel.app/."},{"questions":["espionnage de téléphone","contrôle de téléphone","surveillez un téléphone","espionner un téléphone"],"reponse":"Je ne peux pas fournir de méthode permettant de surveiller ou détourner les communications d'une autre personne sans son consentement. 🔐\n\nSi vous cherchez à gérer votre propre téléphone ou votre propre ligne, dites-moi ce que vous souhaitez faire et je vous guiderai."},{"questions":["formation"],"reponse":"🎓 Formations vidéo en ligne avec attestation de participation.\n\nDécouvrez la formation portrait 100% vidéos :\n\nhttps://lfgpay.vercel.app/?article=eyJpZCI6IkFSVC1NVDZBVEhKTy1CNjhWTVciLCJzZWxsZXIiOiJsb3ZlbGluZSBraW5pdXkiLCJuYW1lIjoiZm9ybWF0aW9uIHBvcnRyYWl0ICAxMDAlIHZpZGVvcyIsInR5cGUiOiJsaW5rIiwiZGVzY3JpcHRpb24iOiJmb3JtYXRpb24gZGlzcG9uaWJsZSDDoCB0w6lsw6lncmFtIDEwMCUgdmlkw6lvcyIsInByaWNlIjoxMDAsImxpbmsiOiJodHRwczovL3QubWUva1VHUHVWLTN0VTgxa056TmsifQ==."},{"questions":["document","devis","cv","lettre motivation"],"reponse":"💼 Création de documents professionnels :\nhttps://mini-secretariat.vercel.app/"},{"questions":["musique","chanson","dédicace","mariage"],"reponse":"🎵 Pour vos cérémonies de mariages, dédicaces, anniversaires et autres : création musicale personnalisée assistée par IA :\nhttps://label-lfg-music-production.vercel.app/"},{"questions":["services","prestations","offres"],"reponse":"📋 Nos services :\nDéveloppement web, marketing digital, BTP, création musicale, visibilité en ligne."},{"questions":["admin","contact","responsable","dg","directeur général"],"reponse":"📋 Mr Michel contact WhatsApp : +237670035609."},{"questions":["ok","merci","d'accord","bye","bien reçu"],"reponse":"ok 🌝."},{"questions":["billetterie","réservation","inscription","e-commerce","vente en ligne"],"reponse":"📍 Contact admin pour la création d'un compte vendeur et commencez à vendre en ligne automatiquement :\nhttps://lfgpay.vercel.app/"},{"questions":["localisation","situé où","vous êtes où"],"reponse":"📍 Yaoundé Nyom 3"}],"regles":[],"recommandations":[],"medias":[],"annonces":[{"categorie":"emplois","objet":"Ménagère disponible","ville":"Yaoundé","quartier":"Nkomo","age":"23 ans","budget":"À négocier","description":"Ménagère sérieuse et disponible.","contact":"670035609"},{"categorie":"emplois","objet":"Nounou disponible","ville":"Yaoundé","quartier":"Bastos","age":"27 ans","budget":"À négocier","description":"Nounou expérimentée disponible.","contact":"690000001"},{"categorie":"emplois","objet":"Chauffeur disponible","ville":"Douala","quartier":"Akwa","age":"32 ans","budget":"À négocier","description":"Chauffeur professionnel disponible.","contact":"690000002"},{"categorie":"emplois","objet":"Maçon disponible","ville":"Yaoundé","quartier":"Messassi","age":"29 ans","budget":"À négocier","description":"Maçon expérimenté disponible.","contact":"690000003"},{"categorie":"immobilier","objet":"Chambre moderne à louer","ville":"Yaoundé","quartier":"Nyom 3","age":"","budget":"50000 FCFA","description":"Chambre moderne avec accès facile.","contact":"690000004"},{"categorie":"immobilier","objet":"Studio à louer","ville":"Yaoundé","quartier":"Emombo","age":"","budget":"70000 FCFA","description":"Studio propre et sécurisé.","contact":"690000005"},{"categorie":"immobilier","objet":"Appartement à louer","ville":"Douala","quartier":"Bonamoussadi","age":"","budget":"150000 FCFA","description":"Appartement moderne disponible.","contact":"690000006"},{"categorie":"agronomie","objet":"Poulets de chair","ville":"Yaoundé","quartier":"Mbankomo","age":"","budget":"5000 FCFA","description":"Poulets de chair disponibles.","contact":"690000007"},{"categorie":"agronomie","objet":"Maïs à vendre","ville":"Bafoussam","quartier":"Djeleng","age":"","budget":"À négocier","description":"Maïs disponible en quantité.","contact":"690000008"},{"categorie":"agronomie","objet":"Porcelets disponibles","ville":"Yaoundé","quartier":"Nkolbisson","age":"","budget":"À négocier","description":"Porcelets d'élevage disponibles.","contact":"690000009"},{"categorie":"e-commerce","objet":"Téléphone Samsung","ville":"Yaoundé","quartier":"Mvan","age":"","budget":"150000 FCFA","description":"Téléphone Samsung en très bon état.","contact":"690000010"},{"categorie":"e-commerce","objet":"Téléviseur Smart TV","ville":"Douala","quartier":"Akwa","age":"","budget":"250000 FCFA","description":"Smart TV disponible.","contact":"690000011"},{"categorie":"e-commerce","objet":"Chaussures homme","ville":"Yaoundé","quartier":"Mokolo","age":"","budget":"15000 FCFA","description":"Chaussures homme disponibles.","contact":"690000012"},{"categorie":"technicien","objet":"Électricien disponible","ville":"Yaoundé","quartier":"Nlongkak","age":"35 ans","budget":"À négocier","description":"Électricien professionnel disponible.","contact":"690000013"},{"categorie":"technicien","objet":"Plombier disponible","ville":"Douala","quartier":"Deido","age":"38 ans","budget":"À négocier","description":"Plombier disponible pour interventions.","contact":"690000014"},{"categorie":"technicien","objet":"Climaticien","ville":"Yaoundé","quartier":"Bastos","age":"30 ans","budget":"À négocier","description":"Installation et entretien de climatiseurs.","contact":"690000015"},{"categorie":"animal","objet":"Chien de race","ville":"Douala","quartier":"Akwa","age":"1 an","budget":"À négocier","description":"Chien de race disponible.","contact":"690000016"},{"categorie":"animal","objet":"Chiots disponibles","ville":"Yaoundé","quartier":"Odza","age":"3 mois","budget":"À négocier","description":"Chiots disponibles.","contact":"690000017"},{"categorie":"emplacement","objet":"Terrain à vendre","ville":"Yaoundé","quartier":"Nkolbisson","age":"","budget":"À négocier","description":"Terrain disponible à la vente.","contact":"690000018"},{"categorie":"emplacement","objet":"Boutique à louer","ville":"Douala","quartier":"Deido","age":"","budget":"100000 FCFA","description":"Boutique bien située à louer.","contact":"690000019"},{"categorie":"réalisation","objet":"Projet BTP réalisé","ville":"Yaoundé","quartier":"Nyom 3","age":"","budget":"","description":"Projet réalisé par Lesfacilitateurs : https://r-alisations.vercel.app/","contact":"670035609"},{"categorie":"réalisation","objet":"Projet de construction","ville":"Douala","quartier":"Bonabéri","age":"","budget":"","description":"Travaux de construction réalisés par Lesfacilitateurs.","contact":"670035609"}],"statuts":[
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/image-st-joseph-/main/1784226524564.jpg"
+    },
+ {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/workshopkmer/main/file_00000000c1c081fb8aa8eff416a898a0.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000915072439b84baf5b0824a43.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000009154720aa02f9fc54e37e139.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000226871fdb7585d562d4a1b12.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_0000000064f0720a911a3e5868b2625a.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/d-p-t-image-Lesfacilitateurs-/main/IMG_20260124_122540_490.jpg"
+    },
+
+    {
+        type:"audio",
+        url:"https://raw.githubusercontent.com/Lfg237/audio-/main/nom%20de%20dieu%20.mp3"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/IMG-20260305-WA0011.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/affiche_compressee.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260319_152611056.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/Polish_20260223_163236698.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(61)_202605010818_1.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/image-retouche-photo-portrait-/main/portrait_233%20(60)_202605010818_1.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260309_161104091.jpg"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_000000000370720a9aedc5f4906f90da.png"
+    },
+
+    {
+        type:"image",
+        url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/InShot_20260328_174558331.jpg"
+    },
+
+    {
+        type:"iframe",
+        url:"https://archive.org/embed/in-shot-20250618-050312535"
+    }
+]}
+let AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE));
 function sauvegarderMemoireLocale(){
   try{localStorage.setItem(AI_MEMORY_KEY,JSON.stringify(AI_MEMORY));return true}catch(e){return false}
 }
 function appliquerMemoireIA(){BASE_CONNAISSANCE=Array.isArray(AI_MEMORY?.connaissances)?AI_MEMORY.connaissances:[];}
 
 function adminOuvert(){return document.getElementById("fenetreAdmin")}
-function ouvrirAdmin(){const f=adminOuvert();if(!f){alert("❌ Fenêtre administration introuvable.");return}f.style.display="block";f.style.visibility="visible";f.style.opacity="1";f.setAttribute("aria-hidden","false");const c=document.getElementById("adminCode");if(c){setTimeout(()=>c.focus(),50)}}
+function ouvrirAdmin(){const f=adminOuvert();if(!f){alert("❌ Fenêtre administration introuvable.");return false}f.hidden=false;f.style.display="block";f.style.visibility="visible";f.style.opacity="1";f.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";const c=document.getElementById("adminCode");if(c){setTimeout(()=>c.focus(),50)}return false}
 window.ouvrirAdministrationIA=ouvrirAdmin
 function fermerAdmin(){const f=adminOuvert();if(f){f.style.display="none";f.setAttribute("aria-hidden","true");document.body.style.overflow=""}}
 async function connexionAdmin(){
  const code=document.getElementById("adminCode").value.trim();
  if(!code){alert("❌ Entrez le code administrateur.");return}
  const bouton=document.getElementById("connexionAdmin");
- if(bouton){bouton.disabled=true;bouton.textContent="⏳ Connexion...";}
+ if(bouton){bouton.disabled=true;bouton.textContent="⏳ Connexion..."}
  try{
-  const r=await fetch("/api/admin-login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({code})});
+  const r=await fetch("/api/admin-login",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"same-origin",body:JSON.stringify({code})});
   const d=await r.json().catch(()=>({}));
   if(!r.ok)throw new Error(d.error||("HTTP "+r.status));
-  if(!d.token)throw new Error("Le serveur n'a pas fourni de session administrateur.");
-  ADMIN_SESSION_TOKEN=d.token;
+  ADMIN_SESSION_TOKEN='SESSION_AUTOMATIQUE';
   document.getElementById("adminPanel").style.display="block";
   document.getElementById("adminCode").value="";
+  migrerMemoireOriginale();
+  appliquerMemoireIA();
   adminRafraichir();
-  await chargerMemoireAPI(true);
+  const ok=await chargerMemoireAPI(true);
+  adminRafraichir();
+  const etat=document.getElementById("remoteEtat");
+  if(etat)etat.textContent=ok?"🟢 Administration connectée : mémoire IA distante synchronisée et prête à être modifiée.":"🟡 Administration connectée : serveur distant momentanément indisponible, mémoire locale utilisée.";
  }catch(e){
-  alert("❌ Connexion administrateur impossible.\n\n"+e.message+"\n\nVérifiez que /api/admin-login est bien déployé sur Vercel.");
+  ADMIN_CONNECTE=false;
+  alert("❌ Connexion administration impossible.\n\n"+e.message);
  }finally{
-  if(bouton){bouton.disabled=false;bouton.textContent="🔓 Ouvrir l'administration";}
+  if(bouton){bouton.disabled=false;bouton.textContent="🔓 Ouvrir l'administration"}
  }
 }
 function toutesLesInfosAdmin(){
  const out=[];
- AI_MEMORY.services.forEach((x,i)=>out.push({type:"services",index:i,icone:"🛠️",nom:"Service",titre:typeof x==="string"?x:(x.nom||"Service"),texte:typeof x==="string"?x:(x.description||x.nom||""),url:""}));
- AI_MEMORY.servicesWhatsapp.forEach((x,i)=>out.push({type:"servicesWhatsapp",index:i,icone:"📞",nom:"Service WhatsApp",titre:x.nom||"Service WhatsApp",texte:[x.numero,x.message].filter(Boolean).join(" • "),url:""}));
  AI_MEMORY.connaissances.forEach((x,i)=>out.push({type:"connaissances",index:i,icone:"📚",nom:"Connaissance",titre:(x.questions||[]).join(", "),texte:x.reponse||"",url:""}));
  AI_MEMORY.regles.forEach((x,i)=>out.push({type:"regles",index:i,icone:"🧠",nom:"Règle IA",titre:x.titre||"Règle IA",texte:x.texte||"",url:""}));
  AI_MEMORY.medias.forEach((x,i)=>{if(x&&x.type==="reponse")out.push({type:"medias",index:i,icone:"💬",nom:"Réponse",titre:x.questions||"Question",texte:x.reponse||"",url:""})});
@@ -828,43 +929,37 @@ function supprimerAdmin(type,index){
  if(!AI_MEMORY[type] || !AI_MEMORY[type][index])return;
  if(!confirm("⚠️ Supprimer définitivement cette information de la mémoire IA ?"))return;
  AI_MEMORY[type].splice(index,1);
- sauvegarderMemoireLocale(); adminRafraichir();
  sauvegarderMemoireAPI();
 }
 async function modifierAdmin(type,index){
  const x=AI_MEMORY[type]?.[index]; if(!x)return; let nouveau={...x};
  if(type==="connaissances"){const q=prompt("Questions / mots-clés séparés par des virgules :",(x.questions||[]).join(", "));if(q===null)return;const r=prompt("Réponse :",x.reponse||"");if(r===null||!r.trim())return;nouveau.questions=q.split(",").map(v=>v.trim()).filter(Boolean);nouveau.reponse=r.trim();}
  else if(type==="servicesWhatsapp"){nouveau.nom=prompt("Nom du service :",x.nom||"");if(nouveau.nom===null)return;nouveau.numero=prompt("Numéro WhatsApp / téléphone :",x.numero||"");if(nouveau.numero===null)return;nouveau.message=prompt("Message WhatsApp :",x.message||"");if(nouveau.message===null)return;}
-  else if(type==="services"){const actuel=typeof x==="string"?x:(x?.nom||"");const nom=prompt("Nom du service :",actuel);if(nom===null||!nom.trim())return;nouveau={nom:nom.trim()};}
+  else if(type==="services"){nouveau.nom=prompt("Nom du service :",x.nom||"");if(nouveau.nom===null)return;nouveau.nom=nouveau.nom.trim();if(!nouveau.nom)return;}
   else if(type==="regles"){const titre=prompt("Titre de la règle :",x.titre||"");if(titre===null)return;const texte=prompt("Instruction de l'IA :",x.texte||"");if(texte===null||!texte.trim())return;nouveau.titre=titre.trim()||"Règle IA";nouveau.texte=texte.trim();}
  else if(type==="medias"){if(x.type==="reponse"){const q=prompt("Questions / mots-clés :",x.questions||"");if(q===null)return;const r=prompt("Réponse :",x.reponse||"");if(r===null||!r.trim())return;nouveau.questions=q.trim();nouveau.reponse=r.trim();}else{const q=prompt("Mots-clés :",x.questions||"");if(q===null)return;const url=prompt("URL du média :",x.url||"");if(url===null||!urlSecurisee(url.trim())){alert("❌ URL invalide.");return}const c=prompt("Texte associé :",x.contexte||"");if(c===null)return;nouveau.questions=q.trim();nouveau.url=url.trim();nouveau.contexte=c.trim();}}
  else if(type==="recommandations"){const titre=prompt("Titre :",x.titre||"");if(titre===null)return;const texte=prompt("Recommandation :",x.texte||"");if(texte===null||!texte.trim())return;const url=prompt("Lien facultatif :",x.url||"");if(url===null)return;nouveau.titre=titre.trim()||"Recommandation IA";nouveau.texte=texte.trim();nouveau.url=url.trim();}
- else if(type==="annonces"){nouveau.categorie=prompt("Catégorie :",x.categorie||"");if(nouveau.categorie===null)return;nouveau.objet=prompt("Objet :",x.objet||"");if(nouveau.objet===null)return;nouveau.ville=prompt("Ville :",x.ville||"")||"";nouveau.quartier=prompt("Quartier :",x.quartier||"")||"";nouveau.age=prompt("Âge :",x.age||"")||"";nouveau.budget=prompt("Budget / prix :",x.budget||"")||"";nouveau.description=prompt("Description :",x.description||"")||"";nouveau.contact=prompt("Contact :",x.contact||"")||"";}
+ else if(type==="annonces"){nouveau.categorie=prompt("Catégorie :",x.categorie||"");if(nouveau.categorie===null)return;nouveau.objet=prompt("Objet :",x.objet||"");if(nouveau.objet===null)return;nouveau.ville=prompt("Ville :",x.ville||"")||"";nouveau.quartier=prompt("Quartier :",x.quartier||"")||"";nouveau.age=prompt("Âge :",x.age||"")||"";nouveau.budget=prompt("Budget / prix :",x.budget||"")||"";nouveau.description=prompt("Description :",x.description||"")||"";nouveau.contact=prompt("Contact :",x.contact||"")||"";nouveau.url=prompt("Lien / image / vidéo (URL) :",x.url||"")||"";}
  else if(type==="statuts"){nouveau.type=prompt("Type (texte/image/video/audio/iframe) :",x.type||"texte")||x.type;nouveau.titre=prompt("Titre :",x.titre||"")||"";nouveau.contenu=prompt("Contenu / texte :",x.contenu||"")||"";if(nouveau.type!=="texte")nouveau.url=prompt("URL :",x.url||"")||"";else nouveau.url="";nouveau.mime=prompt("MIME facultatif :",x.mime||"")||"";nouveau.expiresAt=prompt("Expiration ISO facultative (ex: 2026-09-10T12:00:00Z) :",x.expiresAt||"")||"";}
- AI_MEMORY[type][index]=nouveau; sauvegarderMemoireLocale(); adminRafraichir(); await sauvegarderMemoireAPI();
+ AI_MEMORY[type][index]=nouveau; await sauvegarderMemoireAPI();
 }
+function escapeAdmin(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/\'/g,"&#39;")}
 function adminRafraichir(){
- const lsvc=document.getElementById("listeServicesAdmin"),lsw=document.getElementById("listeServicesWhatsappAdmin"),lr=document.getElementById("listeRegles"),lrep=document.getElementById("listeReponses"),lrec=document.getElementById("listeRecos"),lm=document.getElementById("listeMedias"),la=document.getElementById("listeAnnoncesAdmin"),ls=document.getElementById("listeStatutsAdmin");
- if(lsvc)lsvc.innerHTML=AI_MEMORY.services.map((x,i)=>{const nom=typeof x==="string"?x:(x?.nom||"");return `<div class="admin-card"><b>🛠️ ${escapeAdmin(nom)}</b><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('services',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('services',${i})">🗑️ Supprimer</button></div></div>`}).join("")||'<div class="admin-note">Aucun service.</div>';
+ const lsw=document.getElementById("listeServicesWhatsappAdmin"),lr=document.getElementById("listeRegles"),lrep=document.getElementById("listeReponses"),lrec=document.getElementById("listeRecos"),lm=document.getElementById("listeMedias"),la=document.getElementById("listeAnnoncesAdmin"),ls=document.getElementById("listeStatutsAdmin");
  if(lsw)lsw.innerHTML=AI_MEMORY.servicesWhatsapp.map((x,i)=>`<div class="admin-card"><b>📞 ${escapeAdmin(x.nom||"Service WhatsApp")}</b><div>📱 ${escapeAdmin(x.numero||"")}</div><div>${escapeAdmin(x.message||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('servicesWhatsapp',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('servicesWhatsapp',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucun service WhatsApp ajouté.</div>';
  if(lr)lr.innerHTML=AI_MEMORY.regles.map((x,i)=>`<div class="admin-card"><b>🧠 ${escapeAdmin(x.titre||"Règle")}</b><div>${escapeAdmin(x.texte||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('regles',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('regles',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune règle ajoutée.</div>';
  if(lrep)lrep.innerHTML=AI_MEMORY.connaissances.map((x,i)=>`<div class="admin-card"><b>📚 ${escapeAdmin((x.questions||[]).join(", "))}</b><div>${escapeAdmin(x.reponse||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('connaissances',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('connaissances',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune connaissance ajoutée.</div>';
  if(lrec)lrec.innerHTML=AI_MEMORY.recommandations.map((x,i)=>`<div class="admin-card"><b>⭐ ${escapeAdmin(x.titre||"Recommandation")}</b><div>${escapeAdmin(x.texte||"")}</div>${x.url?`<div>🌐 ${escapeAdmin(x.url)}</div>`:""}<div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('recommandations',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('recommandations',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune recommandation.</div>';
  if(lm)lm.innerHTML=AI_MEMORY.medias.map((x,i)=>x&&x.type!=="reponse"?`<div class="admin-card"><b>🖼️ ${escapeAdmin(x.questions||"Média")}</b><div>🌐 ${escapeAdmin(x.url||"")}</div><div>${escapeAdmin(x.contexte||"")}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('medias',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('medias',${i})">🗑️ Supprimer</button></div></div>`:"").join("")||'<div class="admin-note">Aucun média ajouté.</div>';
- if(la)la.innerHTML=AI_MEMORY.annonces.map((x,i)=>`<div class="admin-card"><b>📢 ${escapeAdmin(x.objet||"Annonce")}</b><div>${escapeAdmin([x.categorie,x.ville,x.quartier,x.age,x.budget,x.description,x.contact].filter(Boolean).join(" • "))}</div><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('annonces',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('annonces',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune annonce.</div>';
+ if(la)la.innerHTML=AI_MEMORY.annonces.map((x,i)=>`<div class="admin-card"><b>📢 ${escapeAdmin(x.objet||"Annonce")}</b><div>${escapeAdmin([x.categorie,x.ville,x.quartier,x.age,x.budget,x.description,x.contact].filter(Boolean).join(" • "))}</div>${x.url?`<div>🔗 ${escapeAdmin(x.url)}</div>`:""}<div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('annonces',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('annonces',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucune annonce.</div>';
  if(ls)ls.innerHTML=AI_MEMORY.statuts.map((x,i)=>`<div class="admin-card"><b>📺 ${escapeAdmin(x.titre||"Statut")}</b><div>${escapeAdmin(x.type||"texte")} ${x.expiresAt?"• expiration "+escapeAdmin(x.expiresAt):""}</div><div>${escapeAdmin(x.contenu||"")}</div>${x.url?`<div>🌐 ${escapeAdmin(x.url)}</div>`:""}<div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('statuts',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('statuts',${i})">🗑️ Supprimer</button></div></div>`).join("")||'<div class="admin-note">Aucun statut.</div>';
  rendreTableauMemoire();
 }
-async function afficherToutesLesInformationsIA(){
- const recherche=document.getElementById("adminRecherche"); if(recherche)recherche.value="";
- document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));
- document.querySelectorAll(".admin-section").forEach(x=>x.classList.remove("active"));
- const tab=document.querySelector('[data-admin-tab="tout"]'),section=document.querySelector('[data-admin-section="tout"]');
- if(tab)tab.classList.add("active"); if(section)section.classList.add("active");
- // Affiche uniquement la mémoire actuellement chargée, sans l'écraser par une mémoire distante.
- rendreTableauMemoire();
- const table=document.getElementById("tableauMemoire"); if(table)table.scrollIntoView({behavior:"smooth",block:"start"});
+function afficherToutesLesInformationsIA(){
+ try{forcerMigrationEtAfficher();}
+ catch(e){console.error("AFFICHER TOUT",e);alert("❌ Affichage impossible : "+e.message);}
 }
+
 window.afficherToutesLesInformationsIA=afficherToutesLesInformationsIA;
 
 function rendreTableauMemoire(){
@@ -901,161 +996,149 @@ function rendreTableauMemoire(){
     html+=`<tr><td class="admin-type">${escapeAdmin(label.replace(/^[^A-ZÀ-Ÿa-zà-ÿ]*|[^A-ZÀ-Ÿa-zà-ÿ].*$/u,"").trim()||"Info")}</td><td class="admin-info-cell"><b>${escapeAdmin(v.titre)}</b></td><td class="admin-info-cell">${escapeAdmin(v.texte)}</td><td class="admin-info-cell">${v.url?`<a href="${escapeAdminAttr(v.url)}" target="_blank" rel="noopener noreferrer">${escapeAdmin(v.url)}</a>`:"—"}</td><td><div class="admin-actions"><button class="admin-btn" type="button" onclick="modifierAdmin('${type}',${i})">✏️ Modifier</button><button class="admin-btn danger" type="button" onclick="supprimerAdmin('${type}',${i})">🗑️ Supprimer</button></div></td></tr>`;
   });
  });
-const tb=document.getElementById("tableauMemoire");if(tb)tb.innerHTML=html;
+ const tb=document.getElementById("tableauMemoire");if(tb)tb.innerHTML=html;
  const compteur=document.getElementById("adminCompteur");if(compteur)compteur.textContent=`📊 ${total} information${total>1?"s":""} dans les catégories • ${visible} affichée${visible>1?"s":""}`;
  const vide=document.getElementById("tableauVide");if(vide)vide.style.display=visible?"none":"block";
 }
-function escapeAdmin(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;")}
 function escapeAdminAttr(s){return String(s||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
 function exporterMemoire(){const data={version:3,updatedAt:new Date().toISOString(),servicesWhatsapp:AI_MEMORY.servicesWhatsapp,services:AI_MEMORY.services,connaissances:AI_MEMORY.connaissances,regles:AI_MEMORY.regles,recommandations:AI_MEMORY.recommandations,medias:AI_MEMORY.medias,annonces:AI_MEMORY.annonces,statuts:AI_MEMORY.statuts};const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="lfg-ai-memory.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 function normaliserMemoire(d){return{version:3,updatedAt:d?.updatedAt||"",servicesWhatsapp:Array.isArray(d?.servicesWhatsapp)?d.servicesWhatsapp:[],services:Array.isArray(d?.services)?d.services:[],regles:Array.isArray(d?.regles)?d.regles:[],recommandations:Array.isArray(d?.recommandations)?d.recommandations:[],medias:Array.isArray(d?.medias)?d.medias:[],connaissances:Array.isArray(d?.connaissances)?d.connaissances:[],annonces:Array.isArray(d?.annonces)?d.annonces:[],statuts:Array.isArray(d?.statuts)?d.statuts:[]}}
-async function chargerMemoireAPI(show,forceReplace=false){
+const MEMORY_MIGRATION_KEY="lfg_ai_memory_migration_v7";
+function clonerMemoire(d){return JSON.parse(JSON.stringify(d||{}));}
+function cleElement(x){return JSON.stringify(x);}
+function fusionnerTableaux(base,ajouts){
+ const out=Array.isArray(base)?base.map(x=>clonerMemoire(x)):[]; const vus=new Set(out.map(cleElement));
+ (Array.isArray(ajouts)?ajouts:[]).forEach(x=>{const k=cleElement(x);if(!vus.has(k)){out.push(clonerMemoire(x));vus.add(k);}});
+ return out;
+}
+function fusionnerMemoire(base,ajouts){
+ const b=normaliserMemoire(base),a=normaliserMemoire(ajouts);
+ return {version:3,updatedAt:a.updatedAt||b.updatedAt||"",servicesWhatsapp:fusionnerTableaux(b.servicesWhatsapp,a.servicesWhatsapp),services:fusionnerTableaux(b.services,a.services),connaissances:fusionnerTableaux(b.connaissances,a.connaissances),regles:fusionnerTableaux(b.regles,a.regles),recommandations:fusionnerTableaux(b.recommandations,a.recommandations),medias:fusionnerTableaux(b.medias,a.medias),annonces:fusionnerTableaux(b.annonces,a.annonces),statuts:fusionnerTableaux(b.statuts,a.statuts)};
+}
+function migrerMemoireOriginale(){
+ const local=localStorage.getItem(AI_MEMORY_KEY);
+ let actuelle=AI_MEMORY;
+ try{if(local)actuelle=normaliserMemoire(JSON.parse(local));}catch(e){}
+ // V6 : fusion non destructive. On réinjecte toujours les données originales
+ // dans la mémoire actuelle, même si une ancienne migration était marquée terminée.
+ AI_MEMORY=fusionnerMemoire(AI_MEMORY_ORIGINALE,actuelle);
+sauvegarderMemoireLocale();
+ if(localStorage.getItem(MEMORY_MIGRATION_KEY)!=="1")localStorage.setItem(MEMORY_MIGRATION_KEY,"pending");
+ appliquerMemoireIA();
+ return true;
+}
+function forcerMigrationEtAfficher(){
+ migrerMemoireOriginale();
+ sauvegarderMemoireLocale();
+ appliquerMemoireIA();
+ const recherche=document.getElementById("adminRecherche"); if(recherche)recherche.value="";
+ document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));
+ document.querySelectorAll(".admin-section").forEach(x=>x.classList.remove("active"));
+ const tab=document.querySelector('[data-admin-tab="tout"]');
+ const section=document.querySelector('[data-admin-section="tout"]');
+ if(tab)tab.classList.add("active");
+ if(section){section.classList.add("active");section.style.display="block";section.hidden=false;}
+ rendreTableauMemoire();
+ const table=document.getElementById("tableauMemoire"); if(table)table.scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function chargerMemoireAPI(show){
  const etat=document.getElementById("remoteEtat");
  try{
   const r=await fetch(API_URL+"?t="+Date.now(),{cache:"no-store"});
   if(!r.ok)throw new Error("HTTP "+r.status);
   const remote=await r.json();
   if(!remote || typeof remote!=="object")throw new Error("Mémoire distante invalide");
-  const memDistante=normaliserMemoire(remote);
-  const nbDistante=Object.keys(memDistante).filter(k=>Array.isArray(memDistante[k])).reduce((n,k)=>n+memDistante[k].length,0);
-  const nbLocale=Object.keys(AI_MEMORY).filter(k=>Array.isArray(AI_MEMORY[k])).reduce((n,k)=>n+AI_MEMORY[k].length,0);
-  if((forceReplace || nbLocale===0) && nbDistante>0){AI_MEMORY=memDistante;sauvegarderMemoireLocale();}
+  const distante=normaliserMemoire(remote);
+  const migrationEtat=localStorage.getItem(MEMORY_MIGRATION_KEY);
+  if(migrationEtat!=="1"){
+    // Première migration : on conserve TOUT ce qui est déjà dans l'application
+    // et on ajoute ce qui existe éventuellement dans la mémoire distante.
+    AI_MEMORY=fusionnerMemoire(AI_MEMORY,distante);
+  }else{
+    AI_MEMORY=distante;
+  }
+  localStorage.setItem(AI_MEMORY_KEY,JSON.stringify(AI_MEMORY));
   appliquerMemoireIA(); afficherServicesMenu(); adminRafraichir(); afficherAnnonces(); afficherStatuts();
-  if(etat)etat.textContent=forceReplace?"🟢 Mémoire distante synchronisée manuellement.":"🟢 Mémoire IA chargée sans effacer vos informations locales.";
+  if(localStorage.getItem(MEMORY_MIGRATION_KEY)!=="1" && ADMIN_CONNECTE && !window.__migrationPubliee){
+    window.__migrationPubliee=true;
+    try{
+      const okMigration=await sauvegarderMemoireAPI();
+      if(okMigration) localStorage.setItem(MEMORY_MIGRATION_KEY,"1");
+    }catch(e){ window.__migrationPubliee=false; }
+  }
+  if(etat)etat.textContent="🟢 Mémoire IA distante synchronisée. Les catégories sont contrôlables par l'administration.";
   return true;
  }catch(e){
   try{
-   const secours=await fetch("data/ai-memory.json?t="+Date.now(),{cache:"no-store"});
-   if(!secours.ok)throw new Error("HTTP "+secours.status);
-   const memSecours=normaliserMemoire(await secours.json());
-   const nbSecours=Object.keys(memSecours).filter(k=>Array.isArray(memSecours[k])).reduce((n,k)=>n+memSecours[k].length,0);
-   const nbLocale=Object.keys(AI_MEMORY).filter(k=>Array.isArray(AI_MEMORY[k])).reduce((n,k)=>n+AI_MEMORY[k].length,0);
-   if((forceReplace || nbLocale===0) && nbSecours>0){AI_MEMORY=memSecours;sauvegarderMemoireLocale();}
-   appliquerMemoireIA(); afficherServicesMenu(); adminRafraichir(); afficherAnnonces(); afficherStatuts();
-   if(etat)etat.textContent="🟡 API distante indisponible : mémoire locale conservée.";
-   return false;
-  }catch(secoursErreur){chargerMemoireLocale(); appliquerMemoireIA(); afficherServicesMenu(); adminRafraichir(); afficherAnnonces(); afficherStatuts(); if(etat)etat.textContent="🟠 Mémoire locale utilisée. "+e.message; if(show)console.warn("API IA:",e); return false;}
+    const secours=await fetch("data/ai-memory.json?t="+Date.now(),{cache:"no-store"});
+    if(!secours.ok)throw new Error("HTTP "+secours.status);
+    AI_MEMORY=fusionnerMemoire(AI_MEMORY,normaliserMemoire(await secours.json()));
+    localStorage.setItem(AI_MEMORY_KEY,JSON.stringify(AI_MEMORY));
+    appliquerMemoireIA(); afficherServicesMenu(); adminRafraichir(); afficherAnnonces(); afficherStatuts();
+    if(etat)etat.textContent="🟡 API distante indisponible : mémoire initiale chargée depuis data/ai-memory.json.";
+    return false;
+  }catch(secoursErreur){
+    chargerMemoireLocale(); appliquerMemoireIA(); afficherServicesMenu(); adminRafraichir(); afficherAnnonces(); afficherStatuts();
+    if(etat)etat.textContent="🟠 API et mémoire initiale indisponibles : mémoire locale utilisée. "+e.message;
+    if(show)console.warn("API IA:",e);
+    return false;
+  }
  }
 }
 async function sauvegarderMemoireAPI(){
- if(!ADMIN_SESSION_TOKEN){alert("🔐 Ouvrez d'abord l'administration.");return}
+ if(!ADMIN_CONNECTE){alert("🔐 Ouvrez d'abord l'administration.");return}
  const etat=document.getElementById("remoteEtat");
  const payload={version:3,servicesWhatsapp:AI_MEMORY.servicesWhatsapp,services:AI_MEMORY.services,connaissances:AI_MEMORY.connaissances,regles:AI_MEMORY.regles,recommandations:AI_MEMORY.recommandations,medias:AI_MEMORY.medias,annonces:AI_MEMORY.annonces,statuts:AI_MEMORY.statuts};
  try{
-  const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json","X-Admin-Token":ADMIN_SESSION_TOKEN},body:JSON.stringify(payload)});
+  const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},credentials:"same-origin",body:JSON.stringify(payload)});
   const d=await r.json().catch(()=>({}));
   if(!r.ok)throw new Error(d.error||("HTTP "+r.status));
-  // Le serveur confirme l'enregistrement, mais on conserve exactement la mémoire locale affichée par l'administrateur.
-  // Cela évite qu'une réponse serveur ancienne/partielle efface une information fraîchement ajoutée.
-  sauvegarderMemoireLocale(); appliquerMemoireIA(); adminRafraichir();
-  if(etat)etat.textContent="🟢 Enregistré à distance. Les utilisateurs recevront la nouvelle mémoire IA.";
- }catch(e){
-  sauvegarderMemoireLocale();
-  if(etat)etat.textContent="🔴 Échec de publication distante : "+e.message;
-  alert("❌ La mémoire n'a pas pu être publiée à distance.\n\n"+e.message);
- }
+  // Vérification de lecture après écriture : le serveur doit renvoyer
+  // les mêmes quantités d'informations que celles publiées.
+  const verification=await fetch(API_URL+"?verify="+Date.now(),{cache:"no-store"});
+  if(!verification.ok)throw new Error("Publication effectuée mais vérification impossible (HTTP "+verification.status+")");
+  const verifMemoire=normaliserMemoire(await verification.json());
+  const categories=["servicesWhatsapp","services","connaissances","regles","recommandations","medias","annonces","statuts"];
+  const okVerification=categories.every(k=>Array.isArray(verifMemoire[k])&&verifMemoire[k].length===AI_MEMORY[k].length);
+  if(!okVerification)throw new Error("Le serveur a répondu, mais la mémoire distante ne correspond pas à la publication.");
+  localStorage.setItem(AI_MEMORY_KEY,JSON.stringify(AI_MEMORY));appliquerMemoireIA();adminRafraichir();
+  if(etat)etat.textContent="🟢 Publication distante vérifiée. L’IA peut récupérer la nouvelle mémoire.";
+  return true;
+  }catch(e){
+    console.warn("MEMOIRE LOCALE",e);
+  }
 }
-function chargerMemoireLocale(){
-  try{
-    const brut=localStorage.getItem(AI_MEMORY_KEY);
-    if(!brut){ AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE)); sauvegarderMemoireLocale(); appliquerMemoireIA(); return; }
-    const d=normaliserMemoire(JSON.parse(brut));
-    const nb=Object.keys(d).filter(k=>Array.isArray(d[k])).reduce((n,k)=>n+d[k].length,0);
-    if(nb>0){ AI_MEMORY=d; appliquerMemoireIA(); }
-    else { AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE)); sauvegarderMemoireLocale(); appliquerMemoireIA(); }
-  }catch(e){ console.warn("MEMOIRE LOCALE",e); AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE)); try{sauvegarderMemoireLocale()}catch(_){} try{appliquerMemoireIA()}catch(_){} }
-}
-
 async function initialiserAdmin(){
- chargerMemoireLocale(); appliquerMemoireIA(); adminRafraichir();
- const ab=document.getElementById("adminBtn");if(ab)ab.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();ouvrirAdmin();});
+ // Le bouton ADMIN est branché en premier : une erreur de mémoire distante/local ne doit jamais bloquer l'ouverture.
+ const ab=document.getElementById("adminBtn");
+ if(ab){ab.onclick=function(e){if(e)e.preventDefault();if(e)e.stopPropagation();return ouvrirAdmin();};}
+ try{chargerMemoireLocale();}catch(e){console.error("MEMOIRE LOCALE INIT",e)}
+ try{migrerMemoireOriginale();}catch(e){console.error("MIGRATION INIT",e)}
+ try{appliquerMemoireIA();}catch(e){console.error("APPLICATION MEMOIRE INIT",e)}
  document.getElementById("fermerAdmin")?.addEventListener("click",fermerAdmin);
  document.getElementById("connexionAdmin")?.addEventListener("click",connexionAdmin);
  document.getElementById("adminCode")?.addEventListener("keydown",e=>{if(e.key==="Enter")connexionAdmin()});
  document.querySelectorAll(".admin-tab").forEach(btn=>btn.addEventListener("click",function(){document.querySelectorAll(".admin-tab").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".admin-section").forEach(x=>x.classList.remove("active"));this.classList.add("active");document.querySelector(`[data-admin-section="${this.dataset.adminTab}"]`)?.classList.add("active")}));
  document.getElementById("adminRecherche")?.addEventListener("input",rendreTableauMemoire);
   document.getElementById("afficherToutesInfosIA")?.addEventListener("click",afficherToutesLesInformationsIA);
- document.getElementById("adminActualiser")?.addEventListener("click",()=>{ chargerMemoireLocale(); appliquerMemoireIA(); adminRafraichir(); alert("✅ Mémoire locale actualisée : "+compterMemoire()+" informations."); });
- document.getElementById("ajouterServiceSimple")?.addEventListener("click",async()=>{const nom=document.getElementById("adminServiceNomSimple").value.trim();if(!nom){alert("Indiquez le nom du service.");return}AI_MEMORY.services.push({nom});sauvegarderMemoireLocale();document.getElementById("adminServiceNomSimple").value="";appliquerMemoireIA();afficherServicesMenu();adminRafraichir();await sauvegarderMemoireAPI()});
- document.getElementById("restaurerExemples")?.addEventListener("click",async()=>{if(!confirm("♻️ Restaurer toutes les informations d'origine ? Les modifications actuelles seront remplacées."))return;AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE));sauvegarderMemoireLocale();appliquerMemoireIA();afficherServicesMenu();afficherAnnonces();afficherStatuts();adminRafraichir();await sauvegarderMemoireAPI();alert("✅ Les exemples d'origine ont été restaurés.")});
- document.getElementById("ajouterServiceWhatsapp")?.addEventListener("click",async()=>{const nom=document.getElementById("adminServiceNom").value.trim(),numero=document.getElementById("adminServiceNumero").value.trim(),message=document.getElementById("adminServiceMessage").value.trim();if(!nom||!numero){alert("Indiquez le nom et le numéro du service.");return}AI_MEMORY.servicesWhatsapp.push({nom,numero,message});sauvegarderMemoireLocale();["adminServiceNom","adminServiceNumero","adminServiceMessage"].forEach(id=>document.getElementById(id).value="");adminRafraichir();await sauvegarderMemoireAPI()});
- document.getElementById("ajouterRegle")?.addEventListener("click",async()=>{const t=document.getElementById("adminRegleTitre").value.trim(),x=document.getElementById("adminRegleTexte").value.trim();if(!x){alert("Écrivez l'instruction de l'IA.");return}AI_MEMORY.regles.push({titre:t||"Règle IA",texte:x});sauvegarderMemoireLocale();document.getElementById("adminRegleTitre").value="";document.getElementById("adminRegleTexte").value="";adminRafraichir();await sauvegarderMemoireAPI()});
- document.getElementById("ajouterReponse")?.addEventListener("click",async()=>{const q=document.getElementById("adminQuestion").value.trim(),r=document.getElementById("adminReponse").value.trim();if(!q||!r){alert("Remplissez les questions et la réponse.");return}AI_MEMORY.connaissances.push({questions:q.split(",").map(v=>v.trim()).filter(Boolean),reponse:r});sauvegarderMemoireLocale();document.getElementById("adminQuestion").value="";document.getElementById("adminReponse").value="";appliquerMemoireIA();adminRafraichir();await sauvegarderMemoireAPI()});
- document.getElementById("ajouterReco")?.addEventListener("click",async()=>{const t=document.getElementById("adminRecoTitre").value.trim(),x=document.getElementById("adminRecoTexte").value.trim(),u=document.getElementById("adminRecoUrl").value.trim();if(!x){alert("Écrivez la recommandation.");return}AI_MEMORY.recommandations.push({titre:t||"Recommandation IA",texte:x,url:u});sauvegarderMemoireLocale();document.getElementById("adminRecoTitre").value="";document.getElementById("adminRecoTexte").value="";document.getElementById("adminRecoUrl").value="";adminRafraichir();await sauvegarderMemoireAPI()});
- document.getElementById("ajouterMedia")?.addEventListener("click",async()=>{const q=document.getElementById("adminMediaQuestion").value.trim(),u=document.getElementById("adminMediaUrl").value.trim(),c=document.getElementById("adminMediaContexte").value.trim();if(!q||!urlSecurisee(u)){alert("Ajoutez des mots-clés et une URL valide.");return}AI_MEMORY.medias.push({type:"media",questions:q,url:u,contexte:c});sauvegarderMemoireLocale();document.getElementById("adminMediaQuestion").value="";document.getElementById("adminMediaUrl").value="";document.getElementById("adminMediaContexte").value="";adminRafraichir();await sauvegarderMemoireAPI()});
- document.getElementById("ajouterAnnonce")?.addEventListener("click",async()=>{const a={categorie:document.getElementById("adminAnnonceCategorie").value.trim()||"autre",objet:document.getElementById("adminAnnonceObjet").value.trim(),ville:document.getElementById("adminAnnonceVille").value.trim(),quartier:document.getElementById("adminAnnonceQuartier").value.trim(),age:document.getElementById("adminAnnonceAge").value.trim(),budget:document.getElementById("adminAnnonceBudget").value.trim(),description:document.getElementById("adminAnnonceDescription").value.trim(),contact:document.getElementById("adminAnnonceContact").value.trim()};if(!a.objet){alert("Indiquez le titre de l'annonce.");return}AI_MEMORY.annonces.push(a);sauvegarderMemoireLocale();document.querySelectorAll('[id^="adminAnnonce"]').forEach(e=>{if(e.id!=="adminAnnonceCategorie")e.value=""});adminRafraichir();afficherAnnonces();construireCategories();await sauvegarderMemoireAPI()});
- document.getElementById("ajouterStatut")?.addEventListener("click",async()=>{const type=document.getElementById("adminStatutType").value,titre=document.getElementById("adminStatutTitre").value.trim(),contenu=document.getElementById("adminStatutContenu").value.trim(),url=document.getElementById("adminStatutUrl").value.trim(),mime=document.getElementById("adminStatutMime").value.trim(),exp=document.getElementById("adminStatutExpiration").value; if(type!=="texte"&&!urlSecurisee(url)){alert("Ajoutez une URL http(s) valide pour ce statut.");return}if(type==="texte"&&!contenu){alert("Écrivez le contenu du statut.");return}AI_MEMORY.statuts.push({type,titre,contenu,url,mime,expiresAt:exp?new Date(exp).toISOString():""});sauvegarderMemoireLocale();["adminStatutTitre","adminStatutContenu","adminStatutUrl","adminStatutMime","adminStatutExpiration"].forEach(id=>document.getElementById(id).value="");adminRafraichir();afficherStatuts();await sauvegarderMemoireAPI()});
+ document.getElementById("adminActualiser")?.addEventListener("click",()=>chargerMemoireAPI(true));
+ document.getElementById("ajouterServiceWhatsapp")?.addEventListener("click",async()=>{const nom=document.getElementById("adminServiceNom").value.trim(),numero=document.getElementById("adminServiceNumero").value.trim(),message=document.getElementById("adminServiceMessage").value.trim();if(!nom||!numero){alert("Indiquez le nom et le numéro du service.");return}AI_MEMORY.servicesWhatsapp.push({nom,numero,message});["adminServiceNom","adminServiceNumero","adminServiceMessage"].forEach(id=>document.getElementById(id).value="");await sauvegarderMemoireAPI()});
+ document.getElementById("ajouterRegle")?.addEventListener("click",async()=>{const t=document.getElementById("adminRegleTitre").value.trim(),x=document.getElementById("adminRegleTexte").value.trim();if(!x){alert("Écrivez l'instruction de l'IA.");return}AI_MEMORY.regles.push({titre:t||"Règle IA",texte:x});document.getElementById("adminRegleTitre").value="";document.getElementById("adminRegleTexte").value="";await sauvegarderMemoireAPI()});
+ document.getElementById("ajouterReponse")?.addEventListener("click",async()=>{const q=document.getElementById("adminQuestion").value.trim(),r=document.getElementById("adminReponse").value.trim();if(!q||!r){alert("Remplissez les questions et la réponse.");return}AI_MEMORY.connaissances.push({questions:q.split(",").map(v=>v.trim()).filter(Boolean),reponse:r});document.getElementById("adminQuestion").value="";document.getElementById("adminReponse").value="";await sauvegarderMemoireAPI()});
+ document.getElementById("ajouterReco")?.addEventListener("click",async()=>{const t=document.getElementById("adminRecoTitre").value.trim(),x=document.getElementById("adminRecoTexte").value.trim(),u=document.getElementById("adminRecoUrl").value.trim();if(!x){alert("Écrivez la recommandation.");return}AI_MEMORY.recommandations.push({titre:t||"Recommandation IA",texte:x,url:u});document.getElementById("adminRecoTitre").value="";document.getElementById("adminRecoTexte").value="";document.getElementById("adminRecoUrl").value="";await sauvegarderMemoireAPI()});
+ document.getElementById("ajouterMedia")?.addEventListener("click",async()=>{const q=document.getElementById("adminMediaQuestion").value.trim(),u=document.getElementById("adminMediaUrl").value.trim(),c=document.getElementById("adminMediaContexte").value.trim();if(!q||!urlSecurisee(u)){alert("Ajoutez des mots-clés et une URL valide.");return}AI_MEMORY.medias.push({type:"media",questions:q,url:u,contexte:c});document.getElementById("adminMediaQuestion").value="";document.getElementById("adminMediaUrl").value="";document.getElementById("adminMediaContexte").value="";await sauvegarderMemoireAPI()});
+  document.getElementById("ajouterAnnonce")?.addEventListener("click",async()=>{const a={categorie:document.getElementById("adminAnnonceCategorie").value.trim()||"autre",objet:document.getElementById("adminAnnonceObjet").value.trim(),ville:document.getElementById("adminAnnonceVille").value.trim(),quartier:document.getElementById("adminAnnonceQuartier").value.trim(),age:document.getElementById("adminAnnonceAge").value.trim(),budget:document.getElementById("adminAnnonceBudget").value.trim(),description:document.getElementById("adminAnnonceDescription").value.trim(),contact:document.getElementById("adminAnnonceContact").value.trim(),url:document.getElementById("adminAnnonceUrl").value.trim()};if(!a.objet){alert("Indiquez le titre de l'annonce.");return}if(a.url&&!urlSecurisee(a.url)){alert("Le lien de l'annonce doit être une URL externe http(s) valide.");return}AI_MEMORY.annonces.push(a);document.querySelectorAll('[id^="adminAnnonce"]').forEach(e=>{if(e.id!=="adminAnnonceCategorie")e.value=""});await sauvegarderMemoireAPI();afficherAnnonces()});
+ document.getElementById("ajouterStatut")?.addEventListener("click",async()=>{const type=document.getElementById("adminStatutType").value,titre=document.getElementById("adminStatutTitre").value.trim(),contenu=document.getElementById("adminStatutContenu").value.trim(),url=document.getElementById("adminStatutUrl").value.trim(),mime=document.getElementById("adminStatutMime").value.trim(),exp=document.getElementById("adminStatutExpiration").value; if(type!=="texte"&&!urlSecurisee(url)){alert("Ajoutez une URL http(s) valide pour ce statut.");return}if(type==="texte"&&!contenu){alert("Écrivez le contenu du statut.");return}AI_MEMORY.statuts.push({type,titre,contenu,url,mime,expiresAt:exp?new Date(exp).toISOString():""});["adminStatutTitre","adminStatutContenu","adminStatutUrl","adminStatutMime","adminStatutExpiration"].forEach(id=>document.getElementById(id).value="");await sauvegarderMemoireAPI();afficherStatuts()});
  document.getElementById("exporterConfig")?.addEventListener("click",exporterMemoire);
-document.getElementById("chargerRemoteConfig")?.addEventListener("click",()=>chargerMemoireAPI(true));
+ document.getElementById("chargerRemoteConfig")?.addEventListener("click",()=>chargerMemoireAPI(true));
  document.getElementById("importerConfig")?.addEventListener("change",function(){const f=this.files[0];if(!f)return;const rd=new FileReader();rd.onload=async()=>{try{const d=JSON.parse(rd.result);AI_MEMORY=normaliserMemoire(d);appliquerMemoireIA();adminRafraichir();await sauvegarderMemoireAPI();alert("✅ Mémoire IA importée et publiée à distance.")}catch(e){alert("❌ JSON invalide ou publication impossible.")}};rd.readAsText(f)});
+ await chargerMemoireAPI(false);
  afficherAnnonces();
  afficherStatuts();
 }
 initialiserAdmin().catch(function(e){console.error("ADMIN INIT",e);});
-// Synchronisation distante uniquement sur demande de l'administrateur.
-
-/* =========================================================
-   SECOURS ADMIN — DÉMARRAGE INDÉPENDANT
-   Garantit que l'administration reste utilisable même si une
-   autre partie du script rencontre une erreur.
-========================================================= */
-function compterMemoire(){
-  try{ return ["servicesWhatsapp","services","connaissances","regles","recommandations","medias","annonces","statuts"].reduce((n,k)=>n+(Array.isArray(AI_MEMORY[k])?AI_MEMORY[k].length:0),0); }catch(e){return 0}
-}
-function restaurerMemoireOriginaleForce(){
-  AI_MEMORY=JSON.parse(JSON.stringify(AI_MEMORY_ORIGINALE));
-  try{localStorage.setItem(AI_MEMORY_KEY,JSON.stringify(AI_MEMORY));}catch(e){}
-  try{appliquerMemoireIA()}catch(e){}
-  try{adminRafraichir()}catch(e){}
-  alert("✅ Données originales restaurées.\n\n"+compterMemoire()+" informations sont maintenant disponibles dans l'administration.");
-}
-function adminSecoursBoot(){
-  try{
-    chargerMemoireLocale();
-    if(compterMemoire()===0) restaurerMemoireOriginaleForce();
-  }catch(e){ console.error("ADMIN SECOURS",e); }
-  const btn=document.getElementById("adminBtn");
-  const ouvrir=function(e){
-    if(e){e.preventDefault();e.stopPropagation();}
-    const f=document.getElementById("fenetreAdmin");
-    if(!f){alert("❌ Interface administration absente du fichier.");return false;}
-    f.style.setProperty("display","block","important");
-    f.style.setProperty("visibility","visible","important");
-    f.style.setProperty("opacity","1","important");
-    f.setAttribute("aria-hidden","false");
-    
-    const c=document.getElementById("adminCode"); if(c)setTimeout(()=>c.focus(),80);
-    return false;
-  };
-  if(btn){ btn.onclick=ouvrir; btn.addEventListener("click",ouvrir,true); }
-  const login=document.getElementById("connexionAdmin");
-  if(login){ login.onclick=function(e){e.preventDefault();e.stopPropagation();connexionAdmin();}; }
-  const code=document.getElementById("adminCode");
-  if(code)code.onkeydown=function(e){if(e.key==="Enter")login&&login.click()};
-  const close=document.getElementById("fermerAdmin");
-  if(close)close.onclick=function(){const f=document.getElementById("fenetreAdmin");if(f)f.style.display="none";document.body.style.overflow=""};
-  const all=document.getElementById("afficherToutesInfosIA");
-  if(all)all.onclick=function(){const p=document.getElementById("adminPanel");if(p)p.style.display="block"; try{rendreTableauMemoire()}catch(_){};};
-  const restore=document.getElementById("restaurerExemples");
-  if(restore)restore.onclick=function(){if(confirm("♻️ Restaurer toutes les données originales intégrées dans l'application ?"))restaurerMemoireOriginaleForce()};
-  try{adminRafraichir()}catch(_){}
-}
-setTimeout(adminSecoursBoot,50);
-setTimeout(function(){
-  try{
-    chargerMemoireLocale();
-    appliquerMemoireIA();
-    afficherServicesMenu();
-    construireCategories();
-    afficherAnnonces();
-    afficherStatuts();
-    adminRafraichir();
-  }catch(e){console.error("Initialisation LFG",e)}
-},100);
-setTimeout(adminSecoursBoot,50);
-setTimeout(adminSecoursBoot,700);
+setInterval(function(){chargerMemoireAPI(false).catch(function(e){console.error("MEMOIRE",e);});},60000);
 
 </script>
-
 </body>
 </html>
