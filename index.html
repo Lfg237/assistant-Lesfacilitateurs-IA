@@ -436,8 +436,7 @@ function chercherDansTouteLaMemoire(texte){
 function obtenirReponse(texte){
  const brut=String(texte||'').trim(),t=normaliserTexte(brut);
  if(!t)return 'Écrivez votre demande et je vais vous aider. 😊';
-
- const loc=extraireVilleQuartier(brut);
+const loc=extraireVilleQuartier(brut);
  const intentionNouvelle=detecterIntention(brut);
  const ancienneVille=ETAT_CONVERSATION.ville;
 
@@ -584,6 +583,7 @@ function creerCarteAnnonce(annonce){
  if(actions.children.length)carte.appendChild(actions); return carte;
 }
 
+
 /* =========================================================
    ANNONCES — AFFICHER LES ANNONCES
 ========================================================= */
@@ -724,8 +724,6 @@ fermerStatuts.addEventListener("click",function(){
 if(fenetreStatuts)fenetreStatuts.style.display="none";
 });
 }
-
-
 /* =========================================================
    INVITER
 ========================================================= */
@@ -771,6 +769,8 @@ if(darkBtn)darkBtn.textContent="☀️ Mode clair";
    INITIALISER LES STATUTS
    (après chargement de la mémoire IA)
 ========================================================= */
+
+
 /* =========================================================
    MESSAGE D'ACCUEIL
 ========================================================= */
@@ -826,7 +826,6 @@ const AI_MEMORY_ORIGINALE={"version":3,"updatedAt":"","servicesWhatsapp":[{"nom"
         type:"image",
         url:"https://raw.githubusercontent.com/Lfg237/m-dias/main/file_00000000226871fdb7585d562d4a1b12.png"
     },
-
 
     {
         type:"image",
